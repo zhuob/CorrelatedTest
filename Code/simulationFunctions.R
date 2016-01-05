@@ -5,7 +5,6 @@ library(reshape2)
 library(ggplot2)
 
 correlated.norm <- function(mu, rho, sigma, n){
-
 ## generate correlated Normal data
 ## input:  
 #    mu:  a vector of 2, specifying the mean level for each gene
