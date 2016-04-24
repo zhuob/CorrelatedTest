@@ -4,13 +4,9 @@
 \usepackage[square, numbers, authoryear]{natbib}
 \usepackage[utf8]{inputenc}    
 \usepackage[usenames,dvipsnames]{xcolor}
-%\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{hyperref}
-%\usepackage{lscape}
-%\usepackage{float}  % PUT FIGURE HERE
 \usepackage{multirow}
-%\usepackage{booktabs} % Create TABS
-\title{Sample correlation and test statistics correlation}
+\title{Estimating test statistics correlation from sample correlation}
 \date{} % Today's date or a custom date
 \usepackage{epsfig}
 \usepackage{subcaption}
@@ -21,30 +17,42 @@
 \newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{corollary}
 
+\newcommand{\cov}{\text{Cov}}
+\newcommand{\cor}{\text{Corr}}
+
 \begin{document}
 	\maketitle
 	\section{Introduction}
-	\textbf{Overall theme: Why would we conduct this study? Or what is the motivation of this study?} \\
+	\textbf{What's the consequence if the correlation between statistics cannot be represented sample correlation?}
+	\begin{enumerate}
+		\item Methods relating FDR control in terms of type I error seems to be OK?? Because under the null, test statistics correlation are (almost) the same as sample correlation.
+		\item What about power in terms of FDR control?
+		\item Competitive gene set test would definitely be affected, in terms of both type I error and power.  
+		\item it seems, according to Efron's 2007 paper, that conditional FDR will also be affected. 
+	\end{enumerate}
+	
+	\textbf{What problem do we address in this paper?}\\
+	\textit{Correlation} is a statistical quantity used to assess a possible linear relationship between two random variables or two sets of data sets. The degree of correlation is measured by \textit{correlation coefficient}, a scaler taking values on the interval $[-1, 1]$. Correlation coefficient of +1/-1 indicates perfect positive/negative dependence, while correlation coefficient of 0 implies no linear relationship between two random variables. Larger correlation coefficient (in absolute value) corresponds to stronger linear correlation. There are several correlation coefficients, including the Pearson's correlation coefficient, the Spearman's rank correlation coefficient and Kendall tau rank correlation coefficient. Pearson's correlation coefficient is the most familiar measure of dependence between two quantities, and is the main focus of this work. 
+	
+	For two random variables $X$ and $Y$, the Pearson's correlation coefficient is defined as the covariance of the two variables divided by the product of the standard deviations, 
+	\begin{equation}
+	\rho_{X, Y} = \dfrac{E[(X-\mu_X)(Y-\mu_Y)]}{\sigma_X\sigma_Y}, 
+	\end{equation} 
+	where $\mu_X$ and $\mu_Y$ are the expected values and $\sigma_X<\infty$ and $\sigma_Y<\infty$ are the standard errors. 
 	
 	
+	\textbf{Introduction}\\
+	In gene expression experiments, inter-gene correlations are commonly observed in expression data \citep{efron2012large, qiu2005effects,barry2008statistical, efron2007correlation,storey2003positive, huang2013gene, wu2012camera}. The key task of expression analysis is to detect differentially expressed (DE) genes. One common feature of such DE detection is that a summary statistic is calculated for each gene to measure the magnitude of DE. The test statistics are often of familiar form, for example, two-sample comparison or experimental design based regression. However, those test statistics are likely to be correlated, since their corresponding expression levels are correlated. This paper concerns the relation between test statistics correlations and the corresponding expression level correlations.
 	
-	
-	\textbf{large scale hypothesis testing in expression analysis}\\
-	Gene expression analysis involves hypothesis testing for tens of thousands of genes simultaneously
-	in biological research. One common feature of such  testing is that a summary statistic is
-	calculated for each gene to measure the magnitude of differential expression (DE). The test
-	statistics are often of familiar form, coming from a simple two group comparison. The statistics
-	themselves or their corresponding $p$-values are then pooled together, treated as known quantities,
-	and used in downstream analysis such as false discovery rate (FDR) or enrichment analysis.  
-	
-	\textbf{Correlation among test statistics need to be considered.} \\
-	The downstream analysis, however, may be sensitive to the presence of correlations among gene
-	expression level. Even modest such correlation can dangerously inflate the apparent FDR. For
-	example, \citet{efron2007correlation} showed in a simulation study that for a nominal FDR of 0.1, the
-	actual FDR can easily vary by a factor of 10. Therefore, attempts  have been made to account for the
-	inter-gene correlation. A first approach is permutation or resampling of biological samples, which
-	generates the null distributions of test statistics (or their associated $p$-values) with the
-	inter-gene correlation preserved. The Gene Set Enrichment Analysis (GSEA)
+	\textbf{Why would people care about correlation between genes?}\\
+	 The stochastic dependence of test statistics has brought methodological issues, in terms of accessing both individual genes and gene sets. The interest in examining individual genes is to find DE genes among tens of thousands of candidates. Multiple hypothesis testing procedures, such as \textit{false discovery rate} (FDR, \citealt{benjamini1995controlling}) and \textit{$q$-value} \citep{storey2003positive}, are therefore needed. In many cases, such techniques work only when test statistics are independent \citep{benjamini1995controlling} or have some particular form of correlation structures \citep{benjamini2001control}. The goal of evaluating gene sets is to find molecular pathways or gene networks that are related to the experimental condition or factors of interest. Testing a gene set is usually done by pooling the test statistics of its member genes, and may or may not involve genes not in the test set \citep{goeman2007analyzing}. In all situations, the correlation between test statistics is a nuisance aspect, which, if not addressed appropriately, will undermine the applicability of the corresponding approaches (REF). For
+	 example, \citet{efron2007correlation} showed in a simulation study that for a nominal FDR of 0.1, the
+	 actual FDR can easily vary by a factor of 10 when correlation between test statistics exists. 
+	 
+	 \textbf{What are existing ways of dealing with inter-gene correlations?}\\
+	 A number of attempts have been made to deal with issues of inter-gene correlation when testing either individual genes or gene sets.  A first approach is to permute the labels of biological samples. This type of permutation preserves underlying structure of inter-gene correlation, and thus protect the test against such correlations (REF, FDR related and gene set test related).
+	  
+	 with the	inter-gene correlation preserved. The Gene Set Enrichment Analysis (GSEA)
 	\citep{subramanian2005gene} falls into this category. A second approach works with the inter-gene
 	correlation directly, by estimating the test statistics correlation. \citet{efron2007correlation}
 	modeled the distribution of the $z$-values correlation [explained in (\ref{t2z})] and estimated some
@@ -95,7 +103,7 @@
 	In this work, we investigated the effect of testing procedures on inter-gene correlation structure
 	regarding two group comparison. Theoretically, we proved that for two sample $z$-test, there is a
 	perfect positive correlation between sample correlation coefficient $r_{\text{sample}}$ and test
-	statistics correlation $r_{\text{statistic}}$. For two sample $t$-test, the equivalance does not
+	statistics correlation $r_{\text{statistic}}$. For two sample $t$-test, the equivalence does not
 	hold in general for $r_{\text{statistic}}$ and $r_{\text{sample}}$, unless all the test are true
 	null (no DE).  We demonstrated by simulation that under the null, such equivalence also holds for
 	two group comparison of Poisson regression. 
@@ -201,7 +209,7 @@
 	
 	Let $\bm A = (a_1, \ldots, a_{2n}) /b_i$ with $a_j = 1$ for $j = 1, \ldots, n$ and $a_j = -1$ for $j
 	=n+1, \ldots, 2n$, then $\bm A^T \bm G = Z_i$ if $b_i = \sqrt{2\sigma_i^2 /n}$, therefore this
-	theorem applies to the case of two sampel $z$-test.
+	theorem applies to the case of two sample $z$-test.
 	
 	\begin{theorem}\label{theoremTstat} 
 		Under (A1-A2),  the two sample $t$-test statistics correlation can be expressed by 
@@ -322,7 +330,7 @@
 	($j =1, \ldots, 500$ for each group). For each given $\rho$, we generate $50,000$ samples for
 	control group and another $50,000$ samples for the treatment group. The $50,000$ samples within each
 	group are then randomly split into 100 blocks of size 500. Next, a pair is formed by taking one
-	block (500 samples) from treatment and one blcok from control,  mimicing one experiment for two
+	block (500 samples) from treatment and one block from control,  mimicing one experiment for two
 	group comparison. Therefore, 100 pairs are obtained to represent 100 replicates of the same
 	experiment, from which 100 test statistics are computed for each gene. 
 	
@@ -389,7 +397,7 @@
 	Correlated Poisson data was simulated according to \cite{madsen2013simulating}. Briefly, a 2-vector
 	standard normal $\bm Z$ is first generated with correlation matrix $\bm \Sigma_Z$, and $Z_i$'s are
 	converted to $U_i= \Phi(Z_i)$ where $\Phi$ is standard normal CDF. $U_i$'s, uniform on (0, 1), are
-	then trnasformed to $Y_i \equiv F_i^{-1}(U_i)$ with 
+	then transformed to $Y_i \equiv F_i^{-1}(U_i)$ with 
 	\begin{align}\label{inverseSim}
 		F_i^{-1}(u) = \inf \{y: F_i(y)\geq u\}
 	\end{align}
@@ -649,7 +657,7 @@
 	as shown in figure (\ref{invsd}). If (\ref{rhosrho}) can be justified theoretically, it is possible
 	to approximate the true value of $\rho(T_1, T_2)$, which will correct the bias of estimating
 	$r_\text{statistics}$ by $r_\text{sample}$. Another remaining challenge is to assess the
-	relationship of $r_\text{statistics}$  and $\rho$ for non-normal distrubutions, or for other
+	relationship of $r_\text{statistics}$  and $\rho$ for non-normal distributions, or for other
 	hypothesis testing under different regression models (e.g., negative binomial regression).  
 	
 	% \textbf{Make suggestions for further research\\ }
