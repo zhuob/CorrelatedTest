@@ -42,7 +42,7 @@
 	
 	
 	\textbf{Introduction}\\
-	In gene expression experiments, inter-gene correlations are commonly observed in expression data \citep{efron2012large, qiu2005effects,barry2008statistical, efron2007correlation,storey2003positive, huang2013gene, wu2012camera}. The key task of expression analysis is to detect differentially expressed (DE) genes. One common feature of such DE detection is that a summary statistic is calculated for each gene to measure the magnitude of DE. The test statistics are often of familiar form, for example, two-sample comparison or experimental design based regression. However, those test statistics are likely to be correlated, since their corresponding expression levels are correlated. This paper concerns the relation between test statistics correlations and the corresponding expression level correlations.
+	In gene expression experiments, inter-gene correlations are commonly observed in expression data \citep{efron2012large, qiu2005effects,barry2008statistical, efron2007correlation,storey2003positive, huang2013gene, wu2012camera, gatti2010heading}. The key task of expression analysis is to detect differentially expressed (DE) genes. One common feature of such DE detection is that a summary statistic is calculated for each gene to measure the magnitude of DE. The test statistics are often of familiar form, for example, two-sample comparison or experimental design based regression. However, those test statistics are likely to be correlated, since their corresponding expression levels are correlated. This paper concerns the relation between test statistics correlations and the corresponding expression level correlations.
 	
 	\textbf{Why would people care about correlation between genes?}\\
 	 The stochastic dependence of test statistics has brought methodological issues, in terms of accessing both individual genes and gene sets. The interest in examining individual genes is to find DE genes among tens of thousands of candidates. Multiple hypothesis testing procedures, such as \textit{false discovery rate} (FDR, \citealt{benjamini1995controlling}) and \textit{$q$-value} \citep{storey2003positive}, are therefore needed. In many cases, such techniques work only when test statistics are independent \citep{benjamini1995controlling} or have some particular form of correlation structures \citep{benjamini2001control}. The goal of evaluating gene sets is to find molecular pathways or gene networks that are related to the experimental condition or factors of interest. Testing a gene set is usually done by pooling the test statistics of its member genes, and may or may not involve genes not in the test set \citep{goeman2007analyzing}. In all situations, the correlation between test statistics is a nuisance aspect, which, if not addressed appropriately, will undermine the applicability of the corresponding approaches (REF). For
@@ -50,26 +50,13 @@
 	 actual FDR can easily vary by a factor of 10 when correlation between test statistics exists. 
 	 
 	 \textbf{What are existing ways of dealing with inter-gene correlations?}\\
-	 A number of attempts have been made to deal with issues of inter-gene correlation when testing either individual genes or gene sets.  A first approach is to permute the labels of biological samples. This type of permutation preserves underlying structure of inter-gene correlation, and thus protect the test against such correlations (REF, FDR related and gene set test related).
-	  
-	 with the	inter-gene correlation preserved. The Gene Set Enrichment Analysis (GSEA)
-	\citep{subramanian2005gene} falls into this category. A second approach works with the inter-gene
-	correlation directly, by estimating the test statistics correlation. \citet{efron2007correlation}
-	modeled the distribution of the $z$-values correlation [explained in (\ref{t2z})] and estimated some
-	dispersion variate $A$ conditioning on which the False Discovery Proportion (FDP) was calculated.
-	\citet{wu2012camera} estimated the variance inflation factor (VIF) associated with inter-gene
-	correlation and incorporated it into parametric and rank-based enrichment testing procedures. This
-	paper concerns a nuisance aspect of the second approach, the relationship between sample
-	correlations and test statistics correlations. 
-	
+	 A number of attempts have been made to deal with issues of inter-gene correlation when testing either individual genes or gene sets. One approach is to derive certain summary statistic from correlation matrix of test statistics and then use it in the hypothesis testing procedure. (Do I need more examples here) For testing individual genes, \citet{efron2007correlation} models the distribution of the $z$-values correlation [explained in (\ref{t2z})] and estimates some dispersion variate conditioning on which the \textit{false discovery proportion} (FDP) was calculated. For testing gene sets, \citet{wu2012camera} estimate a \textit{variance inflation factor} (VIF) associated with inter-gene correlation and incorporate it into their parametric/rank-based testing procedures. The same VIF is also used by \citet{yaari2013quantitative} to account for correlation in their distribution-based gene set testing procedure. Another approach is to permute the labels of biological samples. Sample permutation generates the null distribution of test statistic for each gene.
+	 This type of permutation preserves underlying correlation structure between genes, and thus protect the test against such correlations (REF, FDR related and gene set test related). However, sample permutation method has an extra assumption: that the test statistics always follow the distribution they have under complete null \cite{efron2012large1}, which states that no gene is DE. In other words, the distribution of test statistics under the null is not affected by the presence of non-null cases.
+	 
+	  The Gene Set Enrichment Analysis (GSEA) \citep{subramanian2005gene} falls into this category.
+	 
 	\textbf{Key question: Are  expression level correlations the same as test statistics correlation?}\\
-	There's no way to obtain the correlation structure of test statistics without replicating the
-	experiment.  
-	In the hypothesis testing procedures, only a single test statistic can be obtained for each gene. To
-	incorporate inter-gene correlation into downstream analysis,  the sample correlations, after
-	nullifying gene treatment effects (we term as \textbf{residual sample correlation}), are used to
-	replace the correlations of test statistics. The validity of such replacement is then demonstrated
-	by small simulations. \citet{efron2007correlation} used $z$-values converted from corresponding two
+	The first approach requires the correlations between test statistics to be known or at least can be estimated from the data. Without replicating the experiment, however, there's no way to obtain the correlation structure of test statistics because only a single test statistic is available for each gene. In the case of one-sided gene level test (e.g., two sample $t$-test), one possible choice is to use sample correlations (after gene treatment effects nullified) to represent correlations among test statistics, as is done by \citet{barry2008statistical, efron2007correlation, wu2012camera}. The validity of such representation is then demonstrated by small simulations. \citet{efron2007correlation} used $z$-values converted from corresponding two
 	sample $t$-test statistics by 
 	\begin{equation}\label{t2z}
 		z  = \Phi^{-1}(G_0(t))
