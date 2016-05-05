@@ -19,6 +19,9 @@
 
 \newcommand{\cov}{\text{Cov}}
 \newcommand{\cor}{\text{Corr}}
+\newcommand{\var}{\text{Var}}
+\newcommand{\samplecor}{sample correlation}
+\newcommand{\popucor}{population correlation}
 
 \begin{document}
 	\maketitle
@@ -32,49 +35,55 @@
 	\end{enumerate}
 	
 	\textbf{What problem do we address in this paper?}\\
-	\textit{Correlation} is a statistical quantity used to assess a possible linear relationship between two random variables or two sets of data sets. The degree of correlation is measured by \textit{correlation coefficient}, a scaler taking values on the interval $[-1, 1]$. Correlation coefficient of +1/-1 indicates perfect positive/negative dependence, while correlation coefficient of 0 implies no linear relationship between two random variables. Larger correlation coefficient (in absolute value) corresponds to stronger linear correlation. There are several correlation coefficients, including the Pearson's correlation coefficient, the Spearman's rank correlation coefficient and Kendall tau rank correlation coefficient. Pearson's correlation coefficient is the most familiar measure of dependence between two quantities, and is the main focus of this work. 
-	
-	For two random variables $X$ and $Y$, the Pearson's correlation coefficient is defined as the covariance of the two variables divided by the product of the standard deviations, 
-	\begin{equation}
-	\rho_{X, Y} = \dfrac{E[(X-\mu_X)(Y-\mu_Y)]}{\sigma_X\sigma_Y}, 
-	\end{equation} 
-	where $\mu_X$ and $\mu_Y$ are the expected values and $\sigma_X<\infty$ and $\sigma_Y<\infty$ are the standard errors. 
-	
+
 	
 	\textbf{Introduction}\\
 	In gene expression experiments, inter-gene correlations are commonly observed in expression data \citep{efron2012large, qiu2005effects,barry2008statistical, efron2007correlation,storey2003positive, huang2013gene, wu2012camera, gatti2010heading}. The key task of expression analysis is to detect differentially expressed (DE) genes. One common feature of such DE detection is that a summary statistic is calculated for each gene to measure the magnitude of DE. The test statistics are often of familiar form, for example, two-sample comparison or experimental design based regression. However, those test statistics are likely to be correlated, since their corresponding expression levels are correlated. This paper concerns the relation between test statistics correlations and the corresponding expression level correlations.
 	
 	\textbf{Why would people care about correlation between genes?}\\
-	 The stochastic dependence of test statistics has brought methodological issues, in terms of accessing both individual genes and gene sets. The interest in examining individual genes is to find DE genes among tens of thousands of candidates. Multiple hypothesis testing procedures, such as \textit{false discovery rate} (FDR, \citealt{benjamini1995controlling}) and \textit{$q$-value} \citep{storey2003positive}, are therefore needed. In many cases, such techniques work only when test statistics are independent \citep{benjamini1995controlling} or have some particular form of correlation structures \citep{benjamini2001control}. The goal of evaluating gene sets is to find molecular pathways or gene networks that are related to the experimental condition or factors of interest. Testing a gene set is usually done by pooling the test statistics of its member genes, and may or may not involve genes not in the test set \citep{goeman2007analyzing}. In all situations, the correlation between test statistics is a nuisance aspect, which, if not addressed appropriately, will undermine the applicability of the corresponding approaches (REF). For
+	 The stochastic dependence of test statistics has brought methodological issues, in terms of accessing both individual genes and gene sets. The interest in examining individual genes is to find DE genes among tens of thousands of candidates. Multiple hypothesis testing procedures, such as \textit{false discovery rate} (FDR, \citealt{benjamini1995controlling}) and \textit{$q$-value} \citep{storey2003positive}, are therefore needed. In many cases, such techniques work only when test statistics are independent \citep{benjamini1995controlling} or have positive regression dependency \citep{benjamini2001control}. The goal of evaluating gene sets is to find molecular pathways or gene networks that are related to the experimental condition or factors of interest. Testing a gene set is usually done by pooling the test statistics of its member genes, and may or may not involve genes not in the test set \citep{goeman2007analyzing}. In all situations, the correlation between test statistics is a nuisance aspect, which, if not addressed appropriately, will undermine the applicability of the corresponding approaches (REF). For
 	 example, \citet{efron2007correlation} showed in a simulation study that for a nominal FDR of 0.1, the
 	 actual FDR can easily vary by a factor of 10 when correlation between test statistics exists. 
 	 
 	 \textbf{What are existing ways of dealing with inter-gene correlations?}\\
-	 A number of attempts have been made to deal with issues of inter-gene correlation when testing either individual genes or gene sets. One approach is to derive certain summary statistic from correlation matrix of test statistics and then use it in the hypothesis testing procedure. (Do I need more examples here) For testing individual genes, \citet{efron2007correlation} models the distribution of the $z$-values correlation [explained in (\ref{t2z})] and estimates some dispersion variate conditioning on which the \textit{false discovery proportion} (FDP) was calculated. For testing gene sets, \citet{wu2012camera} estimate a \textit{variance inflation factor} (VIF) associated with inter-gene correlation and incorporate it into their parametric/rank-based testing procedures. The same VIF is also used by \citet{yaari2013quantitative} to account for correlation in their distribution-based gene set testing procedure. Another approach is to permute the labels of biological samples. Sample permutation generates the null distribution of test statistic for each gene.
-	 This type of permutation preserves underlying correlation structure between genes, and thus protect the test against such correlations (REF, FDR related and gene set test related). However, sample permutation method has an extra assumption: that the test statistics always follow the distribution they have under complete null \cite{efron2012large1}, which states that no gene is DE. In other words, the distribution of test statistics under the null is not affected by the presence of non-null cases.
-	 
-	  The Gene Set Enrichment Analysis (GSEA) \citep{subramanian2005gene} falls into this category.
+	 A number of attempts have been made to deal with issues of inter-gene correlation when testing either individual genes or gene sets. One approach is to derive certain summary statistic from correlation among test statistics and then use it in the hypothesis testing procedure. (Do I need more examples here) For testing individual genes, \citet{efron2007correlation} calculates the \textit{false discovery proportion} (FDP) conditioning on some dispersion variate which is estimated from correlation among transformed test statistics.  For testing gene sets, \citet{wu2012camera} estimate a \textit{variance inflation factor} (VIF) associated with inter-gene correlation and incorporate it into their parametric/rank-based testing procedures. The same VIF is also used by \citet{yaari2013quantitative} to account for correlation in their distribution-based gene set testing procedure. Another approach is to permute the labels of biological samples. Sample permutation generates the null distribution of test statistic for each gene.
+	 This type of permutation preserves underlying correlation structure between genes, and thus protect the test against such correlations (REF, FDR related and gene set test related). However, sample permutation method has an extra assumption, which states that the test statistics always follow the distribution they have under complete null  that no gene is DE \cite{efron2012large1}. In other words, this assumption expects that the distribution of test statistics under the null is not affected by the presence of non-null cases. The \textit{gene set enrichment analysis} (GSEA) procedure \citep{subramanian2005gene} falls into this category.
 	 
 	\textbf{Key question: Are  expression level correlations the same as test statistics correlation?}\\
-	The first approach requires the correlations between test statistics to be known or at least can be estimated from the data. Without replicating the experiment, however, there's no way to obtain the correlation structure of test statistics because only a single test statistic is available for each gene. In the case of one-sided gene level test (e.g., two sample $t$-test), one possible choice is to use sample correlations (after gene treatment effects nullified) to represent correlations among test statistics, as is done by \citet{barry2008statistical, efron2007correlation, wu2012camera}. The validity of such representation is then demonstrated by small simulations. \citet{efron2007correlation} used $z$-values converted from corresponding two
-	sample $t$-test statistics by 
-	\begin{equation}\label{t2z}
-		z  = \Phi^{-1}(G_0(t))
-	\end{equation}
-	where $\Phi$ is the cumulative distribution function (CDF) for $N(0, 1)$ and $G_0$ is a putative
-	null CDF for $t$-values. The correlation of $z$-values were approximated by residual sample
-	correlation, since it was demonstrated via simulation that the distribution of residual sample
-	correlation applies to that of $z$-value correlation. \citet{barry2008statistical} showed by Monte
-	Carlo simulation of gene expression data that a nearly linear relationship holds between test
-	statistic correlation and residual sample correlation under several standard experimental design.
-	The sample correlation was then used to account for test statistics correlation in their bootstrap
-	method of enrichment test. \citet{wu2012camera} assumed that genewise $t$-test statistics correlation
-	is the same as residual sample correlation, and calculated the mean of all pairwise sample
-	correlation to estimate the VIF, a vital factor in adjusting for inter-gene correlation in their
-	enrichment test procedures. In all of the three works, it was shown by simulation only the
-	equivalence of sample correlation coefficient and test statistics correlation coefficient, whether
-	in distribution or numerically. It has, to the best of our knowledge, not yet been fully explored in
+	The first approach requires that the correlations between test statistics are known or at least can be estimated from the data. Without replicating the experiment, however, there's no way to obtain the correlation structure of test statistics because only a single test statistic is available for each gene. In the case of one-sided test (e.g., two sample $t$-test), one possible choice is to use sample correlations (after gene treatment effects nullified) to represent correlations among test statistics, as is done by \citet{barry2008statistical, efron2007correlation, wu2012camera}. 
+	In all of the three works, it is shown by simulation only the
+	equivalence (in terms of either distribution or numerical summarization) of sample correlation coefficient and test statistics correlation coefficient. 
+	\citet{efron2007correlation} estimates the distribution of $z$-value (transformed from corresponding two sample $t$-test statistics) correlation by sample correlation. \citet{barry2008statistical} show by Monte Carlo simulation of gene expression data that a nearly linear relationship holds between test statistic correlation and sample correlation for several types of test statistic.
+	%The validity of such representation is then demonstrated by small simulations.
+	% \citet{efron2007correlation} used $z$-values converted from corresponding two sample $t$-test statistics by 
+%	\begin{equation}\label{t2z}
+%		z  = \Phi^{-1}(G_0(t))
+%	\end{equation}
+%	where $\Phi$ is the cumulative distribution function (CDF) for $N(0, 1)$ and $G_0$ is a putative
+%	null CDF for $t$-values. The correlation of $z$-values were approximated by residual sample
+%	correlation, since it was demonstrated via simulation that the distribution of residual sample
+%	correlation applies to that of $z$-value correlation. \citet{barry2008statistical} showed by Monte
+%	Carlo simulation of gene expression data that a nearly linear relationship holds between test
+%	statistic correlation and residual sample correlation under several standard experimental design.
+%	The sample correlation was then used to account for test statistics correlation in their bootstrap
+%	method of enrichment test. \citet{wu2012camera} assumed that genewise $t$-test statistics correlation
+%	is the same as residual sample correlation, and calculated the mean of all pairwise sample
+%	correlation to estimate the VIF, a vital factor in adjusting for inter-gene correlation in their
+%	enrichment test procedures. 
+	 It has, to the best of our knowledge, not yet been fully explored in
 	the context of two group comparison.
+	
+	
+		\textbf{What did we find}\\
+		In this work, we investigated the effect of testing procedures on inter-gene correlation structure
+		regarding two group comparison. Theoretically, we proved that for two sample $z$-test, there is a
+		perfect positive correlation between sample correlation coefficient $r_{\text{sample}}$ and test
+		statistics correlation $r_{\text{statistic}}$. For two sample $t$-test, the equivalence does not
+		hold in general for $r_{\text{statistic}}$ and $r_{\text{sample}}$, unless all the test are true
+		null (no DE).  We demonstrated by simulation that under the null, such equivalence also holds for
+		two group comparison of Poisson regression. 
+		
+		
 	
 	\textbf{Relevant but different work}\\
 	A relevant research was done by \citet{qiu2005effects}, in which they studied the effect of different
@@ -86,89 +95,88 @@
 	remove the correlation between the test statistics. % In this work, our interest is in evaluating
 	%the effect of several testing procedures on gene expression correlation. 
 	
-	\textbf{What did we find}\\
-	In this work, we investigated the effect of testing procedures on inter-gene correlation structure
-	regarding two group comparison. Theoretically, we proved that for two sample $z$-test, there is a
-	perfect positive correlation between sample correlation coefficient $r_{\text{sample}}$ and test
-	statistics correlation $r_{\text{statistic}}$. For two sample $t$-test, the equivalence does not
-	hold in general for $r_{\text{statistic}}$ and $r_{\text{sample}}$, unless all the test are true
-	null (no DE).  We demonstrated by simulation that under the null, such equivalence also holds for
-	two group comparison of Poisson regression. 
-	
-	
+
 	
 	
 	
 	
 	
 	\section{General setup}
-	Consider two random vectors $\bm X = (X_1, X_2)$ and $\bm Y =  (Y_1, Y_2)$ from normal distribution
-	\[ \bm X 
-	\sim N\left[
-	\left(\begin{array}{c}
-	\mu_1\\
-	\mu_2\\
-	\end{array} \right), 
-	\left(
-	\begin{array}{cc}
-	\sigma_1^2 &\rho \sigma_1\sigma_2 \\
-	\rho \sigma_1 \sigma_2 & 	\sigma_2^2 \\
-	\end{array}
-	\right)
-	\right]  \stackrel{\text{def}}{=} N(\bm \mu, \bm \Sigma)
-	\] 
-	and $\bm Y \sim N(\bm \mu + \bm \Delta, \bm \Sigma)$ where $\bm \Delta = (\Delta_1, \Delta_2)^T$.
-	Let $\bm X_1, \ldots, \bm X_n$ and $\bm Y_1, \ldots, \bm Y_n$ be $n$ realizations of each random
-	vector. We assume
-	\begin{enumerate}
-		\item[A1):] Within a sample, the random variables are correlated, $\text{Cor}(X_{i1}, X_{i2}) =
-		\text{Cor}(Y_{j1}, Y_{j2}) = \rho$. 
-		\item[A2):] Across samples, the random variables are independent, Cor($\bm X_{j_1}, \bm Y_{j_2}$)=
-		0. 
-	\end{enumerate} 
 	
-	For notational convenience, let $G_1 = (X_{11}, \ldots, X_{1n}, Y_{11}, \ldots, Y_{1n})$ and $G_2 = 
-	(X_{21}, \ldots, X_{2n}, Y_{21}, \ldots, Y_{2n})$. We are interested in comparing the mean of $X_1$
-	versas $Y_1$, and of $X_2$ versus $Y_2$, statistically formulated as
-	\begin{equation}\label{hypotheses}
-		H_{0i}:  \Delta_i = 0 \text{     Versus   }  H_{1i}: \Delta_i\neq 0 ,  ~~ i = 1, 2.
+	\subsection{define what do we mean by correlation}
+	\textit{Correlation} is a statistical quantity used to assess a possible linear relationship between two random variables or two sets of data sets. The degree of correlation is measured by \textit{correlation coefficient}, a scaler taking values on the interval $[-1, 1]$. Correlation coefficient of +1 (-1) indicates perfect positive (negative dependence), while correlation coefficient of 0 implies no linear relationship between two random variables. Larger correlation coefficient (in absolute value) corresponds to stronger linear correlation. 
+	There are many ways to look at the correlation coefficient , many of which are special cases of Pearson's correlation coefficient \citep{lee1988thirteen}. For example, the \textit{Kendall tau rank correlation coefficient} is computed as Pearson's correlation coefficient between the ranked variables.
+	
+	Let $(X, Y)$ be a random vector, and $(x_j, y_j)$ its $j$th observation. The most familiar measure of dependence between two quantities is the \textit{Pearson's correlation coefficient}.  Following the notation of \cite{lee1988thirteen}, We will restrict our interest to two types of Pearson's correlation coefficient: 1) standardized covariance, which we refer to as \textit{\popucor}
+	\begin{equation}\label{eq:popucor}
+		\rho =\dfrac{\cov(X, Y)}{\sqrt{\var(X)\var(Y)}} = \dfrac{E[(X-\mu_X)(Y-\mu_Y)]}{\sigma_X\sigma_Y}, 
+	\end{equation} 	where $\mu_X$ and $\mu_Y$ are the expected values and $\sigma_X<\infty$ and $\sigma_Y<\infty$ are the population standard errors, and 2) a function of raw scores and means, which we refer to as \textit{\samplecor}
+	\begin{equation}\label{eq:samplecor}
+	r  =  \dfrac{\sum_j (x_j -\bar{x})(y_j - \bar{y})}{\sqrt{\sum_{j}(x_j - \bar{x})^2\sum_i(y_j - \bar{y})^2}}, 
 	\end{equation}
-	
-	\begin{definition}
-		The \textbf{sample correlation} is 
-		\begin{equation}\label{rhosample}
-			r_{\text{sample}}  = \frac{r_X + r_Y}{2}
-		\end{equation}
-		where $r_X$  and $r_Y$ are sample correlations for $\bm X$ and $\bm Y$, respectively.
-		The pooled sample variance for test $H_{0i}$ ($i=1, 2$) is 
-		\begin{equation}\label{pooledvariance}
-			S_i^2 = \frac{(n-1)S_{X_i}^2 + (n-1)S_{Y_i}^2}{n-1 + n-1} = \frac{S_{X_i}^2 + S_{Y_i}^2}{2}
-		\end{equation}
-		where $S_{X_i}^2$ and $S_{Y_i}^2$ are sample variances for $X_i$ and $Y_i$ respectively.
-	\end{definition} 
-	
-	
-	For $i =1, 2$,  $\bar{X}_{i}\sim N(\mu_i, \sigma_i^2/n)$ and $\bar{Y}_{i}\sim N(\mu_i + \Delta_i,
-	\sigma_i^2/n)$. Define
-	\begin{equation}\label{expreU}
-		U_i = \bar{X}_i - \bar{Y}_i
+	where $(\bar{x}, \bar{y})$ is the vector of arithmetic mean of the observations.
+	Throughout this paper, we will discuss the correlation between $X$ and $Y$ under bivariate settings. 
+
+
+	In a two group comparison experiment (e.g., gene expression of treatment and control), let $(X_j, Y_j)$ be the expression level for a pair of genes in sample $j$ where $j=1, \ldots, n_1$ if it's from the treatment group and $j=n_1 + 1, \ldots, n_1 + n_2$ if it's from the control group. We assume that the covariance for different samples are the same, but the mean level might differ between the two groups, that is,  
+	\begin{equation}\label{eq:covstruct}
+		\cov\left(\begin{array}{c}
+			X_j\\
+			Y_j\\	
+		\end{array} \right)	
+		= \left(
+		\begin{array}{cc}
+		\sigma_X^2 &\rho \sigma_X\sigma_Y \\
+		\rho \sigma_X \sigma_Y & 	\sigma_Y^2 \\
+		\end{array} 
+		\right)
+		\stackrel{\text{def}}{=} \bm \Sigma 
 	\end{equation}
-	The two sample $z$-test statistic is
-	\begin{equation}\label{zTest}
-		Z_i = \frac{\bar{X}_{i}-\bar{Y}_{i} }{\sqrt{\frac{\sigma^2_i}{n} + \frac{\sigma^2_i}{n}}} =
-		\frac{U_i}{\sqrt{2\sigma_i^2/n}}\sim N(\Delta_i, 1) ,
+	and 
+	\begin{equation}\label{eq:meanstruct}
+	\begin{aligned}
+	E  \left(\begin{array}{c}
+	X_j\\
+	Y_j\\	
+	\end{array} \right) 
+	& = 	\left(\begin{array}{c}
+	\mu_X\\
+	\mu_Y\\
+	\end{array} \right)\stackrel{\text{def}}{=} \bm \mu,  \text{~~ for $j = 1, \ldots, n_1$} \\
+	E  \left(\begin{array}{c}
+	X_j\\
+	Y_j\\	
+	\end{array} \right) 
+	&= 	\left(\begin{array}{c}
+	\mu_X + \Delta_X\\
+	\mu_Y + \Delta_Y\\
+	\end{array} \right)\stackrel{\text{def}}{=} \bm \mu + \bm \Delta,  \text{~~ for $j = n_1 + 1, \ldots, n_1+ n_2$}.	
+	\end{aligned}	
 	\end{equation}
-	and the two sample $t$-test statistic for pooled variance is given by
-	\begin{align}\label{t-test}
-		T_i = \frac{\bar{X}_i - \bar{Y}_i}{S_i\sqrt{\frac{1}{n}+\frac{1}{n}}} =
-		\frac{U_i}{S_i\sqrt{\frac{2}{n}}} \sim t_{2n-2}(\Delta_i). 
-	\end{align}
-	where $S_i$ the pooled sample standard error defined in (\ref{pooledvariance}) and $\Delta_i$ is the
-	non-center parameter. 
+	Here $\rho$ is the population correlation defined by equation (\ref{popucor}), and $\bm \Delta= (\Delta_X, \Delta_Y)$ is vector of treatment effect for the pair of genes.
+	In addition, We assume independence across samples (Note that independence implies 0 correlation, but not vise versa), 
+	\begin{equation}\label{eq:indepsamples}
+	\cov(X_{j_1}, X_{j_2}) = \cov(Y_{j_1}, Y_{j_2}) = 0 \text{~~~for $j_1\neq j_2$}
+	\end{equation}
+	 In the context of gene expression study, the goal is to detect differential expression (DE)---the mean difference between treatment and control group, which can be statistically formulated as 
+	 \begin{equation}\label{eq:hypotheses}
+	 H_{0i}:  \Delta_i = 0 \textit{     Verses   }  H_{1i}: \Delta_i\neq 0 ,  ~~ i = X, Y.
+	 \end{equation}
+	This hypothesis testing procedure usually results in a ``$t$-test similar" test statistic for each gene. Without a loss of generality, we express the test statistics as follows
+	\begin{equation}\label{eq:teststat}
+	T_X = \dfrac{\bm a^T\bm X}{S_X},  ~~~ T_Y = \dfrac{\bm a^T \bm Y}{S_Y}
+	\end{equation}  
+	where $\bm a$ is a vector of length $n_1 + n_2$ denoting coefficient for comparison(e.g., $1$ for treatment and $-1$ for control), $\bm X = (X_1, \ldots, X_{n_1}, X_{n_1 +1}, \ldots, X_{n_1 + n_2})$, and  $S_X$ and $S_Y$ are the standard error for $\bm a^T\bm X$ and $\bm a^T\bm Y$ respectively. Depending on the type of test, the standard error $S$ may take different forms. In the case of two sample $t$-test with unequal variance, $\bm a^T\bm X = \bar{X}_1 - \bar{X}_2$ and $S_X = \sqrt{S_{X,1}^2/n_1 + S_{X,2}^2/n_2}$, where $ S_{X,1}^2$ and $S_{X,2}^2$ are the sample variances for the treatment and the control groups.
 	
-	Our main goal is to explore the correlation between the test statistics, $\text{Cor}({Z_1, Z_2})$
-	and $\text{Cor}({T_1, T_2})$, and to compare it with true correlation $\rho$. 
-	
+	Our main goal is to explore the relationship between population correlation (equation (\ref{eq:popucor})) for the test statistics 
+	\begin{equation}
+	\rho_T = \cor({T_X, T_Y}),
+	\end{equation}  
+	and that for their corresponding expression level 
+	\begin{equation}
+	\rho = \cor(X, Y). 
+	\end{equation}
+	We will examine ???HOW MANY??? different test statistics having the form of equation (\ref{eq:teststat}).%, for a given sample size of $n_1$ for treatment group and $n_2$ for control group.
 	
 	
 	\section{Results}
@@ -180,24 +188,43 @@
 	statistics correlation $r_{\text{statistics}}$ may be very different from true correlation $\rho$ or
 	sample correlation $r_{\text{sample}}$. 
 	\subsection{Theory}
-	\begin{theorem} 
-		Test statistics correlation is the same as true correlation under linear transformation of $\bm X$
-		and $\bm Y$.
+%	\subsubsection{$S$ is a constant}
+	\begin{theorem}\label{thm:lineartransformation} 
+		For any given sample size $(n_1, n_2)$ and non zero $\bm a$, $\rho_T=\rho$ if $S_X$ and $S_Y$ are constant with respect to $\bm X, \bm Y$. 
 	\end{theorem}
-	Let $\bm A$ be a nonzero vector of length $2n$, and $Z_1 =\bm A^T\bm G_1, Z_2 = \bm A^T\bm G_2$. 
-	Note that \[
-	\text{Cov}(Z_1, Z_2) = \bm A^T\text{Cov}(\bm G_1, \bm G_2)\bm A = \bm
-	A^T\text{diag}(\rho\sigma_1\sigma_2)\bm A =\rho\sigma_1\sigma_2\bm A^T\bm A.\]
-	and also
-	\[\text{Var}(\bm A^T\bm G_1) = \bm A^T\text{Var}(\bm G_1)\bm A = \sigma_1^2\bm A^T\bm A\]
-	It follows therefore 
-	\[\text{Cor}(Z_1, Z_2) = \frac{\text{Cov}(Z_1, Z_2) }{\sqrt{\text{Var}(Z_1)\text{Var}(Z_2)}} =
-	\frac{\rho\sigma_1\sigma_2\bm A^T\bm A}{\sigma_1\sigma_2 \sqrt{\bm A^T\bm A\bm A^T\bm A}}=\rho\]
+	\text{Proof:} Since samples are independent, we have 
+	\begin{equation}
+	\begin{aligned}
+		\cov(\bm a^T\bm X, \bm a^T\bm Y) &= \bm a^T \cov(\bm X, \bm Y)\bm a  = \rho\sigma_X\sigma_Y\bm a^T\bm a, \\
+		\var(\bm a^T\bm X)& = \bm a^T\var(\bm X)\bm a   = \sigma_X^2\bm a^T\bm a, \\
+		\var(\bm a^T\bm Y)& = \bm a^T\var(\bm Y)\bm a   = \sigma_Y^2\bm a^T\bm a 
+	\end{aligned}
+	\end{equation}
+	It follows by equation (\ref{eq:popucor}) that
+	\begin{equation}
+	\rho_T = \dfrac{\cov(T_X, T_Y)}{\sqrt{\var(T_X)\var(T_Y)}} = \dfrac{	\cov(\bm a^T\bm X, \bm a^T\bm Y)/S_XS_Y}{\sqrt{\var(\bm a^T\bm X)\var(\bm a^T\bm Y)}/S_XS_Y} = \rho
+	\end{equation}
+	\textbf{Note:} Theorem \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. Let $\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})$, and if we set $S_X=1$, then $T_X$ corresponds to mean difference between treatment and control group; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, $\rho_T=\rho$ if we use mean difference or $z$-statistic as test statistic.
 	
-	Let $\bm A = (a_1, \ldots, a_{2n}) /b_i$ with $a_j = 1$ for $j = 1, \ldots, n$ and $a_j = -1$ for $j
-	=n+1, \ldots, 2n$, then $\bm A^T \bm G = Z_i$ if $b_i = \sqrt{2\sigma_i^2 /n}$, therefore this
-	theorem applies to the case of two sample $z$-test.
 	
+%	Let $\bm A$ be a nonzero vector of length $2n$, and $Z_1 =\bm A^T\bm G_1, Z_2 = \bm A^T\bm G_2$. 
+%	Note that \[
+%	\text{Cov}(Z_1, Z_2) = \bm A^T\text{Cov}(\bm G_1, \bm G_2)\bm A = \bm
+%	A^T\text{diag}(\rho\sigma_1\sigma_2)\bm A =\rho\sigma_1\sigma_2\bm A^T\bm A.\]
+%	and also
+%	\[\text{Var}(\bm A^T\bm G_1) = \bm A^T\text{Var}(\bm G_1)\bm A = \sigma_1^2\bm A^T\bm A\]
+%	It follows therefore 
+%	\[\text{Cor}(Z_1, Z_2) = \frac{\text{Cov}(Z_1, Z_2) }{\sqrt{\text{Var}(Z_1)\text{Var}(Z_2)}} =
+%	\frac{\rho\sigma_1\sigma_2\bm A^T\bm A}{\sigma_1\sigma_2 \sqrt{\bm A^T\bm A\bm A^T\bm A}}=\rho\]
+%	
+%	Let $\bm A = (a_1, \ldots, a_{2n}) /b_i$ with $a_j = 1$ for $j = 1, \ldots, n$ and $a_j = -1$ for $j
+%	=n+1, \ldots, 2n$, then $\bm A^T \bm G = Z_i$ if $b_i = \sqrt{2\sigma_i^2 /n}$, therefore this
+%	theorem applies to the case of two sample $z$-test.
+%	
+%	\subsubsection{Z test}
+	
+	
+%	\subsubsection{t test}
 	\begin{theorem}\label{theoremTstat} 
 		Under (A1-A2),  the two sample $t$-test statistics correlation can be expressed by 
 		\begin{align}\label{tTestCorrelation}
@@ -248,7 +275,7 @@
 		>\frac{\rho }{\sqrt{  \left[ 1 + \frac{\Delta_1^2}{8\sigma_1^2}\right]\left[ 1 +
 				\frac{\Delta_2^2}{8\sigma_2^2}\right]}} >\rho\]
 		\item  if $\Delta_1\Delta_2 <0$, then gene 1 and gene 2 are DE in different directions (one
-		up-regulaed and the other down-regulated), then by $r_s < -\rho$, 
+		up-regulated and the other down-regulated), then by $r_s < -\rho$, 
 		\[\rho(T_1, T_2)= \frac{\rho + \frac{\Delta_1\Delta_2}{8\sigma_1\sigma_2}r_{\text{s}}}{\sqrt{ 
 				\left[ 1 + \frac{\Delta_1^2}{8\sigma_1^2}\right]\left[ 1 + \frac{\Delta_2^2}{8\sigma_2^2}\right]}} 
 		>\rho\frac{ 1-\frac{\Delta_1\Delta_2}{8\sigma_1\sigma_2}}{\sqrt{  \left[ 1 +
@@ -317,7 +344,7 @@
 	($j =1, \ldots, 500$ for each group). For each given $\rho$, we generate $50,000$ samples for
 	control group and another $50,000$ samples for the treatment group. The $50,000$ samples within each
 	group are then randomly split into 100 blocks of size 500. Next, a pair is formed by taking one
-	block (500 samples) from treatment and one block from control,  mimicing one experiment for two
+	block (500 samples) from treatment and one block from control,  mimicking one experiment for two
 	group comparison. Therefore, 100 pairs are obtained to represent 100 replicates of the same
 	experiment, from which 100 test statistics are computed for each gene. 
 	
@@ -736,11 +763,82 @@
 		%correlation UNDER THE NULL. 
 		
 		
+		\section{MOVED FROM SETUP}
+		
+		
+			\begin{definition}
+				The \textbf{sample correlation} is 
+				\begin{equation}\label{rhosample}
+				r_{\text{sample}}  = \frac{r_1 + r_2}{2}
+				\end{equation}
+				where $r_1$  and $r_2$ are sample correlations for expression levels from treatment group and control group, respectively.
+				The pooled sample variance for test $H_{0i}$ ($i=1, 2$) is 
+				\begin{equation}\label{pooledvariance}
+				S_i^2 = \frac{(n-1)S_{X_i}^2 + (n-1)S_{Y_i}^2}{n-1 + n-1} = \frac{S_{X_i}^2 + S_{Y_i}^2}{2}
+				\end{equation}
+				where $S_{X_i}^2$ and $S_{Y_i}^2$ are sample variances for $X_i$ and $Y_i$ respectively.
+			\end{definition} 
+			
+			
+			
+			
+			Consider two random vectors $\bm X = (X_1, X_2)$ and $\bm Y =  (Y_1, Y_2)$ from normal distribution
+			\[ \bm X 
+			\sim N\left[
+			\left(\begin{array}{c}
+			\mu_1\\
+			\mu_2\\
+			\end{array} \right), 
+			\left(
+			\begin{array}{cc}
+			\sigma_1^2 &\rho \sigma_1\sigma_2 \\
+			\rho \sigma_1 \sigma_2 & 	\sigma_2^2 \\
+			\end{array}
+			\right)
+			\right]  \stackrel{\text{def}}{=} N(\bm \mu, \bm \Sigma)
+			\] 
+			and $\bm Y \sim N(\bm \mu + \bm \Delta, \bm \Sigma)$ where $\bm \Delta = (\Delta_1, \Delta_2)^T$.
+			Let $\bm X_1, \ldots, \bm X_n$ and $\bm Y_1, \ldots, \bm Y_n$ be $n$ realizations of each random
+			vector. 
+			\begin{enumerate}
+				\item[A1):] Within a sample, the random variables are correlated, $\text{Cor}(X_{i1}, X_{i2}) =
+				\text{Cor}(Y_{j1}, Y_{j2}) = \rho$.  This is the \textbf{population correlation}.
+				\item[A2):] Across samples, the random variables are independent, ($\cor\bm X_{j_1}, \bm Y_{j_2}$)=
+				0. 
+			\end{enumerate} 
+			
+			For notational convenience, let $G_1 = (X_{11}, \ldots, X_{1n}, Y_{11}, \ldots, Y_{1n})$ and $G_2 = 
+			(X_{21}, \ldots, X_{2n}, Y_{21}, \ldots, Y_{2n})$. We are interested in comparing the mean of $X_1$
+			verses $Y_1$, and of $X_2$ versus $Y_2$, statistically formulated as
+			\begin{equation}\label{hypotheses1}
+			H_{0i}:  \Delta_i = 0 \text{     Verses   }  H_{1i}: \Delta_i\neq 0 ,  ~~ i = 1, 2.
+			\end{equation}
+			
+			
+			For $i =1, 2$,  $\bar{X}_{i}\sim N(\mu_i, \sigma_i^2/n)$ and $\bar{Y}_{i}\sim N(\mu_i + \Delta_i,
+			\sigma_i^2/n)$. Define
+			\begin{equation}\label{expreU}
+			U_i = \bar{X}_i - \bar{Y}_i
+			\end{equation}
+			The two sample $z$-test statistic is
+			\begin{equation}\label{zTest}
+			Z_i = \frac{\bar{X}_{i}-\bar{Y}_{i} }{\sqrt{\frac{\sigma^2_i}{n} + \frac{\sigma^2_i}{n}}} =
+			\frac{U_i}{\sqrt{2\sigma_i^2/n}}\sim N(\Delta_i, 1) ,
+			\end{equation}
+			and the two sample $t$-test statistic for pooled variance is given by
+			\begin{align}\label{t-test}
+			T_i = \frac{\bar{X}_i - \bar{Y}_i}{S_i\sqrt{\frac{1}{n}+\frac{1}{n}}} =
+			\frac{U_i}{S_i\sqrt{\frac{2}{n}}} \sim t_{2n-2}(\Delta_i). 
+			\end{align}
+			where $S_i$ the pooled sample standard error defined in (\ref{pooledvariance}) and $\Delta_i$ is the
+			non-center parameter. 
+		
+		
 		
 		\newpage
 		
 	\end{appendix}
-	\bibliographystyle{apalike}
+	\bibliographystyle{nar}
 	\bibliography{mybib}
 	
 \end{document}
