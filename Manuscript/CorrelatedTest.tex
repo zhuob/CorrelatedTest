@@ -153,7 +153,7 @@
 	\end{array} \right)\stackrel{\text{def}}{=} \bm \mu + \bm \Delta,  \text{~~ for $j = n_1 + 1, \ldots, n_1+ n_2$}.	
 	\end{aligned}	
 	\end{equation}
-	Here $\rho$ is the population correlation defined by equation (\ref{popucor}), and $\bm \Delta= (\Delta_X, \Delta_Y)$ is vector of treatment effect for the pair of genes.
+	Here $\rho$ is the population correlation defined by equation (\ref{eq:popucor}), and $\bm \Delta= (\Delta_X, \Delta_Y)$ is vector of treatment effect for the pair of genes.
 	In addition, We assume independence across samples (Note that independence implies 0 correlation, but not vise versa), 
 	\begin{equation}\label{eq:indepsamples}
 	\cov(X_{j_1}, X_{j_2}) = \cov(Y_{j_1}, Y_{j_2}) = 0 \text{~~~for $j_1\neq j_2$}
@@ -202,7 +202,7 @@
 	\end{equation}
 	It follows by equation (\ref{eq:popucor}) that
 	\begin{equation}
-	\rho_T = \dfrac{\cov(T_X, T_Y)}{\sqrt{\var(T_X)\var(T_Y)}} = \dfrac{	\cov(\bm a^T\bm X, \bm a^T\bm Y)/S_XS_Y}{\sqrt{\var(\bm a^T\bm X)\var(\bm a^T\bm Y)}/S_XS_Y} = \rho
+	\rho_T = \dfrac{\cov(T_X, T_Y)}{\sqrt{\var(T_X)\var(T_Y)}} = \dfrac{\cov(\bm a^T\bm X, \bm a^T\bm Y)/S_XS_Y}{\sqrt{\var(\bm a^T\bm X)\var(\bm a^T\bm Y)}/S_XS_Y} = \rho
 	\end{equation}
 	\textbf{Note:} Theorem \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. Let $\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})$, and if we set $S_X=1$, then $T_X$ corresponds to mean difference between treatment and control group; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, $\rho_T=\rho$ if we use mean difference or $z$-statistic as test statistic.
 	
@@ -225,18 +225,24 @@
 	
 	
 %	\subsubsection{t test}
-	\begin{theorem}\label{theoremTstat} 
-		Under (A1-A2),  the two sample $t$-test statistics correlation can be expressed by 
-		\begin{align}\label{tTestCorrelation}
-			\text{Cor}(T_1, T_2)  = \frac{r_{\text{s}}\frac{\Delta_1\Delta_2}{\sigma_1\sigma_2}n(A-B) + 2\rho B
-				+ 2r_{\text{s}}\rho(A-B)}{\sqrt{\left[ \frac{\Delta_1^2}{\sigma_1^2}n(A-B) + 2
-					A\right]\left[\frac{\Delta_2^2}{\sigma_2^2}n(A-B) + 2 A\right]}}
-		\end{align} where 
-		\begin{align}\label{invScor}
-			r_s = \text{Cor}(\frac{1}{S_1}, \frac{1}{S_2}), ~~~~~A = \frac{n-1}{n-2}, ~~~B =
-			\frac{(n-1)\Gamma^2(n-3/2)}{\Gamma^2(n-1)}.
-		\end{align}
+
+	\begin{theorem}\label{thm:tstat}
+		If $(X_i, Y_i)$ follows a bivariate normal distribution with mean specified in equation (\ref{eq:meanstruct}) and covariance in (\ref{eq:covstruct}), then 
+			\begin{align}\label{eq:ttestcor}
+			\text{Cor}(T_X, T_Y)  = \frac{\rho_{\text{s}}\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}n_1(A-B) + (1 + \frac{n_1}{n_2}) \rho B
+				+ (1 + \frac{n_1}{n_2})\rho_{\text{s}}\rho(A-B)}{\sqrt{\left[ \frac{\Delta_X^2}{\sigma_X^2}n_1(A-B) + (1 + \frac{n_1}{n_2})
+					A\right]\left[\frac{\Delta_Y^2}{\sigma_X^2}n_1(A-B) + (1 + \frac{n_1}{n_2}) A\right]}}
+			\end{align}
+			 where 
+			 \begin{align}\label{eq:AandB}
+			 \rho_s = \text{Cor}(\frac{1}{S_1}, \frac{1}{S_2}), ~~A = \frac{n_1 + n_2-2}{n_1 + n_2-4}, ~~B =
+			 \frac{(\frac{n_1 + n_2 -2}{2})\Gamma^2(\frac{n_1 + n_2 -4}{2} + \frac{1}{2})}{\Gamma^2(\frac{n_1+ n_2 -2}{2})}.
+			 \end{align}
+			 
 	\end{theorem}
+
+
+
 	We will prove this in the methods section.
 	
 	\begin{corollary} 
@@ -527,66 +533,77 @@
 	$E(U_1U_2)E(\frac{1}{S_1S_2})$. Additionally, if we know $\text{Cor}(\frac{1}{S_1}, \frac{1}{S_2})$,
 	then the $t$-test statistics correlation can be accurately represented. 
 	
-	\textbf{Proof of theorem (\ref{theoremTstat})} \\
+	\textbf{Proof of theorem (\ref{thm:tstat})} \\
 	First note that
 	\begin{align*}
-		\text{Cov}(T_1, T_2) &= E(T_1T_2) - E(T_1)E(T_2) \\
+		\cov(T_X, T_Y) &= E(T_XT_Y) - E(T_X)E(T_Y) \\
 		%& = E(c_0\frac{U_1}{S_1} \cdot c_0\frac{U_2}{S_2}) - E(c_0\frac{U_1}{S_1})E( c_0\frac{U_2}{S_2}) \\
-		& = c_0^2 \left[E(U_1U_2)E(\frac{1}{S_1S_2}) - E(\frac{U_1}{S_1})E( \frac{U_2}{S_2})\right]   
+		& = \frac{1}{c_0^2} \left[E(U_XU_Y)E(\frac{1}{S_XS_Y}) - E(\frac{U_X}{S_X})E( \frac{U_Y}{S_Y})\right]   
 		~~~~~~~~~\text{ (by lemma \ref{lemmaIndep})}
 	\end{align*}
-	where $c_0 = \sqrt{\frac{n}{2}}$ and $\text{Var}(T_1) = \text{Var}(c_0\frac{U_1}{S_1})=
-	c_0^2\text{Var}(\frac{U_1}{S_1})$. 
+	where $c_0 = \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ and $\var(T_X) = \var(\frac{U_X}{c_0S_X})=
+	\frac{1}{c_0^2}\var(\frac{U_X}{S_X})$. 
 	Note that 
-	\begin{align}\label{Tcorrelation}
-		\text{Cor}(T_1, T_2) & = \frac{\text{Cov}(T_1, T_2) }{\sqrt{\text{Var}(T_1) \text{Var}(T_2) }} =
-		\frac{E(U_1U_2)E(\frac{1}{S_1S_2}) - E(\frac{U_1}{S_1})E(
-			\frac{U_2}{S_2})}{\sqrt{\text{Var}(\frac{U_1}{S_1})\text{Var}(\frac{U_2}{S_2})}} 
+	\begin{align}\label{eq:Tcorrelation}
+		\cor(T_X, T_Y) & = \frac{\cov(T_X, T_Y) }{\sqrt{\var(T_X) \var(T_Y) }} =
+		\frac{E(U_XU_Y)E(\frac{1}{S_XS_Y}) - E(\frac{U_X}{S_X})E(
+			\frac{U_Y}{S_Y})}{\sqrt{\var(\frac{U_X}{S_X})\var(\frac{U_Y}{S_Y})}} 
 	\end{align}
-	We need to calculate $E(U_1U_2)$, $E(\frac{1}{S_1S_2})$, $ E(\frac{U_i}{S_i})$ and
-	$\text{Var}(\frac{U_i}{S_i})$ for $i =1, 2$. 
+	We need to calculate $E(U_XU_Y)$, $E(\frac{1}{S_XS_Y})$, $ E(\frac{U_i}{S_i})$ and
+	$\var(\frac{U_i}{S_i})$ for $i =X, Y$. 
 	\begin{enumerate}
-		\item Note that $U_i\sim N(\Delta_i, \frac{2\sigma_i^2}{n}),  i=1, 2$. 
+		\item Note that $U_i\sim N(\Delta_i, \frac{2\sigma_i^2}{n}),  i=X, Y$. 
 		\begin{align}\label{eq1}
-			E(U_1U_2)= \text{Cov}(U_1, U_2) + E(U_1)E(U_2) = \rho \frac{2\sigma_1\sigma_2}{n} +
-			\Delta_1\Delta_2
+			E(U_XU_X)= \cov(U_X, U_Y) + E(U_X)E(U_Y) = \rho\sigma_X\sigma_Y\left(\frac{1}{n_1} + \frac{1}{n_2}\right) +
+			\Delta_X\Delta_Y
 		\end{align} 
-		\item Since $\frac{(n-1)S_{X_1}^2}{\sigma_1^2}$ and $\frac{(n-1)S_{Y_1}^2}{\sigma_1^2}$ are
-		independent  and follow $\chi^2(n-1)$, we have $W_{S_1}=\frac{2(n-1)S_1^2}{\sigma_1^2}\sim
-		\chi^2(2n-2)$. It can be shown that 
-		\[E(W_{S_1}^k)= \frac{2^k\Gamma(n-1+k)}{\Gamma(n-1)}\] 
+		\item Since $\frac{(n_1-1)S_{X}^2}{\sigma_X^2}$ and $\frac{(n_2-1)S_{Y}^2}{\sigma_Y^2}$ are
+		independent and follow $\chi^2(n_1-1)$ and $\chi^2(n_2 -1)$ respectively, , we have $W_{X}=\frac{(n_1 + n_2 -2)S_X^2}{\sigma_X^2}\sim
+		\chi^2(n_1 + n_2-2)$. It can be shown that 
+		\[E(W_{X}^k)= \frac{2^k\Gamma(\frac{n_1 + n_2 -2}{2}+k)}{\Gamma(\frac{n_1 + n_2 -2}{2})}\] 
 		Therefore 
-		\[E\left(\frac{1}{S_1}\right) =
-		\frac{\sqrt{n-1}\Gamma(n-\frac{3}{2})}{\sigma_1\Gamma(n-1)}=\frac{\sqrt{A}}{\sigma_1}, 
-		~~\text{Var}\left(\frac{1}{S_1}\right)=\frac{n-1}{\sigma_1^2}\left[\frac{1}{n-2} -
-		\frac{\Gamma^2(n-\frac{3}{2})}{\Gamma^2(n-1)}\right]=\frac{A-B}{\sigma_1^2}\]
-		Note that $r_s = \text{Cor}(\frac{1}{S_1}, \frac{1}{S_2})$, we have 
-		\begin{align}\label{eq2}
-			E(\frac{1}{S_1S_2})  = E(\frac{1}{S_1})E(\frac{1}{S_2}) + r_s
-			\sqrt{\text{Var}(\frac{1}{S_1})\text{Var}(\frac{1}{S_2})} = \frac{A}{\sigma_1\sigma_2} + r_s
-			\frac{A-B}{\sigma_1\sigma_2}
-		\end{align}
-		\item $U_i\sim N(\Delta_i, \frac{2\sigma_i^2}{n})$ and $\frac{2(n-1)S_i^2}{\sigma_i^2} \sim
-		\chi^2(2n-2)$ and by Lemma \ref{lemmaIndep} they are independent, we have 
-		\[\frac{\frac{U_i-\Delta_i}{\sqrt{2\sigma_i^2/n}}}{\frac{2(n-1)S_i^2}{\sigma_i^2}/(2n-2)}  =
-		\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\sim t(2n-2)\]
-		It follows from $E\left(\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\right)=0 $ and
-		$\text{Var}\left(\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\right) = \frac{n-1}{n-2}$ that
+		\begin{equation}
+		\begin{aligned}
+		E\left(\frac{1}{S_X}\right) =
+	 \frac{\sqrt{B}}{\sigma_X},		~~~\var\left(\frac{1}{S_X}\right) = \frac{A-B}{\sigma_X^2}
+		\end{aligned}
+		\end{equation}
+			Note that $\rho_s = \text{Cor}(\frac{1}{S_X}, \frac{1}{S_Y})$, we have 
+			\begin{equation}\label{eq2}
+			\begin{aligned}
+			E(\frac{1}{S_XS_Y})  &= E(\frac{1}{S_X})E(\frac{1}{S_Y}) + \rho_s
+			\sqrt{\var(\frac{1}{S_X})\var(\frac{1}{S_Y})} \\
+			& = \frac{B}{\sigma_X\sigma_Y} + \rho_s
+			\frac{A-B}{\sigma_X\sigma_Y}
+			\end{aligned}
+			\end{equation}
+	
+		\item $U_i\sim N\left(\Delta_i, \sigma_i^2(\frac{1}{n_1} + \frac{1}{n_2})\right)$ and $\frac{(n_1 + n_2 -2)S_i^2}{\sigma_i^2} \sim
+		\chi^2(n_1 + n_2-2)$ and by Lemma \ref{lemmaIndep}  $U_i$ and $\frac{(n_1 + n_2 -2)S_i^2}{\sigma_i^2}$ are independent for $i = X, Y$, we have 
+		\begin{equation}
+			\frac{\frac{U_i-\Delta_i}{\sigma_i\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}}{\frac{(n_1 + n_2-2)S_i^2}{\sigma_i^2}/(n_1 + n_2 -2)}  =
+			\frac{U_i-\Delta_i}{S_i\sqrt{\frac{1}{n_1 } + \frac{1}{n_2}}}\sim t(n_1 + n_2-2)
+		\end{equation}	
+		It follows from 
+		\begin{equation}
+			E\left(\frac{U_i-\Delta_i}{S_i\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}\right)=0, ~~ \text{Var}\left(\frac{U_i-\Delta_i}{S_i\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}\right) = \frac{n_1 + n_2-2}{n_1 + n_2-4}
+		\end{equation}
+	 that
 		\begin{align}\label{eq3}
-			E\left(\frac{U_i}{S_i}\right) &= \frac{\Delta_i}{\sigma_i}\sqrt{A}
+			E\left(\frac{U_i}{S_i}\right) &= \frac{\Delta_i}{\sigma_i}\sqrt{B}
 		\end{align}
 		\begin{align}\label{eq4}
-			\text{Var}\left(\frac{U_i}{S_i}\right)&=\frac{2}{n}A + \frac{\Delta_i^2}{\sigma_i^2}(A-B)
+			\text{Var}\left(\frac{U_i}{S_i}\right)&=A\left(\frac{1}{n_1} + \frac{1}{n_2}\right) + \frac{\Delta_i^2}{\sigma_i^2}(A-B)
 		\end{align}
 	\end{enumerate}
-	Finally,  the test statistics correlation (\ref{tTestCorrelation}) is obtained by plugging
-	(\ref{eq1}--\ref{eq4}) into (\ref{Tcorrelation}).
+	Finally,  the test statistics correlation (\ref{eq:ttestcor}) is obtained by plugging
+	(\ref{eq1}--\ref{eq4}) into (\ref{eq:Tcorrelation}).
 	
-	Up to now we have obtained an exact expression for $\text{Cor}(T_1, T_2)$, which depends not only on
-	the sample size $n$, but also on $\Delta/\sigma$, the magnitude of DE. The rest of this section
-	discusses asymptotic  property of $\text{Cor}(T_1, T_2)$ for large sample size.
+	Up to now we have obtained an exact expression for $\text{Cor}(T_X, T_Y)$, which depends not only on
+	the sample size $n_1$ and $n_2$, but also on $\Delta/\sigma$, the relative magnitude of DE. The rest of this section
+	discusses asymptotic  property of $\text{Cor}(T_X, T_Y)$ for large sample size.
 	\begin{lemma}\label{lemmaLimit}
-		Let $A = \frac{n-1}{n-2}$, $B= \frac{(n-1)\Gamma^2(n-3/2)}{\Gamma^2(n-1)}$, then the following
+		For $A$ and $B$ defined in equation (\ref{eq:AandB}),  the following results hold
 		results hold:
 		\begin{enumerate}
 			\item $\lim\limits_{n\rightarrow \infty} A = 1$.
@@ -833,6 +850,122 @@
 			where $S_i$ the pooled sample standard error defined in (\ref{pooledvariance}) and $\Delta_i$ is the
 			non-center parameter. 
 		
+			\begin{theorem}\label{theoremTstat} 
+				Under (A1-A2),  the two sample $t$-test statistics correlation can be expressed by 
+				\begin{align}\label{tTestCorrelation}
+				\text{Cor}(T_1, T_2)  = \frac{r_{\text{s}}\frac{\Delta_1\Delta_2}{\sigma_1\sigma_2}n(A-B) + 2\rho B
+					+ 2r_{\text{s}}\rho(A-B)}{\sqrt{\left[ \frac{\Delta_1^2}{\sigma_1^2}n(A-B) + 2
+						A\right]\left[\frac{\Delta_2^2}{\sigma_2^2}n(A-B) + 2 A\right]}}
+				\end{align} where 
+				\begin{align}\label{invScor}
+				r_s = \text{Cor}(\frac{1}{S_1}, \frac{1}{S_2}), ~~~~~A = \frac{n-1}{n-2}, ~~~B =
+				\frac{(n-1)\Gamma^2(n-3/2)}{\Gamma^2(n-1)}.
+				\end{align}
+			\end{theorem}
+		
+		
+		
+			First note that
+			\begin{align*}
+			\text{Cov}(T_1, T_2) &= E(T_1T_2) - E(T_1)E(T_2) \\
+			%& = E(c_0\frac{U_1}{S_1} \cdot c_0\frac{U_2}{S_2}) - E(c_0\frac{U_1}{S_1})E( c_0\frac{U_2}{S_2}) \\
+			& = c_0^2 \left[E(U_1U_2)E(\frac{1}{S_1S_2}) - E(\frac{U_1}{S_1})E( \frac{U_2}{S_2})\right]   
+			~~~~~~~~~\text{ (by lemma \ref{lemmaIndep})}
+			\end{align*}
+			where $c_0 = \sqrt{\frac{n}{2}}$ and $\text{Var}(T_1) = \text{Var}(c_0\frac{U_1}{S_1})=
+			c_0^2\text{Var}(\frac{U_1}{S_1})$. 
+			Note that 
+			\begin{align}\label{tttTcorrelation}
+			\text{Cor}(T_1, T_2) & = \frac{\text{Cov}(T_1, T_2) }{\sqrt{\text{Var}(T_1) \text{Var}(T_2) }} =
+			\frac{E(U_1U_2)E(\frac{1}{S_1S_2}) - E(\frac{U_1}{S_1})E(
+				\frac{U_2}{S_2})}{\sqrt{\text{Var}(\frac{U_1}{S_1})\text{Var}(\frac{U_2}{S_2})}} 
+			\end{align}
+			We need to calculate $E(U_1U_2)$, $E(\frac{1}{S_1S_2})$, $ E(\frac{U_i}{S_i})$ and
+			$\text{Var}(\frac{U_i}{S_i})$ for $i =1, 2$. 
+			\begin{enumerate}
+				\item Note that $U_i\sim N(\Delta_i, \frac{2\sigma_i^2}{n}),  i=1, 2$. 
+				\begin{align}\label{eqq1}
+				E(U_1U_2)= \text{Cov}(U_1, U_2) + E(U_1)E(U_2) = \rho \frac{2\sigma_1\sigma_2}{n} +
+				\Delta_1\Delta_2
+				\end{align} 
+				\item Since $\frac{(n-1)S_{X_1}^2}{\sigma_1^2}$ and $\frac{(n-1)S_{Y_1}^2}{\sigma_1^2}$ are
+				independent  and follow $\chi^2(n-1)$, we have $W_{S_1}=\frac{2(n-1)S_1^2}{\sigma_1^2}\sim
+				\chi^2(2n-2)$. It can be shown that 
+				\[E(W_{S_1}^k)= \frac{2^k\Gamma(n-1+k)}{\Gamma(n-1)}\] 
+				Therefore 
+				\[E\left(\frac{1}{S_1}\right) =
+				\frac{\sqrt{n-1}\Gamma(n-\frac{3}{2})}{\sigma_1\Gamma(n-1)}=\frac{\sqrt{A}}{\sigma_1}, 
+				~~\text{Var}\left(\frac{1}{S_1}\right)=\frac{n-1}{\sigma_1^2}\left[\frac{1}{n-2} -
+				\frac{\Gamma^2(n-\frac{3}{2})}{\Gamma^2(n-1)}\right]=\frac{A-B}{\sigma_1^2}\]
+				Note that $r_s = \text{Cor}(\frac{1}{S_1}, \frac{1}{S_2})$, we have 
+				\begin{align}\label{eqq2}
+				E(\frac{1}{S_1S_2})  = E(\frac{1}{S_1})E(\frac{1}{S_2}) + r_s
+				\sqrt{\text{Var}(\frac{1}{S_1})\text{Var}(\frac{1}{S_2})} = \frac{A}{\sigma_1\sigma_2} + r_s
+				\frac{A-B}{\sigma_1\sigma_2}
+				\end{align}
+				\item $U_i\sim N(\Delta_i, \frac{2\sigma_i^2}{n})$ and $\frac{2(n-1)S_i^2}{\sigma_i^2} \sim
+				\chi^2(2n-2)$ and by Lemma \ref{lemmaIndep} they are independent, we have 
+				\[\frac{\frac{U_i-\Delta_i}{\sqrt{2\sigma_i^2/n}}}{\frac{2(n-1)S_i^2}{\sigma_i^2}/(2n-2)}  =
+				\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\sim t(2n-2)\]
+				It follows from $E\left(\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\right)=0 $ and
+				$\text{Var}\left(\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\right) = \frac{n-1}{n-2}$ that
+				\begin{align}\label{eqq3}
+				E\left(\frac{U_i}{S_i}\right) &= \frac{\Delta_i}{\sigma_i}\sqrt{A}
+				\end{align}
+				\begin{align}\label{eqq4}
+				\text{Var}\left(\frac{U_i}{S_i}\right)&=\frac{2}{n}A + \frac{\Delta_i^2}{\sigma_i^2}(A-B)
+				\end{align}
+			\end{enumerate}
+			Finally,  the test statistics correlation (\ref{tTestCorrelation}) is obtained by plugging
+			(\ref{eq1}--\ref{eq4}) into (\ref{Tcorrelation}).
+			
+			Up to now we have obtained an exact expression for $\text{Cor}(T_1, T_2)$, which depends not only on
+			the sample size $n$, but also on $\Delta/\sigma$, the magnitude of DE. The rest of this section
+			discusses asymptotic  property of $\text{Cor}(T_1, T_2)$ for large sample size.
+			\begin{lemma}\label{llemmaLimit}
+				Let $A = \frac{n-1}{n-2}$, $B= \frac{(n-1)\Gamma^2(n-3/2)}{\Gamma^2(n-1)}$, then the following
+				results hold:
+				\begin{enumerate}
+					\item $\lim\limits_{n\rightarrow \infty} A = 1$.
+					\item $\lim\limits_{n\rightarrow \infty} B = 1$.
+					\item $\lim\limits_{n\rightarrow \infty} n(A-B) = \frac{1}{4}$. 
+				\end{enumerate}
+			\end{lemma}
+			\textbf{Proof}: We will use second order Stirling's formula
+			\begin{align}\label{sStirling1}
+			n! \approx \sqrt{2\pi n}\left(\frac{n}{e}\right)^n(1 + \frac{1}{12n})
+			\end{align}
+			By Stirling's formula (\ref{Stirling1}) and  $\Gamma(n + \frac{1}{2}) =
+			\frac{(2n)!}{4^nn!}\sqrt{\pi}$ 
+			\begin{align*}
+			\frac{\Gamma^2(n - \frac{3}{2}) }{\Gamma^2(n-1)} & =\left[\frac{\Gamma(n -2 +
+				\frac{1}{2})}{\Gamma(n-1)}\right]^2\\
+			&  = \left[\frac{(2n-4)!}{[(n-2)!]^2}\left(\frac{1}{4}\right)^{(n-2)}\right]^2\pi\\
+			& \approx \left[\frac{\sqrt{2\pi(2n-4)}\left(\frac{2n-4}{e}\right)^{2n-4}\left(1 +
+				\frac{1}{12(2n-4)}\right)}{\left[\sqrt{2\pi(n-2)}\left(\frac{n-2}{e}\right)^{2n-4}\left(1 +
+				\frac{1}{12(n-2)}\right)\right]^2}\left(\frac{1}{2}\right)^{2n-4}\right]^2\pi \\
+			& = \frac{(n-2)\left[(n-2) + \frac{1}{24}\right]^2}{(n-2 + \frac{1}{12})^4}
+			\end{align*}
+			therefore $\lim\limits _{n\rightarrow\infty}A = \lim\limits_{n\rightarrow\infty}B = 1$. Next, 
+			\begin{align*}
+			\lim\limits_{n\rightarrow \infty} n(A-B)& =\lim\limits_{n\rightarrow \infty} n\left[\frac{n-1}{n-2}
+			- \frac{(n-2)\left[(n-2) + \frac{1}{24}\right]^2}{(n-2 + \frac{1}{12})^4}\right]\\
+			& = \lim\limits_{n\rightarrow \infty}  \frac{\frac{1}{4} n(n-1)(n-2)^3 +
+				o\left((n-2)^4\right)}{(n-2)\left[(n-2)^4 +  o\left((n-2)^4\right)\right]}\\
+			&= \frac{1}{4}
+			\end{align*}
+			Application of Lemma \ref{lemmaLimit} to (\ref{tTestCorrelation}) gives the limit of test statistics
+			correlation, 
+			\begin{align}\label{llimitT}
+			\rho(T_1, T_2)=\lim\limits_{n \rightarrow \infty} \text{Cor}(T_1, T_2) = \frac{\rho +
+				\frac{\Delta_1\Delta_2}{8\sigma_1\sigma_2}r_{\text{s}}}{\sqrt{  \left[ 1 +
+					\frac{\Delta_1^2}{8\sigma_1^2}\right]\left[ 1 + \frac{\Delta_2^2}{8\sigma_2^2}\right]}}
+			\end{align}
+			where $r_{\text{s}}$ is defined in (\ref{invScor}). When $\bm \Delta = \bm 0$ then $\lim\limits_{n
+				\rightarrow \infty} \text{Cor}(T_1, T_2) = \rho$; but when $\bm \Delta \neq \bm 0$, $\lim\limits_{n
+				\rightarrow \infty} \text{Cor}(T_1, T_2) \neq \rho$ in general. In the next section, we will discuss
+			about it in further detail. 
+			
 		
 		
 		\newpage
