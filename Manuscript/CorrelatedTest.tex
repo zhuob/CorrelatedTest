@@ -1,7 +1,8 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage{graphicx}
 \usepackage{amsmath,bm}
-\usepackage[square, numbers, authoryear]{natbib}
+\usepackage[square,numbers]{natbib}
+%\usepackage[square, numbers, authoryear]{natbib}
 \usepackage[utf8]{inputenc}    
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{hyperref}
@@ -10,6 +11,9 @@
 \date{} % Today's date or a custom date
 \usepackage{epsfig}
 \usepackage{subcaption}
+
+
+
 
 \newtheorem{theorem}{Theorem}       % theorem environment
 \newtheorem{definition}{Definition}     % definition environment
@@ -107,7 +111,7 @@
 	\textit{Correlation} is a statistical quantity used to assess a possible linear relationship between two random variables or two sets of data sets. The degree of correlation is measured by \textit{correlation coefficient}, a scaler taking values on the interval $[-1, 1]$. Correlation coefficient of +1 (-1) indicates perfect positive (negative dependence), while correlation coefficient of 0 implies no linear relationship between two random variables. Larger correlation coefficient (in absolute value) corresponds to stronger linear correlation. 
 	There are many ways to look at the correlation coefficient , many of which are special cases of Pearson's correlation coefficient \citep{lee1988thirteen}. For example, the \textit{Kendall tau rank correlation coefficient} is computed as Pearson's correlation coefficient between the ranked variables.
 	
-	Let $(X, Y)$ be a random vector, and $(x_j, y_j)$ its $j$th observation. The most familiar measure of dependence between two quantities is the \textit{Pearson's correlation coefficient}.  Following the notation of \cite{lee1988thirteen}, We will restrict our interest to two types of Pearson's correlation coefficient: 1) standardized covariance, which we refer to as \textit{\popucor}
+	Let $(X, Y)$ be a random vector, and $(x_j, y_j)$ its $j$th observation. The most familiar measure of dependence between two quantities is the \textit{Pearson's correlation coefficient}.  Following the notation of \citet{lee1988thirteen}, We will restrict our interest to two types of Pearson's correlation coefficient: 1) standardized covariance, which we refer to as \textit{\popucor}
 	\begin{equation}\label{eq:popucor}
 		\rho =\dfrac{\cov(X, Y)}{\sqrt{\var(X)\var(Y)}} = \dfrac{E[(X-\mu_X)(Y-\mu_Y)]}{\sigma_X\sigma_Y}, 
 	\end{equation} 	where $\mu_X$ and $\mu_Y$ are the expected values and $\sigma_X<\infty$ and $\sigma_Y<\infty$ are the population standard errors, and 2) a function of raw scores and means, which we refer to as \textit{\samplecor}
@@ -166,7 +170,11 @@
 	\begin{equation}\label{eq:teststat}
 	T_X = \dfrac{\bm a^T\bm X}{S_X},  ~~~ T_Y = \dfrac{\bm a^T \bm Y}{S_Y}
 	\end{equation}  
-	where $\bm a$ is a vector of length $n_1 + n_2$ denoting coefficient for comparison(e.g., $1$ for treatment and $-1$ for control), $\bm X = (X_1, \ldots, X_{n_1}, X_{n_1 +1}, \ldots, X_{n_1 + n_2})$, and  $S_X$ and $S_Y$ are the standard error for $\bm a^T\bm X$ and $\bm a^T\bm Y$ respectively. Depending on the type of test, the standard error $S$ may take different forms. In the case of two sample $t$-test with unequal variance, $\bm a^T\bm X = \bar{X}_1 - \bar{X}_2$ and $S_X = \sqrt{S_{X,1}^2/n_1 + S_{X,2}^2/n_2}$, where $ S_{X,1}^2$ and $S_{X,2}^2$ are the sample variances for the treatment and the control groups.
+	where $\bm a$ is a vector of length $n_1 + n_2$ denoting coefficient for comparison(e.g., $1$ for treatment and $-1$ for control), $\bm X = (X_1, \ldots, X_{n_1}, X_{n_1 +1}, \ldots, X_{n_1 + n_2})$, and  $S_X$ and $S_Y$ are the standard error for $\bm a^T\bm X$ and $\bm a^T\bm Y$ respectively. Depending on the type of test, the standard error $S$ may take different forms. In the case of two sample $t$-test with unequal variance, $\bm a^T\bm X = \bar{X}_1 - \bar{X}_2$ and $S_X = \sqrt{S_{X,1}^2/n_1 + S_{X,2}^2/n_2}$, where $ S_{X,1}^2$ and $S_{X,2}^2$ are the sample variances for the treatment and the control groups,
+	\begin{equation}\label{eq:samplevariance}
+	S_{X, 1} =  \frac{\sum_{j=1}^{n_1}(X_j - \bar{X}_1)^2}{n_1 -1}, ~~S_{X, 2} =  \frac{\sum_{j=n_1 +1}^{n_1 + n_2}(X_j - \bar{X}_2)^2}{n_2 -1}
+	\end{equation}
+	
 	
 	Our main goal is to explore the relationship between population correlation (equation (\ref{eq:popucor})) for the test statistics 
 	\begin{equation}
@@ -235,64 +243,76 @@
 	\end{theorem}
 	The proof of Theorem \ref{thm:tstat} is presented in Section \ref{section:testcormethod}. Next we give the limit of $\cor(T_X, T_Y)$.
 	\begin{theorem}\label{thm:rholimit}
-	  	If there exists a positive number $M$, such that  $n_1n_2^{-1}\leq M$ and $n_1n_2^{-1}\leq M$, then
+	  	If there exists positive constant $M_1$ and $M_2$, such that $M_1 \leq n_1n_2^{-1}\leq M_2$, then
 	   \begin{equation}\label{limitT}
 	   \rho_T=\lim\limits_{n_1 + n_2 \rightarrow \infty} \cor(T_X, T_Y) = \frac{\rho +
 	   	\beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho_{s}}{\sqrt{  \left[ 1 +\beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}}
 	   \end{equation}
-	   where $\rho_{s}$ is defined in equation (\ref{eq:AandB}) and $\beta = \lim\limits_{n_1 + n_2 \rightarrow \infty}C$.
+	   where $\rho_{s}$ is defined in equation (\ref{eq:AandB}) and $\beta = \lim\limits_{n_1 + n_2 \rightarrow \infty}C = (4 + 2n_1^{-1}n_2 + 2n_1n_2^{-1})$.
 	\end{theorem}
-	 When $\bm \Delta = \bm 0$ then $\rho_T = \rho$; but when $\bm \Delta \neq \bm 0$, then $\rho_T \neq \rho$ in general. % In the next section, we will discuss about it in further detail. 
-	\begin{corollary} 
-	If $\bm \Delta  = (\Delta_X, \Delta_Y)= \bm 0$, and there exists a positive number $M$, such that  $n_1n_2^{-1}\leq M$ and $n_1n_2^{-1}\leq M$,  then $\cor({T_X, T_Y})\rightarrow \rho$ as $n_1 + n_2 \rightarrow \infty$. 
-	\end{corollary}
-	Proof:  If null is true for both test or $\bm \Delta  = 0$, then equation (\ref{eq:ttestcor}) reduces to
-	\begin{align}\label{CalculateTCor}
-		\cor(T_X, T_Y) = \left[\rho_s \cdot 1 + (1-\rho_s)\frac{B}{A}\right]\rho
-	\end{align}
-	The term in the square bracket is a weighted average of 1 and $\frac{B}{A}$, with the latter
-	converging to 1 as $n_1 + n_2$ grows to infinity. Therefore $\lim\limits_{n_1 + n_2\rightarrow\infty} \cor({T_X, T_Y}) = \rho$.
-	\begin{corollary} 
-		If $\bm \Delta = (\Delta_X, \Delta_Y)\neq \bm 0$, then  $\cor({T_X,
-			T_Y})$ does not converge to $\rho$ in general.
-	\end{corollary} 
-	The result immediately follows from lemma  (\ref{lemmaLimit}) in appendix.
+	Theorem \ref{thm:rholimit} says that as long as $n_1$ and $n_2$ grow proportionally, the limit of $\cor(T_X, T_Y)$ is a function of population covariance $\bm \Sigma$, the true mean difference $\bm \Delta$ and the ratio $n_1/n_2$. We have the following observations:
+	\begin{enumerate}
+		\item If both test are true null (i.e., $\bm \Delta = \bm 0$), then $\rho_T = \rho$.
+		\item If one test is true null, then $\rho_T$ is proportional to and smaller in absolute value than $\rho$. For example, when $\Delta_X=0$, $\rho_T = \rho /\sqrt{1 + \beta \frac{\Delta_Y^2}{\sigma_Y^2}}$. 
+		\item If both tests are true alternative (i.e., $\bm \Delta \neq \bm 0$), then $\rho_T\neq \rho$ in general.
+	\end{enumerate}
 	
-	Depending on the true value of $\bm\Delta$ (DE or not DE, up-regulated or down-regulated if DE),
-	$\cor({T_X, T_Y})$ might be far from $\rho$ in different ways, discussed below.
+	However, it should be noted that if $n_1/n_2 \rightarrow 0$ or $\infty$, then $\beta = 0$ and we have $\rho_T = \rho$. That is, when sample size of one group is dominant, $\cor(T_X, T_Y)$ will converge to $\rho$ regardless of whether the tests are under the null or not. 
 	
-	We show via simulation [figure (\ref{invsd})] that for $\rho$ growing from -1 to 1, $\rho_s$
-	in equation (\ref{eq:AandB}) has a "U" shape whose minimum is located near $\rho=0$, and  
+%	 When $\bm \Delta = \bm 0$ then $\rho_T = \rho$; but when $\bm \Delta \neq \bm 0$, then $\rho_T \neq \rho$ in general. % In the next section, we will discuss about it in further detail. 
+%	\begin{corollary} 
+%	If $\bm \Delta  = (\Delta_X, \Delta_Y)= \bm 0$, and there exists a positive number $M$, such that  $n_1n_2^{-1}\leq M$ and $n_1n_2^{-1}\leq M$,  then $\cor({T_X, T_Y})\rightarrow \rho$ as $n_1 + n_2 \rightarrow \infty$. 
+%	\end{corollary}
+%	Proof:  If null is true for both test or $\bm \Delta  = 0$, then equation (\ref{eq:ttestcor}) reduces to
+%	\begin{align}\label{CalculateTCor}
+%		\cor(T_X, T_Y) = \left[\rho_s \cdot 1 + (1-\rho_s)\frac{B}{A}\right]\rho
+%	\end{align}
+%	The term in the square bracket is a weighted average of 1 and $\frac{B}{A}$, with the latter
+%	converging to 1 as $n_1 + n_2$ grows to infinity. Therefore $\lim\limits_{n_1 + n_2\rightarrow\infty} \cor({T_X, T_Y}) = \rho$.
+%	\begin{corollary} 
+%		If $\bm \Delta = (\Delta_X, \Delta_Y)\neq \bm 0$, then  $\cor({T_X,
+%			T_Y})$ does not converge to $\rho$ in general.
+%	\end{corollary} 
+%	The result immediately follows from lemma  (\ref{lemmaLimit}) in appendix.
+
+	
+	
+	Depending on the underlying value of $\bm\Delta$ (DE or not DE, up-regulated or down-regulated if DE) and covariance $\bm \Sigma$,
+	$\rho_T$ might be far from $\rho$ in different ways. Next we will discuss the relationship between $\rho_T$ and $\rho$ under several scenarios.
+	
+	We show via simulation (see Figure \ref{invsd}) that for $\rho$ growing from -1 to 1, $\rho_s$
+	in equation (\ref{eq:AandB}) has a ``U" shape whose minimum is located near $\rho=0$, and  
 	\begin{equation}\label{rhoineq}
 		0 \leq r_s \leq |\rho| \text{~~ ONLY BASED ON SIMULATION}
 	\end{equation}
-	(\ref{rhoineq}) is useful in comparing  $\rho({T_1, T_2})$  and $\rho$. 
+	which is useful in comparing  $\rho_T$  and $\rho$. 
 	For $\rho <0 $
 	\begin{enumerate}
-		\item if $\Delta_1\Delta_2 >0$, then gene 1 and gene 2 are DE in the same direction (both 
+		\item if $\Delta_X\Delta_Y >0$, then gene $X$ and gene $Y$ are DE in the same direction (both 
 		up-regulated or both down-regulated), then 
-		\[\rho(T_1, T_2)= \frac{\rho + \frac{\Delta_1\Delta_2}{8\sigma_1\sigma_2}r_{\text{s}}}{\sqrt{ 
-				\left[ 1 + \frac{\Delta_1^2}{8\sigma_1^2}\right]\left[ 1 + \frac{\Delta_2^2}{8\sigma_2^2}\right]}} 
-		>\frac{\rho }{\sqrt{  \left[ 1 + \frac{\Delta_1^2}{8\sigma_1^2}\right]\left[ 1 +
-				\frac{\Delta_2^2}{8\sigma_2^2}\right]}} >\rho\]
-		\item  if $\Delta_1\Delta_2 <0$, then gene 1 and gene 2 are DE in different directions (one
-		up-regulated and the other down-regulated), then by $r_s < -\rho$, 
-		\[\rho(T_1, T_2)= \frac{\rho + \frac{\Delta_1\Delta_2}{8\sigma_1\sigma_2}r_{\text{s}}}{\sqrt{ 
-				\left[ 1 + \frac{\Delta_1^2}{8\sigma_1^2}\right]\left[ 1 + \frac{\Delta_2^2}{8\sigma_2^2}\right]}} 
-		>\rho\frac{ 1-\frac{\Delta_1\Delta_2}{8\sigma_1\sigma_2}}{\sqrt{  \left[ 1 +
-				\frac{\Delta_1^2}{8\sigma_1^2}\right]\left[ 1 + \frac{\Delta_2^2}{8\sigma_2^2}\right]}} >\rho\]
-		\item if  $\Delta_1\Delta_2 =0$, then one is DE but the other is not. Suppose gene 1 is not DE,
+		\begin{equation}
+			\rho_T= \frac{\rho + \beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho_s}{\sqrt{ 
+					\left[ 1 + \beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}} 
+			>\frac{\rho }{\sqrt{  \left[ 1 + \beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 +
+					\beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}} >\rho
+		\end{equation}
+		\item  if $\Delta_X\Delta_Y <0$, then gene $X$ and gene $Y$ are DE in different directions (one
+		up-regulated and the other down-regulated), then by $\rho_s < -\rho$, 
+		\[\rho(T_X, T_Y)= \frac{\rho + \beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho_{\text{s}}}{\sqrt{ 
+				\left[ 1 + \beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}} 
+		>\rho\frac{ 1-\beta\frac{\Delta_1\Delta_2}{\sigma_1\sigma_2}}{\sqrt{  \left[ 1 +
+				\beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}} >\rho\]
+		\item if  $\Delta_X\Delta_Y =0$, then one is DE but the other is not. Suppose gene $X$ is not DE,
 		then
-		\[\rho(T_1, T_2)= \frac{\rho}{\sqrt{  \left[ 1 + \frac{\Delta_1^2}{8\sigma_1^2}\right]}} >\rho \]
+		\[\rho(T_X, T_Y)= \frac{\rho}{\sqrt{  \left[ 1 + \beta\frac{\Delta_X^2}{\sigma_X^2}\right]}} >\rho \]
 		
 	\end{enumerate}
-	Therefore in any case, $\rho(T_1, T_2) \geq \rho$ when $\rho <0$. Similarly it can be shown that for
-	$\rho >0$, $\rho(T_1, T_2) \leq \rho $. In simple words,  $T_1$ and $T_2$ are "less" correlated than
-	the samples are. 
+	Therefore in any case, $\rho_T \geq \rho$ when $\rho <0$. Similarly it can be shown that for
+	$\rho >0$, $\rho_T \leq \rho $. In simple words,  $T_X$ and $T_Y$ are "less" correlated than their corresponding expression values are. 
 	\begin{figure}[!h]
 		\centering
-		\caption{$\cor(S^{-1}_1, S^{-1}_2)$ against $\rho$}
-		\includegraphics[scale=0.25]{./Figure/invsd.png}
+		\caption{$\cor(S^{-1}_X, S^{-1}_Y)$ against $\rho$}
+		\includegraphics[scale=0.25]{./Figures/invsd.png}
 		\label{invsd}
 	\end{figure}
 	
@@ -371,14 +391,14 @@
 		\centering
 		\begin{subfigure}{.5\textwidth}
 			\centering
-			\includegraphics[width=1\linewidth]{./Figure/NonDET.eps}
+			\includegraphics[width=1\linewidth]{./Figures/NonDET.eps}
 			\captionsetup{justification=centering}
 			\caption{$\bm \Delta= (0, 0)$}
 			% \label{fig:fitsa}
 		\end{subfigure}%
 		\begin{subfigure}{.5\textwidth}
 			\centering
-			\includegraphics[width=1\linewidth]{./Figure/DET.eps}
+			\includegraphics[width=1\linewidth]{./Figures/DET.eps}
 			\captionsetup{justification=centering}
 			\caption{$\bm \Delta= (2, -2)$}
 			% \label{fig:fitsb}
@@ -388,14 +408,14 @@
 		\centering
 		\begin{subfigure}{.5\textwidth}
 			\centering
-			\includegraphics[width=1\linewidth]{./Figure/DETsame.eps}
+			\includegraphics[width=1\linewidth]{./Figures/DETsame.eps}
 			\captionsetup{justification=centering}
 			\caption{$\bm \Delta= (2, 2)$}
 			% \label{fig:fitsa}
 		\end{subfigure}%
 		\begin{subfigure}{.5\textwidth}
 			\centering
-			\includegraphics[width=1\linewidth]{./Figure/DETone.eps}
+			\includegraphics[width=1\linewidth]{./Figures/DETone.eps}
 			\captionsetup{justification=centering}
 			\caption{$\bm \Delta= (-2, 0)$ }
 			% \label{fig:fitsb}
@@ -444,14 +464,14 @@
 		\centering
 		\begin{subfigure}{.5\textwidth}
 			\centering
-			\includegraphics[width=1\linewidth]{./Figure/pois1_1.png}
+			\includegraphics[width=1\linewidth]{./Figures/pois1_1.png}
 			\captionsetup{justification=centering}
 			\caption{$\bm \Delta= (0, 0)$}
 			%  \label{fig:fitsa}
 		\end{subfigure}%
 		\begin{subfigure}{.5\textwidth}
 			\centering
-			\includegraphics[width=1\linewidth]{./Figure/pois2_1.png}
+			\includegraphics[width=1\linewidth]{./Figures/pois2_1.png}
 			\captionsetup{justification=centering}
 			\caption{$\bm \Delta= (40, -30)$}
 			%  \label{fig:fitsb}
@@ -461,14 +481,14 @@
 		\centering
 		\begin{subfigure}{.5\textwidth}
 			\centering
-			\includegraphics[width=1\linewidth]{./Figure/pois3_1.png}
+			\includegraphics[width=1\linewidth]{./Figures/pois3_1.png}
 			\captionsetup{justification=centering}
 			\caption{$\bm \Delta= (40, 70)$}
 			%  \label{fig:fitsa}
 		\end{subfigure}%
 		\begin{subfigure}{.5\textwidth}
 			\centering
-			\includegraphics[width=1\linewidth]{./Figure/pois4_1.png}
+			\includegraphics[width=1\linewidth]{./Figures/pois4_1.png}
 			\captionsetup{justification=centering}
 			\caption{$\bm \Delta= (40, 0)$ }
 			%  \label{fig:fitsb}
@@ -491,7 +511,7 @@
 		Sample correlation coefficient is a consistent estimator for $\rho$, 
 		\[\sqrt{n}(r_{\text{sample}} - \rho ) \stackrel{D}{\rightarrow}N\left(0, (1-\rho^2)^2\right).\]
 	\end{lemma}
-	The proof of lemma 1 can be found in \cite{fisher1915frequency}. \\
+	The proof of lemma 1 can be found in \citet{fisher1915frequency}. \\
 	%$\rho({G_1, G_2})$ and $\frac{{\rho}_X + {\rho}_Y}{2}$ are asymptotically equivalent. \\
 	
 	To prove Theorem \ref{thm:tstat}, it is useful to note that $\bm U$ is independent of $\bm S$,
@@ -511,8 +531,8 @@
 		\end{equation}
 		for $n>3$ and $-1<\rho < 1$.
 	\end{lemma}
-	For proof of Lemma \ref{lemmabiChisq}, interested readers are referred to \cite{joarder2009moments}.
-	It immediately follows from Lemma \ref{lemmabiChisq} that $\bm W_1 = (\frac{(n_1 -1)S_{X, 1}^2}{\sigma_X^2}, \frac{(n_1-1)S_{Y, 1}^2}{\sigma_Y^2})$ and $\bm W_2 =(\frac{(n_2 -1)S_{X, 2}^2}{\sigma_X^2}, \frac{(n_2-1)S_{Y, 2}^2}{\sigma_Y^2})$ both follow bivariate chi-square distributions, with degree of freedom $n_1-1$ and $n_2-1$ respectively. Note that $\bm W_1$ and $\bm W_2$ are independent since the samples are independent. 
+	For proof of Lemma \ref{lemmabiChisq}, interested readers are referred to \citet{joarder2009moments}.
+	It immediately follows from Lemma \ref{lemmabiChisq} that $\bm W_1 = (\frac{(n_1 -1)S_{X, 1}^2}{\sigma_X^2}, \frac{(n_1-1)S_{Y, 1}^2}{\sigma_Y^2})$ follows bivariate chi-square distribution with degree of freedom $n_1-1$, where $S_{X_,1}$ and $S_{X, 2}$ are defined in equation (\ref{eq:samplevariance}). Similarly, $\bm W_2 =(\frac{(n_2 -1)S_{X, 2}^2}{\sigma_X^2}, \frac{(n_2-1)S_{Y, 2}^2}{\sigma_Y^2})$ follows a bivariate chi-square distribution with degree of freedom $n_2-1$.  Note that $\bm W_1$ and $\bm W_2$ are independent since the samples are independent. 
 	
 	\begin{lemma}\label{lemmaIndep}
 		$\bm U =(U_X, U_Y)$ is independent of $\bm S = (S_X ,S_Y)$, where $\bm U$ and $\bm S$ are defined in
