@@ -8,7 +8,7 @@
 \usepackage{hyperref}
 \usepackage{multirow}
 \title{Estimating test statistics correlation from sample correlation}
-\date{} % Today's date or a custom date
+\date{\today} % Today's date or a custom date
 \usepackage{epsfig}
 \usepackage{subcaption}
 
@@ -197,24 +197,65 @@
 	sample correlation $r_{\text{sample}}$. 
 	\subsection{Theory}
 %	\subsubsection{$S$ is a constant}
-	\begin{theorem}\label{thm:lineartransformation} 
-		For any given sample size $(n_1, n_2)$ and non zero $\bm a$, $\rho_T=\rho$ if $S_X$ and $S_Y$ are constant with respect to $\bm X, \bm Y$. 
+	
+	\begin{theorem}\label{thm:teststatcor}
+		Let $(X_j, Y_j), j = 1, \ldots, n_1 + n_2$ be independent random vectors with mean and covariance structures specified in equations (\ref{eq:meanstruct}) and (\ref{eq:covstruct}), and $E(\bm a^T\bm X, \bm a^T\bm Y) = (\Delta_X,\Delta_Y)$. If $(\bm a^T\bm X, \bm a^T\bm Y)$ is independent of $(S_X, S_Y)$, then the correlation of $T_X$ and $T_Y$ in equation (\ref{eq:teststat}) can be expressed as 
+		\begin{equation}\label{eq:teststatcor}
+			\rho_T = \frac{\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y\bm a^T\bm a}\cov(S_X^{-1}, S_Y^{-1}) + \rho E(S_X^{-1}S_Y^{-1})}{\sqrt{\left[E(S_X^{-2}) + \frac{\Delta_X^2}{\sigma_X^2\bm a^T\bm a}\var(S_X^{-1})\right]\left[E(S_Y^{-2}) + \frac{\Delta_Y^2}{\sigma_Y^2\bm a^T\bm a}\var(S_Y^{-1})\right]}}
+		\end{equation}
 	\end{theorem}
-	\text{Proof:} Since samples are independent, we have 
-	\begin{equation}
+	\textbf{Proof:} Since samples are independent, we have 
+	\begin{equation}\label{eq:testprepare}
 	\begin{aligned}
 		\cov(\bm a^T\bm X, \bm a^T\bm Y) &= \bm a^T \cov(\bm X, \bm Y)\bm a  = \rho\sigma_X\sigma_Y\bm a^T\bm a, \\
-		\var(\bm a^T\bm X)& = \bm a^T\var(\bm X)\bm a   = \sigma_X^2\bm a^T\bm a, \\
-		\var(\bm a^T\bm Y)& = \bm a^T\var(\bm Y)\bm a   = \sigma_Y^2\bm a^T\bm a 
+		\var(\bm a^T\bm X)&  = \sigma_X^2\bm a^T\bm a, \\
+		 E(\bm a^T\bm X)^2& =\Delta_X^2 + \sigma_X^2\bm a^T\bm a, \\
+		E[\bm (\bm a^T\bm X)(\bm a^T\bm Y)] &=E(\bm a^T\bm X)E(\bm a^T\bm Y) + \cov(\bm a^T\bm X, \bm a^T\bm Y)  	\\& = 	\Delta_X\Delta_Y + \rho \sigma_X\sigma_Y\bm a^T\bm a
 	\end{aligned}
 	\end{equation}
-	It follows by equation (\ref{eq:popucor}) that
-	\begin{equation}
-	\rho_T = \dfrac{\cov(T_X, T_Y)}{\sqrt{\var(T_X)\var(T_Y)}} = \dfrac{\cov(\bm a^T\bm X, \bm a^T\bm Y)/S_XS_Y}{\sqrt{\var(\bm a^T\bm X)\var(\bm a^T\bm Y)}/S_XS_Y} = \rho
+	Note that since $S_X$ is independent of $S_X$, we have 
+	\begin{equation}\label{eq:testdenom1}
+	\begin{aligned}
+		\var(T_X) &= E\left[\left(\frac{\bm a^T\bm X}{S_X}\right)^2\right] - \left[E\left(\frac{\bm a^T\bm X}{S_X}\right)\right]^2\\
+		& = E[\bm a^T\bm X]^2E[S_X^{-2}] - \left[E(\bm a^T\bm X)\right]^2\left[E(S_X^{-1})\right]^2\\
+		& = \sigma_X^2\bm a^T\bm a E(S_X^{-2}) + \Delta_X^2\var(S_X^{-1})
+	\end{aligned}
 	\end{equation}
-	\textbf{Note:} Theorem \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. Let $\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})$, and if we set $S_X=1$, then $T_X$ corresponds to mean difference between treatment and control group; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, $\rho_T=\rho$ if we use mean difference or $z$-statistic as test statistic.
+	Similarly, 
+	\begin{equation}\label{eq:testdenom2}
+	\var(T_Y)= \sigma_Y^2\bm a^T\bm a E(S_Y^{-2}) + \Delta_Y^2\var(S_Y^{-1})
+	\end{equation}
+	and
+	\begin{equation}\label{eq:testnumerator}
+	\begin{aligned}
+		&\cov(T_X, T_Y) = E\left[\frac{ \bm a^T\bm X }{S_X^{-1}}\cdot\frac{ \bm a^T\bm Y }{S_Y^{-1}}\right] - E\left[\frac{\bm a^T\bm X}{S_X^{-1}}\right]E\left[\frac{\bm a^T\bm Y}{S_Y^{-1}}\right] \\
+			 & = E[\bm (\bm a^T\bm X)(\bm a^T\bm Y)]\cdot E[S_X^{-1}S_Y^{-1}]-  \Delta_X\Delta_YE[S_X^{-1}]E[S_Y^{-1}]\\
+			 & = (\Delta_X\Delta_Y + \rho \sigma_X\sigma_Y\bm a^T\bm a)E[S_X^{-1}S_Y^{-1}]- \Delta_X\Delta_YE[S_X^{-1}]E[S_Y^{-1}]
+	\end{aligned}
+	\end{equation}	
+	The result follows by plugging equations (\ref{eq:testprepare})-(\ref{eq:testnumerator}) into equation (\ref{eq:popucor}).
 	
+	\begin{corollary}\label{thm:lineartransformation} 
+		For any non zero $\bm a$, $\rho_T=\rho$ if $S_X$ and $S_Y$ are constant with respect to $\bm X, \bm Y$. 
+	\end{corollary}
+	\textbf{Proof}: When $S_X$ and $S_Y$ are constants, $\cov(S_X^{-1}, S_Y^{-1})$, $\var(S_X^{-1}) $ and $\var(S_Y^{-1})$ are all 0, and equation (\ref{eq:teststatcor}) reduces to 
+	\begin{equation}
+		\rho_T = \frac{\rho E(S_X^{-1}S_Y^{-1})}{\sqrt{E(S_X^{-2})E(S_Y^{-2})}} = \rho.
+	\end{equation}
+	\textbf{Note:} Corollary \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. Let $\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})$, and if we set $S_X=1$, then $T_X$ corresponds to mean difference between treatment and control group; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, $\rho_T=\rho$ if we use mean difference or $z$-value as test statistic.
 	
+	Next, if we assume $(S_X, S_Y)$ is a function of $(\bm X, \bm Y)$, then the test statistics correlation in equation (\ref{eq:teststatcor}) can be expressed as  
+	\begin{equation}
+	\cor(T_X, T_Y) = \frac{\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y\bm a^T\bm a} \rho_s + \rho \frac{E(S_X^{-1}S_Y^{-1})}
+	{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}	
+		}{\sqrt{\left[ \frac{E(S_X^{-2})}{\var(S_X^{-1})} + \frac{\Delta_X^2}{\sigma_X^2\bm a^T\bm a}\right]\left[ \frac{E(S_Y^{-2})}{\var(S_Y^{-1})} + \frac{\Delta_Y^2}{\sigma_Y^2\bm a^T\bm a}\right]}} 
+	\end{equation}
+	where 
+	\begin{equation}
+	 \rho_s = \frac{\cov(S_X^{-1},S_Y^{-1})}{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}
+	\end{equation}
+	
+	Under two sample $t$-test with equal variance, we have the following theorem,
 	\begin{theorem}\label{thm:tstat}
 		Let $(X_i, Y_i), i = 1, \ldots, n_1 + n_2$ follow a bivariate normal distribution with mean specified in equation (\ref{eq:meanstruct}) and covariance in (\ref{eq:covstruct}). If $T_X$ and $T_Y$ are statistics for equal-variance two-sample $t$-test, that is, 
 		\begin{equation}\label{eq:tstatform}
