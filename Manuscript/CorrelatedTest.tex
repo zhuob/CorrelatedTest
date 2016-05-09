@@ -122,11 +122,22 @@
 	Throughout this paper, we will discuss the correlation between $X$ and $Y$ under bivariate settings. 
 
 
-	In a two group comparison experiment (e.g., gene expression of treatment and control), let $(X_j, Y_j)$ be the expression level for a pair of genes in sample $j$ where $j=1, \ldots, n_1$ if it's from the treatment group and $j=n_1 + 1, \ldots, n_1 + n_2$ if it's from the control group. We assume that the covariance for different samples are the same, but the mean level might differ between the two groups, that is,  
-	\begin{equation}\label{eq:covstruct}
+ We assume that the population mean of $(X_j, Y_j)$ may differ across samples, but that the population covariance structure remains the same, that is,  
+		\begin{equation}\label{eq:meanstruct}
+		E  \left(\begin{array}{c}
+		X_j\\
+		Y_j\\	
+		\end{array} \right) 
+		 = 	\left(\begin{array}{c}
+		\mu_{X,j}\\
+		\mu_{Y,j}\\
+		\end{array} \right)\stackrel{\text{def}}{=} \bm \mu_j,  \text{~~ for $j = 1, \ldots, n$}
+		\end{equation}
+	and 
+		\begin{equation}\label{eq:covstruct}
 		\cov\left(\begin{array}{c}
-			X_j\\
-			Y_j\\	
+		X_j\\
+		Y_j\\	
 		\end{array} \right)	
 		= \left(
 		\begin{array}{cc}
@@ -135,57 +146,35 @@
 		\end{array} 
 		\right)
 		\stackrel{\text{def}}{=} \bm \Sigma 
-	\end{equation}
-	and 
-	\begin{equation}\label{eq:meanstruct}
-	\begin{aligned}
-	E  \left(\begin{array}{c}
-	X_j\\
-	Y_j\\	
-	\end{array} \right) 
-	& = 	\left(\begin{array}{c}
-	\mu_X\\
-	\mu_Y\\
-	\end{array} \right)\stackrel{\text{def}}{=} \bm \mu,  \text{~~ for $j = 1, \ldots, n_1$} \\
-	E  \left(\begin{array}{c}
-	X_j\\
-	Y_j\\	
-	\end{array} \right) 
-	&= 	\left(\begin{array}{c}
-	\mu_X + \Delta_X\\
-	\mu_Y + \Delta_Y\\
-	\end{array} \right)\stackrel{\text{def}}{=} \bm \mu + \bm \Delta,  \text{~~ for $j = n_1 + 1, \ldots, n_1+ n_2$}.	
-	\end{aligned}	
-	\end{equation}
-	Here $\rho$ is the population correlation defined by equation (\ref{eq:popucor}), and $\bm \Delta= (\Delta_X, \Delta_Y)$ is vector of treatment effect for the pair of genes.
-	In addition, We assume independence across samples (Note that independence implies 0 correlation, but not vise versa), 
+		\end{equation}
+	where $\rho$ is the population correlation defined by equation (\ref{eq:popucor}).
+	
+	In addition, we assume independence across samples (Note that independence implies 0 correlation, but not vise versa), 
 	\begin{equation}\label{eq:indepsamples}
 	\cov(X_{j_1}, X_{j_2}) = \cov(Y_{j_1}, Y_{j_2}) = 0 \text{~~~for $j_1\neq j_2$}
 	\end{equation}
-	 In the context of gene expression study, the goal is to detect differential expression (DE)---the mean difference between treatment and control group, which can be statistically formulated as 
+	 In the context of gene expression study, the goal is to detect differential expression (DE)---whether the expression level of a gene is significantly correlated with treatment or experimental variables. Let $\bm a:=(a_1, \ldots, a_n)^T$ be a vector for a contrast of interest, then DE detection for gene $X$ can be statistically formulated as 
 	 \begin{equation}\label{eq:hypotheses}
-	 H_{0i}:  \Delta_i = 0 \textit{     Verses   }  H_{1i}: \Delta_i\neq 0 ,  ~~ i = X, Y.
+	 H_{0}:  \bm a^T\bm \mu_X = d_X \textit{     Verses   }  H_{1}: \bm a^T\bm \mu_X \neq d_X,
 	 \end{equation}
-	This hypothesis testing procedure usually results in a ``$t$-test similar" test statistic for each gene. Without a loss of generality, we express the test statistics as follows
+	 where $\bm X = (X_1, \ldots, X_n)^T$ and $\bm \mu_{X} = (\mu_{X, 1}, \ldots, \mu_{X, n})^T$. 
+	This hypothesis testing procedure usually results in a ``$t$-test similar" test statistic, in which the numerator is a linear combination of $\bm X$ and the denominator is its standard error. Without a loss of generality, we express the test statistics as follows
 	\begin{equation}\label{eq:teststat}
 	T_X = \dfrac{\bm a^T\bm X}{S_X},  ~~~ T_Y = \dfrac{\bm a^T \bm Y}{S_Y}
 	\end{equation}  
-	where $\bm a$ is a vector of length $n_1 + n_2$ denoting coefficient for comparison(e.g., $1$ for treatment and $-1$ for control), $\bm X = (X_1, \ldots, X_{n_1}, X_{n_1 +1}, \ldots, X_{n_1 + n_2})$, and  $S_X$ and $S_Y$ are the standard error for $\bm a^T\bm X$ and $\bm a^T\bm Y$ respectively. Depending on the type of test, the standard error $S$ may take different forms. In the case of two sample $t$-test with unequal variance, $\bm a^T\bm X = \bar{X}_1 - \bar{X}_2$ and $S_X = \sqrt{S_{X,1}^2/n_1 + S_{X,2}^2/n_2}$, where $ S_{X,1}^2$ and $S_{X,2}^2$ are the sample variances for the treatment and the control groups,
-	\begin{equation}\label{eq:samplevariance}
-	S_{X, 1} =  \frac{\sum_{j=1}^{n_1}(X_j - \bar{X}_1)^2}{n_1 -1}, ~~S_{X, 2} =  \frac{\sum_{j=n_1 +1}^{n_1 + n_2}(X_j - \bar{X}_2)^2}{n_2 -1}
-	\end{equation}
-	
+	$S_X$ and $S_Y$ are the standard error for $\bm a^T\bm X$ and $\bm a^T\bm Y$ respectively.
 	
 	Our main goal is to explore the relationship between population correlation (equation (\ref{eq:popucor})) for the test statistics 
 	\begin{equation}
-	\rho_T = \cor({T_X, T_Y}),
+	\rho_T(n) = \cor({T_X, T_Y}),
 	\end{equation}  
 	and that for their corresponding expression level 
 	\begin{equation}
 	\rho = \cor(X, Y). 
 	\end{equation}
 	We will examine ???HOW MANY??? different test statistics having the form of equation (\ref{eq:teststat}).%, for a given sample size of $n_1$ for treatment group and $n_2$ for control group.
-	
+		
+
 	
 	\section{Results}\label{section:tcorresults}
 	
@@ -199,18 +188,19 @@
 %	\subsubsection{$S$ is a constant}
 	
 	\begin{theorem}\label{thm:teststatcor}
-		Let $(X_j, Y_j), j = 1, \ldots, n_1 + n_2$ be independent random vectors with mean and covariance structures specified in equations (\ref{eq:meanstruct}) and (\ref{eq:covstruct}), and $E(\bm a^T\bm X, \bm a^T\bm Y) = (\Delta_X,\Delta_Y)$. If $(\bm a^T\bm X, \bm a^T\bm Y)$ is independent of $(S_X, S_Y)$, then the correlation of $T_X$ and $T_Y$ in equation (\ref{eq:teststat}) can be expressed as 
+		Let $(X_j, Y_j), j = 1, \ldots, n$ be independent random vectors with mean and covariance structures specified in equations (\ref{eq:meanstruct}) and (\ref{eq:covstruct}). If $(\bm a^T\bm X, \bm a^T\bm Y)$ is independent of $(S_X, S_Y)$, then the correlation of $T_X$ and $T_Y$ in equation (\ref{eq:teststat}) can be expressed as 
 		\begin{equation}\label{eq:teststatcor}
-			\rho_T = \frac{\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y\bm a^T\bm a}\cov(S_X^{-1}, S_Y^{-1}) + \rho E(S_X^{-1}S_Y^{-1})}{\sqrt{\left[E(S_X^{-2}) + \frac{\Delta_X^2}{\sigma_X^2\bm a^T\bm a}\var(S_X^{-1})\right]\left[E(S_Y^{-2}) + \frac{\Delta_Y^2}{\sigma_Y^2\bm a^T\bm a}\var(S_Y^{-1})\right]}}
+			\rho_T(n) = \frac{\frac{\bm a^T\bm \mu_X\cdot \bm a^T\bm \mu_Y}{\sigma_X\sigma_Y\bm a^T\bm a}\cov(S_X^{-1}, S_Y^{-1}) + \rho E(S_X^{-1}S_Y^{-1})}{\sqrt{\left[E(S_X^{-2}) + \frac{(\bm a^T\bm \mu_X)^2}{\sigma_X^2\bm a^T\bm a}\var(S_X^{-1})\right]\left[E(S_Y^{-2}) + \frac{(\bm a^T\bm \mu_Y)^2}{\sigma_Y^2\bm a^T\bm a}\var(S_Y^{-1})\right]}}
 		\end{equation}
+	%	where $d_X = E(\bm a^T\bm \mu_X)$ and $d_Y = E(\bm a^T\bm Y)$.
 	\end{theorem}
 	\textbf{Proof:} Since samples are independent, we have 
 	\begin{equation}\label{eq:testprepare}
 	\begin{aligned}
 		\cov(\bm a^T\bm X, \bm a^T\bm Y) &= \bm a^T \cov(\bm X, \bm Y)\bm a  = \rho\sigma_X\sigma_Y\bm a^T\bm a, \\
 		\var(\bm a^T\bm X)&  = \sigma_X^2\bm a^T\bm a, \\
-		 E(\bm a^T\bm X)^2& =\Delta_X^2 + \sigma_X^2\bm a^T\bm a, \\
-		E[\bm (\bm a^T\bm X)(\bm a^T\bm Y)] &=E(\bm a^T\bm X)E(\bm a^T\bm Y) + \cov(\bm a^T\bm X, \bm a^T\bm Y)  	\\& = 	\Delta_X\Delta_Y + \rho \sigma_X\sigma_Y\bm a^T\bm a
+		 E(\bm a^T\bm X)^2& =(\bm a^T\bm \mu_X)^2 + \sigma_X^2\bm a^T\bm a, \\
+		E[\bm (\bm a^T\bm X)(\bm a^T\bm Y)] &=E(\bm a^T\bm X)E(\bm a^T\bm Y) + \cov(\bm a^T\bm X, \bm a^T\bm Y)  	\\& = (\bm a^T\bm \mu_X)(\bm a^T\bm \mu_Y) + \rho \sigma_X\sigma_Y\bm a^T\bm a
 	\end{aligned}
 	\end{equation}
 	Note that since $S_X$ is independent of $S_X$, we have 
@@ -218,19 +208,19 @@
 	\begin{aligned}
 		\var(T_X) &= E\left[\left(\frac{\bm a^T\bm X}{S_X}\right)^2\right] - \left[E\left(\frac{\bm a^T\bm X}{S_X}\right)\right]^2\\
 		& = E[\bm a^T\bm X]^2E[S_X^{-2}] - \left[E(\bm a^T\bm X)\right]^2\left[E(S_X^{-1})\right]^2\\
-		& = \sigma_X^2\bm a^T\bm a E(S_X^{-2}) + \Delta_X^2\var(S_X^{-1})
+		& = \sigma_X^2\bm a^T\bm a E(S_X^{-2}) + (\bm a^T\bm \mu_X)^2\var(S_X^{-1})
 	\end{aligned}
 	\end{equation}
 	Similarly, 
 	\begin{equation}\label{eq:testdenom2}
-	\var(T_Y)= \sigma_Y^2\bm a^T\bm a E(S_Y^{-2}) + \Delta_Y^2\var(S_Y^{-1})
+	\var(T_Y)= \sigma_Y^2\bm a^T\bm a E(S_Y^{-2}) + (\bm a^T\bm \mu_Y)^2\var(S_Y^{-1})
 	\end{equation}
 	and
 	\begin{equation}\label{eq:testnumerator}
 	\begin{aligned}
 		&\cov(T_X, T_Y) = E\left[\frac{ \bm a^T\bm X }{S_X^{-1}}\cdot\frac{ \bm a^T\bm Y }{S_Y^{-1}}\right] - E\left[\frac{\bm a^T\bm X}{S_X^{-1}}\right]E\left[\frac{\bm a^T\bm Y}{S_Y^{-1}}\right] \\
-			 & = E[\bm (\bm a^T\bm X)(\bm a^T\bm Y)]\cdot E[S_X^{-1}S_Y^{-1}]-  \Delta_X\Delta_YE[S_X^{-1}]E[S_Y^{-1}]\\
-			 & = (\Delta_X\Delta_Y + \rho \sigma_X\sigma_Y\bm a^T\bm a)E[S_X^{-1}S_Y^{-1}]- \Delta_X\Delta_YE[S_X^{-1}]E[S_Y^{-1}]
+			 & = E[\bm (\bm a^T\bm X)(\bm a^T\bm Y)]\cdot E[S_X^{-1}S_Y^{-1}]-(\bm a^T\bm \mu_X)(\bm a^T\bm \mu_Y)E[S_X^{-1}]E[S_Y^{-1}]\\
+			 & = [(\bm a^T\bm \mu_X)(\bm a^T\bm \mu_Y)+ \rho \sigma_X\sigma_Y\bm a^T\bm a]E[S_X^{-1}S_Y^{-1}]- d_Xd_YE[S_X^{-1}]E[S_Y^{-1}]
 	\end{aligned}
 	\end{equation}	
 	The result follows by plugging equations (\ref{eq:testprepare})-(\ref{eq:testnumerator}) into equation (\ref{eq:popucor}).
@@ -240,31 +230,37 @@
 	\end{corollary}
 	\textbf{Proof}: When $S_X$ and $S_Y$ are constants, $\cov(S_X^{-1}, S_Y^{-1})$, $\var(S_X^{-1}) $ and $\var(S_Y^{-1})$ are all 0, and equation (\ref{eq:teststatcor}) reduces to 
 	\begin{equation}
-		\rho_T = \frac{\rho E(S_X^{-1}S_Y^{-1})}{\sqrt{E(S_X^{-2})E(S_Y^{-2})}} = \rho.
+		\rho_T(n) = \frac{\rho E(S_X^{-1}S_Y^{-1})}{\sqrt{E(S_X^{-2})E(S_Y^{-2})}} = \rho.
 	\end{equation}
-	\textbf{Note:} Corollary \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. Let $\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})$, and if we set $S_X=1$, then $T_X$ corresponds to mean difference between treatment and control group; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, $\rho_T=\rho$ if we use mean difference or $z$-value as test statistic.
+	\textbf{Note:} Corollary \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. In a two group comparison, Let $n = n_1 + n_2$ where $n_1, n_2$ are the sample sizes for the two groups, and 
+	\begin{equation}\label{eq:contrast}
+	\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})
+	\end{equation}
+ be a contrast. If we set $S_X=1$, then $T_X$ corresponds to mean difference between the treatment and the control group; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ where $\sigma_X$ is known, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, $\rho_T=\rho$ if we use mean difference or $z$-value as test statistic.
 	
 	Next, if we assume $(S_X, S_Y)$ is a function of $(\bm X, \bm Y)$, then the test statistics correlation in equation (\ref{eq:teststatcor}) can be expressed as  
 	\begin{equation}
-	\cor(T_X, T_Y) = \frac{\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y\bm a^T\bm a} \rho_s + \rho \frac{E(S_X^{-1}S_Y^{-1})}
+		\rho_T(n) = \frac{\frac{(\bm a^T\bm \mu_X)(\bm a^T\bm \mu_Y)}{\sigma_X\sigma_Y\bm a^T\bm a} \rho_s + \rho \frac{E(S_X^{-1}S_Y^{-1})}
 	{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}	
-		}{\sqrt{\left[ \frac{E(S_X^{-2})}{\var(S_X^{-1})} + \frac{\Delta_X^2}{\sigma_X^2\bm a^T\bm a}\right]\left[ \frac{E(S_Y^{-2})}{\var(S_Y^{-1})} + \frac{\Delta_Y^2}{\sigma_Y^2\bm a^T\bm a}\right]}} 
+		}{\sqrt{\left[ \frac{E(S_X^{-2})}{\var(S_X^{-1})} + \frac{(\bm a^T\bm \mu_X)^2}{\sigma_X^2\bm a^T\bm a}\right]\left[ \frac{E(S_Y^{-2})}{\var(S_Y^{-1})} + \frac{(\bm a^T\bm \mu_Y)^2}{\sigma_Y^2\bm a^T\bm a}\right]}} 
 	\end{equation}
 	where 
 	\begin{equation}
 	 \rho_s = \frac{\cov(S_X^{-1},S_Y^{-1})}{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}
 	\end{equation}
-	
-	Under two sample $t$-test with equal variance, we have the following theorem,
+	SAY SOMETHING HERE....
+	\newpage
+	In gene expression analysis, a commonly used statistic is the two sample $t$-statistic (REF). Let $(\mu_{X,j}, \mu_{Y, j}) = (\mu_X, \mu_Y)$ for $j = 1, \ldots, n_1$ and $(\mu_{X,j}, \mu_{Y, j}) = (\mu_X + \Delta_X, \mu_Y + \Delta_Y)$ for $j = n_1 + 1, \ldots, n_1 + n_2$. In the case of two sample $t$-test with equal variance, $\bm a^T\bm X = \bar{X}_1 - \bar{X}_2$ and $S_X = S_P\sqrt{1/n_1 + 1/n_2}$ where $S_P$ is the pooled variance. Denote  
+	 \begin{equation}\label{eq:tstatform}
+	 \begin{aligned}
+	 &\bm a^T\bm X  = \bar{X}_1 - \bar{X}_2 \stackrel{def}{= }U_X, ~~\bm a^T\bm Y = \bar{Y}_1 -\bar{Y}_2 \stackrel{def}{=}U_Y, \\
+	 &S_i^2 = \frac{(n_1-1)S_{i, 1}^2 + (n_2 -1)S_{i,2}^2}{n_1 + n_2 -2}, ~~i = X, Y. \\
+	% 	&S_{X, 1}^2 =  \frac{\sum_{j=1}^{n_1}(X_j - \bar{X}_1)^2}{n_1 -1}, ~~S_{X, 2}^2 =  \frac{\sum_{j=n_1 +1}^{n_1 + n_2}(X_j - \bar{X}_2)^2}{n_2 -1},\\
+	 \end{aligned}
+	 \end{equation}
+	where $\bm a$ is defined in equation (\ref{eq:contrast}) and $S_{i, 1}^2$ and $S_{i, 2}^2$ are sample variances for the two groups for gene $i$. Under two sample $t$-test with equal variance, we have the following theorem.
 	\begin{theorem}\label{thm:tstat}
-		Let $(X_i, Y_i), i = 1, \ldots, n_1 + n_2$ follow a bivariate normal distribution with mean specified in equation (\ref{eq:meanstruct}) and covariance in (\ref{eq:covstruct}). If $T_X$ and $T_Y$ are statistics for equal-variance two-sample $t$-test, that is, 
-		\begin{equation}\label{eq:tstatform}
-			\begin{aligned}
-				&\bm a^T\bm X  = \bar{X}_1 - \bar{X}_2 \stackrel{def}{= }U_X, ~~\bm a^T\bm Y = \bar{Y}_1 -\bar{Y}_2 \stackrel{def}{=}U_Y \\
-				&S_i^2 = \frac{(n_1-1)S_{i, 1}^2 + (n_2 -1)S_{i,2}^2}{n_1 + n_2 -2}, ~~i = X, Y.
-			\end{aligned}
-		\end{equation}
-		then 
+		Let $(X_i, Y_i), i = 1, \ldots, n_1 + n_2$ follow a bivariate normal distribution with mean specified in equation (\ref{eq:meanstruct}) and covariance in (\ref{eq:covstruct}). If $T_X$ and $T_Y$ are statistics for equal-variance two-sample $t$-test, then 
 		\begin{equation}\label{eq:ttestcor}
 	\begin{aligned}
 	 \cor(T_X, T_Y) =   
