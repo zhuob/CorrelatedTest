@@ -30,18 +30,19 @@
 \begin{document}
 	\maketitle
 	\section{Introduction}
-	\textbf{What's the consequence if the correlation between statistics cannot be represented sample correlation?}
-	\begin{enumerate}
-		\item Methods relating FDR control in terms of type I error seems to be OK?? Because under the null, test statistics correlation are (almost) the same as sample correlation.
-		\item What about power in terms of FDR control?
-		\item Competitive gene set test would definitely be affected, in terms of both type I error and power.  
-		\item it seems, according to Efron's 2007 paper, that conditional FDR will also be affected. 
-	\end{enumerate}
-	
-	\textbf{What problem do we address in this paper?}\\
+%	\textbf{What's the consequence if the correlation between statistics cannot be represented sample correlation?}
+%	\begin{enumerate}
+%		\item Methods relating FDR control in terms of type I error seems to be OK?? Because under the null, test statistics correlation are (almost) the same as sample correlation.
+%		\item What about power in terms of FDR control?
+%		\item Competitive gene set test would definitely be affected, in terms of both type I error and power.  
+%		\item it seems, according to Efron's 2007 paper, that conditional FDR will also be affected. 
+%	\end{enumerate}
+%	
+%	\textbf{What problem do we address in this paper?}\\
+%
+%	
+%	\textbf{Introduction}\\
 
-	
-	\textbf{Introduction}\\
 	In gene expression experiments, inter-gene correlations are commonly observed in expression data \citep{efron2012large, qiu2005effects,barry2008statistical, efron2007correlation,storey2003positive, huang2013gene, wu2012camera, gatti2010heading}.
 	 The key task of expression analysis is to detect differentially expressed (DE) genes. One common feature of such DE detection is that a
 	  summary statistic is calculated for each gene to measure the magnitude of DE. The test statistics are often of familiar form, for example, 
@@ -141,7 +142,7 @@
 	\subsection{define what do we mean by correlation}
 	\textit{Correlation} is a statistical quantity used to assess a possible linear relationship between two random variables or two sets of 
 	data sets. The degree of correlation is measured by \textit{correlation coefficient}, a scaler taking values on the interval $[-1, 1]$. 
-	Correlation coefficient of +1 (-1) indicates perfect positive (negative dependence), while correlation coefficient of 0 implies no linear 
+	Correlation coefficient of $+1$ ($-1$) indicates perfect positive (negative dependence), while correlation coefficient of 0 implies no linear 
 	relationship between two random variables. Larger correlation coefficient (in absolute value) corresponds to stronger linear correlation. 
 	There are many ways to look at the correlation coefficient , many of which are special cases of Pearson's correlation coefficient 
 	\citep{lee1988thirteen}. For example, the \textit{Kendall tau rank correlation coefficient} is computed as Pearson's correlation coefficient 
@@ -276,11 +277,11 @@
 	\end{equation}
 	\textbf{Note:} Corollary \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. In a two group comparison, Let $n = n_1 + n_2$ where $n_1, n_2$ are the sample sizes for the two groups, and 
 	\begin{equation}\label{eq:contrast}
-	\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})
+	\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})^T
 	\end{equation}
  be a contrast. If we set $S_X=1$, then $T_X$ corresponds to mean difference between the treatment and the control group; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ where $\sigma_X$ is known, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, $\rho_T=\rho$ if we use mean difference or $z$-value as test statistic.
 	
-	Next, if we assume $(S_X, S_Y)$ is a function of $(\bm X, \bm Y)$, then the test statistics correlation in equation (\ref{eq:teststatcor}) can be expressed as  
+	Next, if we assume that $(S_X, S_Y)$ is a function of $(\bm X, \bm Y)$, then the test statistics correlation in equation (\ref{eq:teststatcor}) can be expressed as  
 	\begin{equation}
 		\rho_T(n) = \frac{ \frac{E(S_X^{-1}S_Y^{-1})}
 			{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}\rho + \frac{(\bm a^T\bm \mu_X)(\bm a^T\bm \mu_Y)}{\sigma_X\sigma_Y\bm a^T\bm a} \rho_s	
@@ -326,7 +327,7 @@
 	The proof of Theorem \ref{thm:tstat} is presented in Section \ref{section:testcormethod}. Next we give the limit of $\cor(T_X, T_Y)$.
 	\begin{theorem}\label{thm:rholimit}
 	  	If there exists positive constant $M_1$ and $M_2$, such that $M_1 \leq n_1n_2^{-1}\leq M_2$, then
-	   \begin{equation}\label{limitT}
+	   \begin{equation}\label{eq:limitT}
 	   \rho_T=\lim\limits_{n_1 + n_2 \rightarrow \infty} \cor(T_X, T_Y) = \frac{\rho +
 	   	\beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho_{s}}{\sqrt{  \left[ 1 +\beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}}
 	   \end{equation}
@@ -401,12 +402,7 @@
 	
 	
 	\subsection{Simulation}
-	The simulations are performed under two different testing procedures. The first is two sample
-	$t$-test, where we evaluate the true correlation and statistics correlation.  In the second setting,
-	we simulate correlated Poisson data to mimic RNA-Seq counts, and evaluate the relationship between
-	the two for score test of Poisson regression. \\
-	
-	For the normal case, we let 
+	We perform simulations to evaluate the correlations between test statistics and those between expression levels under two sample $t$-test. We simulate the expression data from normal distributions. Specifically, we let $(X, Y)$ be the expression levels of genes $X$ and $Y$, and
 	\begin{equation}
 		\begin{aligned}
 			&\left( \begin{array}{c}
@@ -415,13 +411,13 @@
 			\end{array}\right)
 			\sim N\left[
 			\left(\begin{array}{c}
-				10\\
-				-10\\
+				0\\
+				0\\
 			\end{array} \right), 
 			\left(
 			\begin{array}{cc}
-				0.1 &\rho \sqrt{0.1\cdot 0.3} \\
-				\rho \sqrt{0.1\cdot 0.3} & 	0.3 \\
+				1 &\rho \sqrt{1\cdot 3} \\
+				\rho \sqrt{1\cdot 3} & 	3 \\
 			\end{array}
 			\right)
 			\right] \\
@@ -431,158 +427,51 @@
 			\end{array}\right)
 			\sim N\left[
 			\left(\begin{array}{c}
-				10+ \Delta_X\\
-				-10 + \Delta_Y\\
+				\Delta_X\\
+				 \Delta_Y\\
 			\end{array} \right), 
 			\left(
 			\begin{array}{cc}
-				0.1 &\rho \sqrt{0.1\cdot 0.3} \\
-				\rho \sqrt{0.1\cdot 0.3} & 	0.3 \\
+				1 &\rho \sqrt{1\cdot 3} \\
+				\rho \sqrt{1\cdot 3} & 	3 \\
 			\end{array}
 			\right)
 			\right] 
 		\end{aligned}
 	\end{equation}
-	where $j_1 = 1,\ldots, n_1$ and $j_2 = n_1 + 1, \ldots, n_1 + n_2$. We let $n_1= n_2 =50$ and increase $\rho$
-	from $-0.99$ to $0.99$ by fixed step size $0.01$. For each given $\rho$, we consider these $n=100$ pairs of $(X, Y)$
-	as observations in one \textit{simulated} experiment. Out of this experiment, we calculate a pair of statistic $(T_X, T_Y)$ using 
-	two-sample $t$-test for equal variance procedure. We replicate the simulated
-	experiment for $B=100$ times, resulting 100 pairs of test statistics, from which we calculate the sample correlation coefficient
-	$r_\text{statistics} = \cor(T_X, T_Y)$ by equation (\ref{eq:samplecor}). For correlation between expression levels, we combine
-	the samples in the 100 ``experiments" according to the treatment-control labels. We calculate
-	the sample correlation $r_{\text{sample}}$ after subtracting the mean within each group from the simulated data. 
-	\citet{fisher1915frequency} proved that sample correlation is a consistent estimator for underlying true correlation, therefore
+	where $j_1 = 1,\ldots, n_1$ and $j_2 = n_1 + 1, \ldots, n_1 + n_2$. In this simulation setting, we set both $n_1$ and $n_2$ to be 100.  For each given $\rho$, we consider these $n=200$ pairs of $(X, Y)$
+	as observations from one \textit{simulated} experiment. Out of this experiment, we calculate $q = (T_X, T_Y, r_{XY})$ where $T_X$ and $T_Y$ are the test statistics for gene $X$ and gene $Y$ respectively using 
+	two-sample $t$-test for equal variance procedure, and $r_{XY}$ is the sample correlation after the treatment effect is removed. We replicate the simulated
+	experiment for $B=1000$ times, resulting in a matrix $\bm Q_{1000\times 3}$. We take the correlation between the first and the second columns of $\bm Q$ as an estimate for test statistics correlation	$r_\text{statistics}$, and 
+	the mean of the third column as an estimate of sample correlation $r_{\text{sample}}$. 
+	\citet{fisher1915frequency} proved that sample correlation is a consistent estimator for underlying true 
+	correlation, therefore
 		$r_\text{statistics}$ and $r_{\text{sample}}$ should reflect the true correlation between $T_X$ and $T_Y$ and 
 		that between $X$ and $Y$ respectively. 
-	
-	We examine the relationship between $r_\text{statistics}$ and $r_{\text{sample}}$ under four different cases:
+		We increase $\rho$ from $-0.99$ to $0.99$ by fixed step size $0.01$, and examine the relationship between $r_\text{statistics}$ and $r_{\text{sample}}$ under four different cases:
 	\begin{enumerate}
-		\item[a)] no DE genes (i.e., $\Delta_X = \Delta_Y  =0$);
-		\item[b)]  DE in opposite directions (i.e., $\Delta_X\Delta_Y <0$);
-		\item[c)] DE in the same direction (i.e., $\Delta_X\Delta_Y>0$); 
-		\item[d)] gene 1 DE and gene 2 null (i.e, only one of $\Delta_X$ and $\Delta_Y$ is 0).
-	\end{enumerate}
-	Figure \ref{figureT} plots $r_\text{statistics}$ and $r_{\text{sample}}$ against $\rho$. While the
-	equivalence between those three holds when neither gene is DE [case a)], it fails as long as DE
-	exists. $r_\text{statistics}$ is almost always negative, if genes are DE in different direction
-	[case b)], and almost always positive if genes are DE in the same direction [case c)]. When only one
-	gene is DE,  $r_\text{statistics}$ is positively proportional to $\rho$ [case d)]. Note that in all
-	cases, $|r_{\text{statistics}}| \leq |\rho|$, in other words, the test statistics tend to be "less
-	correlated" than the samples are.
+		\item[a)] No DE genes (i.e., $\Delta_X = \Delta_Y  =0$);
+		\item[b)] One gene is DE and the other is not (i.e, only one of $\Delta_X$ and $\Delta_Y$ is 0); in the simulation we set $\Delta_X = 0$ and $\Delta_Y=5$;
+		\item[c)] DE towards the same direction (i.e., $\Delta_X\Delta_Y>0$); in the simulation we set $\Delta_X = 2$ and $\Delta_Y=5$;
+		\item[d)] DE towards opposite directions (i.e., $\Delta_X\Delta_Y <0$); in the simulation we set $\Delta_X = 2$ and $\Delta_Y=-5$.
+		\end{enumerate}
+		
+	In Figure \ref{fig:tstat}, we plot $r_\text{statistics}$ and $r_{\text{sample}}$ against the underlying true population correlation $\rho$. Note that in all cases, while $r_{\text{sample}}$ is a consistent estimator of $\rho$, $r_\text{statistics}$ might be very different from $\rho$ and thus from $r_\text{sample}$.  
+	In case a) where no gene is DE, $r_\text{statistics}$ and $r_{\text{sample}}$ are almost equal, and both converge the true correlation $\rho$. However, as long as DE effect exists, there is a discrepancy between $r_\text{statistics}$ and $\rho$. In case b) where only one gene is DE, 
+	 the magnitude of $r_\text{statistics}$ is proportional to, and smaller in absolute value than $\rho$.
+	% and according to equation (\ref{eq:ttestcor}), the magnitude of $r_\text{statistics}$ has to do with the signal-to-noise ratio $\Delta/\sigma$
+	It is more interesting to note that $r_\text{statistics}$ is not monotone with respect to $\rho$ when both genes are DE. If genes are DE towards the same direction as in the case of c),  $r_\text{statistics}$ first decreases from a positive value to 0, and continues to decrease until it reaches the minimum (a negative value), and then gradually increases to 1, as $\rho$ grows from $-1$ to $1$. When genes are DE towards opposite directions like in case d), however, the trend is reversed from that in the case of c).	This set of simulation results is reflected in the test statistics correlation formula of equation (\ref{eq:limitT}). 
 	
 	\begin{figure}[!ht]
 		\centering
-		\begin{subfigure}{.5\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{./Figures/NonDET.eps}
-			\captionsetup{justification=centering}
-			\caption{$\bm \Delta= (0, 0)$}
-			% \label{fig:fitsa}
-		\end{subfigure}%
-		\begin{subfigure}{.5\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{./Figures/DET.eps}
-			\captionsetup{justification=centering}
-			\caption{$\bm \Delta= (2, -2)$}
-			% \label{fig:fitsb}
-		\end{subfigure}
-		\newline
-		\newline
-		\centering
-		\begin{subfigure}{.5\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{./Figures/DETsame.eps}
-			\captionsetup{justification=centering}
-			\caption{$\bm \Delta= (2, 2)$}
-			% \label{fig:fitsa}
-		\end{subfigure}%
-		\begin{subfigure}{.5\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{./Figures/DETone.eps}
-			\captionsetup{justification=centering}
-			\caption{$\bm \Delta= (-2, 0)$ }
-			% \label{fig:fitsb}
-		\end{subfigure}
-		\caption{Under $t$-test, the relationship between $r_{\text{sample}}$ (solid dots), $
-			r_\text{statistics}$ (triangles) and $r_{\text{true}}$ (horizontal axis), for the case (a): gene 1
-			and gene 2 are not DE; (b): both genes are DE, but in different direction; (c): both genes are DE,
-			in the same direction; (d): gene 1 is DE, but gene 2 is not. $\bm \Delta$ is the magnitude of DE.}
-		\label{figureT}
+		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case1.eps}
+		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case2.eps}
+		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case3.eps}
+		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case4.eps}
+	\caption{Plots for estimates of sample/test statistics correlation against true population correlations. For each of the simulation settings a)--d), the test statistics are calculated using two sample $t$-test with equal variance, and the correlations are calculated by equation (\ref{eq:samplecor}). }
+		\label{fig:tstat}
 	\end{figure}
-	
-	
-	
-	Correlated Poisson data was simulated according to \cite{madsen2013simulating}. Briefly, a 2-vector
-	standard normal $\bm Z$ is first generated with correlation matrix $\bm \Sigma_Z$, and $Z_i$'s are
-	converted to $U_i= \Phi(Z_i)$ where $\Phi$ is standard normal CDF. $U_i$'s, uniform on (0, 1), are
-	then transformed to $Y_i \equiv F_i^{-1}(U_i)$ with 
-	\begin{align}\label{inverseSim}
-		F_i^{-1}(u) = \inf \{y: F_i(y)\geq u\}
-	\end{align}
-	The element in $\bm \Sigma_Z$ are chosen such that the desired Pearson correlation can be achieved.
-	Technical details are available in \cite{madsen2013simulating} and thus not discussed here. 
-	
-	The two group comparison under Poisson regression are simulated as follows: for control group
-	$X_{1i} \sim \text{Pois}(20)$ and $X_{2i}\sim $ Pois(50)   with $\cov(X_{1i}, X_{2i}) = \rho$;
-	for treatment group, a shift $\bm \Delta$ is added to the mean vectors, in other words, $Y_{1i} \sim
-	$ Pois($20 + \Delta_1$) and $Y_{2i} \sim $ Pois($50 + \Delta_2$) with $\cov(Y_{1j}, Y_{2j}) =
-	\rho$. The test statistics are calculated from score test (derivation is available in appendix),
-	\begin{align}\label{Poisscoretest}
-		U = \frac{\sqrt{\frac{n}{2}}(\bar{y}_1- \bar{y}_2)}{\sqrt{\bar{y}_1 + \bar{y}_2}}.
-	\end{align}
-	
-	Unlike the normal distribution whose shape is determined by both the mean and variance parameters,
-	the shape of a Poisson distribution is totally determined by its mean parameter. For a score test
-	statistic such as (\ref{Poisscoretest}), the denominator and the numerator are no longer
-	independent. Subsequently, the derivation of test statistics correlation for $t$-test is invalid for
-	Poisson regression. We will only demonstrate via simulation the relationship between 
-	$r_\text{statistics}$, $r_{\text{sample}}$ and $\rho$.
-	
-	Figure (\ref{figurePois}) presents the simulation under scenarios a)-d). The equivalence of
-	$r_\text{statistics}$, $r_{\text{sample}}$ and $\rho$ still holds in general when neither gene is
-	DE.  
-	
-	
-	\begin{figure}[h!]
-		\centering
-		\begin{subfigure}{.5\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{./Figures/pois1_1.png}
-			\captionsetup{justification=centering}
-			\caption{$\bm \Delta= (0, 0)$}
-			%  \label{fig:fitsa}
-		\end{subfigure}%
-		\begin{subfigure}{.5\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{./Figures/pois2_1.png}
-			\captionsetup{justification=centering}
-			\caption{$\bm \Delta= (40, -30)$}
-			%  \label{fig:fitsb}
-		\end{subfigure}
-		\newline
-		\newline
-		\centering
-		\begin{subfigure}{.5\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{./Figures/pois3_1.png}
-			\captionsetup{justification=centering}
-			\caption{$\bm \Delta= (40, 70)$}
-			%  \label{fig:fitsa}
-		\end{subfigure}%
-		\begin{subfigure}{.5\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{./Figures/pois4_1.png}
-			\captionsetup{justification=centering}
-			\caption{$\bm \Delta= (40, 0)$ }
-			%  \label{fig:fitsb}
-		\end{subfigure}
-		\caption{Under score test of Poisson regression, the relationship between $r_{\text{sample}}$
-			(solid dots), $ r_\text{statistics}$ (triangles) and $r_{\text{true}}$ (horizontal axis), for the
-			case (a): gene 1 and gene 2 are not DE; (b): both genes are DE, but in different direction; (c):
-			both genes are DE, in the same direction; (d): gene 1 is DE, but gene 2 is not.}
-		\label{figurePois}
-	\end{figure}
-	
+
 	
 	
 	
@@ -803,94 +692,8 @@
 	
 	
 	\newpage
-	\section{Appendix}
-	\begin{appendix}
-		
-		
-		
-		\textbf{
-			Score test statistics correlation under Poisson regression}\\
-		For a gene, let $Y= (Y_1, Y_2, \ldots, Y_n)$ be the gene expression level, and $X= (1, \ldots,
-		1, 0, \ldots, 0)$ be the indicator of whether sample is from treatment or control group. A Poisson
-		regression model 
-		\begin{align*}\label{poisson}
-			Y_i\sim Pois(\mu_i) \\
-			\log(\mu_i) = \beta_0 +\beta_1 x_i
-		\end{align*}
-		From the likelihood function 
-		\[L = \prod_{i=1}^n \frac{\mu_i^{y_i}}{y_i!}e^{-\mu_i}\]
-		we obtain the log-likelihood function
-		\begin{align}\label{poissonLikelihood}
-			l(\beta_0, \beta_1) & = \log L = \sum_{i=1}^n(y_i\log \mu_i - \log y_i! -\mu_i) \\ \notag
-			& = \sum y_i(\beta_0 +\beta_1x_i) - \sum \log y_i! - \sum \exp(\beta_0 + \beta_1x_i) \notag
-		\end{align}
-		
-		
-		For testing $H_0:\beta_1=0$, the score test statistics is 
-		\[U = [Z(\tilde{\beta})^T I^{-1}(\tilde{\beta}) Z(\tilde{\beta})]^{1/2} \]
-		where $\tilde{\beta} = (\hat{\beta}_0, 0)$.   From (\ref{poissonLikelihood}) we have
-		\[\frac{\partial l}{\partial \beta_0} = \sum_i y_i - \sum_i \exp(\beta_0) \Rightarrow ~~
-		\hat{\beta}_0 = \log (\bar{y})\] 
-		Therefore
-		\[Z(\tilde{\beta}) = \left[
-		\begin{array}{c}
-		\sum_i y_i - \sum_i\exp(\beta_0 + \beta_1x_i) \\
-		\sum_i y_ix_i -\sum_i \exp(\beta_0 + \beta_1x_i)x_i
-		\end{array}
-		\right]|_{\beta_1 = 0}
-		= \left[
-		\begin{array}{c}
-		\sum y_i - \exp(\hat{\beta}_0) \\
-		\sum y_ix_i - \sum\exp(\hat{\beta}_0)x_i 
-		\end{array}
-		\right]
-		= \left[
-		\begin{array}{c}
-		0\\
-		\sum y_ix_i - \bar{y}\sum x_i 
-		\end{array}
-		\right]
-		\]
-		\[I(\tilde{\beta}) = 
-		\left[
-		\begin{array}{cc}
-		\sum \exp (\hat{\beta}_0 + \hat{\beta}_1 x_i)& \sum \exp (\hat{\beta}_0 + \hat{\beta}_1
-		x_i)x_i\\
-		\sum \exp (\hat{\beta}_0 + \hat{\beta}_1 x_i)x_i & \sum \exp (\hat{\beta}_0 + \hat{\beta}_1
-		x_i)x_i^2  \\
-		\end{array}\right]
-		=\left[\begin{array}{cc}
-		\sum y_i  & \bar{y}\sum x_i \\
-		\bar{y}\sum x_i  &\bar{y}\sum x_i^2\\
-		\end{array}\right]
-		\]
-		and it follows that 
-		\begin{align}\label{scoretest1}
-			U =  [Z(\tilde{\beta})^T I^{-1}(\tilde{\beta}) Z(\tilde{\beta})]^{1/2} =\left( \frac{n(\sum
-				y_ix_i -\bar{y}\sum x_i)^2}{\bar{y}[n\sum x_i^2 -(\sum x_i)^2]}\right)^{1/2}
-		\end{align}
-		To simplify the above expression, let's assume the first $n/2$ elements of $\bm X$ are 1,
-		therefore we have $\sum x_i =\sum x_i^2=n/2$
-		\begin{align}\label{scoretest2}
-			U = \sqrt{\frac{n(\sum_{i=1}^{n/2}y_i-\bar{y}\cdot n/2)^2}{\bar{y}[n\cdot n/2 - (n/2)^2]}} =
-			\sqrt{\frac{\frac{n}{2} (\bar{y}_1-\bar{y}_2)^2}{\bar{y}_1 + \bar{y}_2}} = \pm
-			\frac{\sqrt{\frac{n}{2}}(\bar{y}_1- \bar{y}_2)}{\sqrt{\bar{y}_1 + \bar{y}_2}}
-		\end{align}
-		where $\bar{y}_1 = \frac{\sum_{i=1}^{n/2}y_i }{n/2}$ and $\bar{y}_2 =  \frac{\sum_{i=n/2
-				+1}^{n}y_i}{n/2}$ are just group means. It resembles a $t$ test statistic.
-		
-		%\textbf{Note:} there is an upper bound for this correlation
-		%\[r_{Y_1,Y_2}= \frac{Cov(Y_1, Y_2)}{\sigma_{Y_1}\sigma_{Y_2}} =
-		%\frac{\sigma_X^2}{\sigma_{Y_1}\sigma_{Y_2}} \leq \frac{\min (\sigma^2_{Y_1}, \sigma^2_{Y_2})
-		%}{\sigma_{Y_1}\sigma_{Y_2}} = \min \left(
-		%\frac{\sigma_{Y_1}}{\sigma_{Y_2}},\frac{\sigma_{Y_2}}{\sigma_{Y_1}} \right)\]
-		%For each pair of $(\rho, \lambda)$, evaluate the sample correlation and score test statistics
-		%correlation UNDER THE NULL. 
-		
-	
-		\newpage
-		
-	\end{appendix}
+%	\section{Appendix}
+
 	
 	\bibliographystyle{apalike}
 	\bibliography{mybib}
