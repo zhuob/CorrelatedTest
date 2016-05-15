@@ -164,28 +164,27 @@
 	 We assume that the population mean of $(X_j, Y_j)$ may differ across samples, but that the population covariance structure remains the 
 	 same, that is,  
 		\begin{equation}\label{eq:meanstruct}
+		\begin{aligned}
 		E  \left(\begin{array}{c}
 		X_j\\
 		Y_j\\	
 		\end{array} \right) 
-		 = 	\left(\begin{array}{c}
+		 = &	\left(\begin{array}{c}
 		\mu_{X,j}\\
 		\mu_{Y,j}\\
-		\end{array} \right)\stackrel{\text{def}}{=} \bm \mu_j,  \text{~~ for $j = 1, \ldots, n$}
-		\end{equation}
-	and 
-		\begin{equation}\label{eq:covstruct}
+		\end{array} \right)\stackrel{\text{def}}{=} \bm \mu_j,\\
 		\cov\left(\begin{array}{c}
 		X_j\\
 		Y_j\\	
 		\end{array} \right)	
-		= \left(
+		= &\left(
 		\begin{array}{cc}
 		\sigma_X^2 &\rho \sigma_X\sigma_Y \\
 		\rho \sigma_X \sigma_Y & 	\sigma_Y^2 \\
 		\end{array} 
 		\right)
-		\stackrel{\text{def}}{=} \bm \Sigma 
+		\stackrel{\text{def}}{=} \bm \Sigma,  \text{~~ for $j = 1, \ldots, n$}
+			\end{aligned}
 		\end{equation}
 	where $\rho$ is the population correlation defined by equation (\ref{eq:popucor}).
 	
@@ -231,7 +230,7 @@
 %	\subsubsection{$S$ is a constant}
 	
 	\begin{theorem}\label{thm:teststatcor}
-		Let $(X_j, Y_j), j = 1, \ldots, n$ be independent random vectors with mean and covariance structures specified in equations (\ref{eq:meanstruct}) and (\ref{eq:covstruct}). If $(\bm a^T\bm X, \bm a^T\bm Y)$ is independent of $(S_X, S_Y)$, then the correlation of $T_X$ and $T_Y$ in equation (\ref{eq:teststat}) can be expressed as 
+		Let $(X_j, Y_j), j = 1, \ldots, n$ be independent random vectors with mean and covariance structures specified in equation (\ref{eq:meanstruct}). If $(\bm a^T\bm X, \bm a^T\bm Y)$ is independent of $(S_X, S_Y)$, then the correlation of $T_X$ and $T_Y$ in equation (\ref{eq:teststat}) can be expressed as 
 		\begin{equation}\label{eq:teststatcor}
 			\rho_T(n) = \frac{ \rho E(S_X^{-1}S_Y^{-1}) + \frac{\bm a^T\bm \mu_X\cdot \bm a^T\bm \mu_Y}{\sigma_X\sigma_Y\bm a^T\bm a}\cov(S_X^{-1}, S_Y^{-1}) }{\sqrt{\left[E(S_X^{-2}) + \frac{(\bm a^T\bm \mu_X)^2}{\sigma_X^2\bm a^T\bm a}\var(S_X^{-1})\right]\left[E(S_Y^{-2}) + \frac{(\bm a^T\bm \mu_Y)^2}{\sigma_Y^2\bm a^T\bm a}\var(S_Y^{-1})\right]}}
 		\end{equation}
@@ -292,21 +291,24 @@
 	 \rho_s = \frac{\cov(S_X^{-1},S_Y^{-1})}{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}
 	\end{equation}
 	SAY SOMETHING HERE....
-	\newpage
-	In gene expression analysis, a commonly used statistic is the two sample $t$-statistic (REF). Let $(\mu_{X,j}, \mu_{Y, j}) = (\mu_X, \mu_Y)$ 
-	for $j = 1, \ldots, n_1$ and $(\mu_{X,j}, \mu_{Y, j}) = (\mu_X + \Delta_X, \mu_Y + \Delta_Y)$ for $j = n_1 + 1, \ldots, n_1 + n_2$. In the 
-	case of two sample $t$-test with equal variance, $\bm a^T\bm X = \bar{X}_1 - \bar{X}_2$ and $S_X = S_{P, X}\sqrt{1/n_1 + 1/n_2}$ where 
-	$S_{P,X}$ is the pooled variance. Denote  
+	
+	In gene expression analysis, a commonly used statistic is the two sample $t$-statistic (REF).
+	For a two-factor experiment, we let $n_1$ and $n_2$ be the sample size for each treatment. The mean expression level is $\bm \mu_j = (\mu_X, \mu_Y)$  for the first treatment (i.e., $j = 1, \ldots, n_1$), and  $\bm \mu_j = (\mu_X,  \mu_Y)^T  + ( \Delta_X,\Delta_Y)^T$ for the second treatment (i.e., $j = n_1 + 1, \ldots, n_1 + n_2$). 
+	
+	In the case of two sample $t$-test with equal variance, the contrast $\bm a$ is defined in equation (\ref{eq:contrast}), giving the test statistic 
+	\begin{equation}\label{eq:tx}
+		T_X= \frac{\bar{X}_1- \bar{X}_2}{S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}
+	\end{equation}
+	where $S_p$ is the pooled variance
 	 \begin{equation}\label{eq:tstatform}
 	 \begin{aligned}
-	 &\bm a^T\bm X  = \bar{X}_1 - \bar{X}_2 \stackrel{def}{= }U_X, ~~\bm a^T\bm Y = \bar{Y}_1 -\bar{Y}_2 \stackrel{def}{=}U_Y, \\
-	 &S_{P, i}^2 = \frac{(n_1-1)S_{i, 1}^2 + (n_2 -1)S_{i,2}^2}{n_1 + n_2 -2}, ~~i = X, Y. \\
+	 &S_{X}^2 = \frac{(n_1-1)S_{X, 1}^2 + (n_2 -1)S_{X,2}^2}{n_1 + n_2 -2}. \\
 	% 	&S_{X, 1}^2 =  \frac{\sum_{j=1}^{n_1}(X_j - \bar{X}_1)^2}{n_1 -1}, ~~S_{X, 2}^2 =  \frac{\sum_{j=n_1 +1}^{n_1 + n_2}(X_j - \bar{X}_2)^2}{n_2 -1},\\
 	 \end{aligned}
 	 \end{equation}
-	where $\bm a$ is defined in equation (\ref{eq:contrast}) and $S_{i, 1}^2$ and $S_{i, 2}^2$ are sample variances for the two groups for gene $i$. Under two sample $t$-test with equal variance, we have the following theorem.
+ Similarly, we obtain $T_Y$ by replacing the subscript ``$X$" in equations (\ref{eq:tx}) and (\ref{eq:tstatform}). Under normal distribution assumption, we have the following theorem for two sample $t$-test with equal variance:
 	\begin{theorem}\label{thm:tstat}
-		Let $(X_i, Y_i), i = 1, \ldots, n_1 + n_2$ follow a bivariate normal distribution with mean specified in equation (\ref{eq:meanstruct}) and covariance in (\ref{eq:covstruct}). If $T_X$ and $T_Y$ are statistics for equal-variance two-sample $t$-test, then 
+		Let $(X_i, Y_i), i = 1, \ldots, n_1 + n_2$ follow a bivariate normal distribution with mean and covariance specified by equation (\ref{eq:meanstruct}). If $T_X$ and $T_Y$ are statistics for equal-variance two-sample $t$-test, then 
 		\begin{equation}\label{eq:ttestcor}
 	\begin{aligned}
 	 \cor(T_X, T_Y) =   
@@ -319,7 +321,7 @@
 			 	 \begin{aligned}
 			 	 A & = \frac{n_1 + n_2-2}{n_1 + n_2-4}, ~~B =
 			 	 \frac{(\frac{n_1 + n_2 -2}{2})\Gamma^2(\frac{n_1 + n_2 -4}{2} + \frac{1}{2})}{\Gamma^2(\frac{n_1+ n_2 -2}{2})}, \\
-			 	 \rho_s & = \cor(\frac{1}{S_X}, \frac{1}{S_Y}), ~~ 
+			 	 \rho_s & = \cor(S_X^{-1}, S_Y^{-1}), ~~ 
 			 	 C = \frac{(n_1 + n_2)(A-B)}{(2 + n_1n_2^{-1} + n_1n_2^{-1})}.
 			 	 \end{aligned}
 			 \end{equation}	 
@@ -328,20 +330,28 @@
 	\begin{theorem}\label{thm:rholimit}
 	  	If there exists positive constant $M_1$ and $M_2$, such that $M_1 \leq n_1n_2^{-1}\leq M_2$, then
 	   \begin{equation}\label{eq:limitT}
-	   \rho_T=\lim\limits_{n_1 + n_2 \rightarrow \infty} \cor(T_X, T_Y) = \frac{\rho +
-	   	\beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho_{s}}{\sqrt{  \left[ 1 +\beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}}
+	   \rho_T=\lim\limits_{n_1 + n_2 \rightarrow \infty} \cor(T_X, T_Y) = \frac{\rho(1  +
+	   	\beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho)}{\sqrt{  \left[ 1 +\beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}}
 	   \end{equation}
-	   where $\rho_{s}$ is defined in equation (\ref{eq:AandB}) and $\beta = \lim\limits_{n_1 + n_2 \rightarrow \infty}C = (4 + 2n_1^{-1}n_2 + 2n_1n_2^{-1})^{-1}$.
+	   where %$\rho_{s}$ is defined in equation (\ref{eq:AandB}) and 
+	   $\beta = \lim\limits_{n_1 + n_2 \rightarrow \infty}C = (4 + 2n_1^{-1}n_2 + 2n_1n_2^{-1})^{-1}$.
 	\end{theorem}
 	Theorem \ref{thm:rholimit} says that as long as $n_1$ and $n_2$ grow proportionally, the limit of $\cor(T_X, T_Y)$ is a function of population covariance $\bm \Sigma$, the true mean difference $\bm \Delta$ and the ratio $n_1/n_2$. We have the following observations:
 	\begin{enumerate}
 		\item If both test are true null (i.e., $\bm \Delta = \bm 0$), then $\rho_T = \rho$.
-		\item If one test is true null, then $\rho_T$ is proportional to and smaller in absolute value than $\rho$. For example, when $\Delta_X=0$, $\rho_T = \rho /\sqrt{1 + \beta \frac{\Delta_Y^2}{\sigma_Y^2}}$. 
-		\item If both tests are true alternative (i.e., $\bm \Delta \neq \bm 0$), then $\rho_T\neq \rho$ in general.
-	\end{enumerate}
-	
-	However, it should be noted that if $n_1/n_2 \rightarrow 0$ or $\infty$, then $\beta = 0$ and we have $\rho_T = \rho$. That is, when sample size of one group is dominant, $\cor(T_X, T_Y)$ will converge to $\rho$ regardless of whether the tests are under the null or not. 
-	
+		\item If one test is true null, then $\rho_T$ is proportional to and smaller in absolute value than $\rho$ (i.e., $|\rho_T|< |\rho|$).
+		\item If both tests are true alternative (i.e., $\bm \Delta \neq \bm 0$), then $\rho_T\neq \rho$ in general. Specifically,
+			\begin{enumerate}
+				\item  when $\Delta_X\Delta_Y >0$ (i.e., both genes are DE towards the same direction), we have $\rho_T>\rho$ for $\rho <0$ and $0 \leq \rho_T \leq\rho$ for $\rho \geq 0$.
+				\item when $\Delta_X\Delta_Y <0$ (i.e., genes are DE towards different directions), we have
+				$\rho <\rho_T<0$ for $\rho <0$ and $\rho_T<\rho$ for $\rho>0$.
+			\end{enumerate}
+		Therefore in either case, we have $|\rho_T| \leq |\rho|$. 
+		\end{enumerate}
+		
+	For a two sample $t$ test with equal variance, we note that $|\rho_T| \leq |\rho|$. In other words, $T_X$ and $T_Y$ are never ``more correlated" than $X$ and $Y$ are. It's also interesting to note that when both genes are DE, $\rho_T=0$ at $\rho =-\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} $ and $\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} \in (-1, 1)$.
+			
+	 In addition, we note that if $n_1/n_2 \rightarrow 0$ or $\infty$, then $\beta = 0$ and we have $\rho_T = \rho$. That is, when sample size of one group is not proportional to that of the other, $\cor(T_X, T_Y)$ will converge to $\rho$ regardless of whether the tests are under the null or not. 	
 %	 When $\bm \Delta = \bm 0$ then $\rho_T = \rho$; but when $\bm \Delta \neq \bm 0$, then $\rho_T \neq \rho$ in general. % In the next section, we will discuss about it in further detail. 
 %	\begin{corollary} 
 %	If $\bm \Delta  = (\Delta_X, \Delta_Y)= \bm 0$, and there exists a positive number $M$, such that  $n_1n_2^{-1}\leq M$ and $n_1n_2^{-1}\leq M$,  then $\cor({T_X, T_Y})\rightarrow \rho$ as $n_1 + n_2 \rightarrow \infty$. 
@@ -357,48 +367,10 @@
 %			T_Y})$ does not converge to $\rho$ in general.
 %	\end{corollary} 
 %	The result immediately follows from lemma  (\ref{lemmaLimit}) in appendix.
+%	Depending on the underlying value of $\bm\Delta$ (DE or not DE, up-regulated or down-regulated if DE) and covariance $\bm \Sigma$,
+%	$\rho_T$ might be far from $\rho$ in different ways. 
 
-	
-	
-	Depending on the underlying value of $\bm\Delta$ (DE or not DE, up-regulated or down-regulated if DE) and covariance $\bm \Sigma$,
-	$\rho_T$ might be far from $\rho$ in different ways. Next we will discuss the relationship between $\rho_T$ and $\rho$ under several scenarios.
-	
-	We show via simulation (see Figure \ref{invsd}) that for $\rho$ growing from -1 to 1, $\rho_s$
-	in equation (\ref{eq:AandB}) has a ``U" shape whose minimum is located near $\rho=0$, and  
-	\begin{equation}\label{rhoineq}
-		0 \leq r_s \leq |\rho| \text{~~ ONLY BASED ON SIMULATION}
-	\end{equation}
-	which is useful in comparing  $\rho_T$  and $\rho$. 
-	For $\rho <0 $
-	\begin{enumerate}
-		\item if $\Delta_X\Delta_Y >0$, then gene $X$ and gene $Y$ are DE in the same direction (both 
-		up-regulated or both down-regulated), then 
-		\begin{equation}
-			\rho_T= \frac{\rho + \beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho_s}{\sqrt{ 
-					\left[ 1 + \beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}} 
-			>\frac{\rho }{\sqrt{  \left[ 1 + \beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 +
-					\beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}} >\rho
-		\end{equation}
-		\item  if $\Delta_X\Delta_Y <0$, then gene $X$ and gene $Y$ are DE in different directions (one
-		up-regulated and the other down-regulated), then by $\rho_s < -\rho$, 
-		\[\rho(T_X, T_Y)= \frac{\rho + \beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho_{\text{s}}}{\sqrt{ 
-				\left[ 1 + \beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}} 
-		>\rho\frac{ 1-\beta\frac{\Delta_1\Delta_2}{\sigma_1\sigma_2}}{\sqrt{  \left[ 1 +
-				\beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}} >\rho\]
-		\item if  $\Delta_X\Delta_Y =0$, then one is DE but the other is not. Suppose gene $X$ is not DE,
-		then
-		\[\rho(T_X, T_Y)= \frac{\rho}{\sqrt{  \left[ 1 + \beta\frac{\Delta_X^2}{\sigma_X^2}\right]}} >\rho \]
-		
-	\end{enumerate}
-	Therefore in any case, $\rho_T \geq \rho$ when $\rho <0$. Similarly it can be shown that for
-	$\rho >0$, $\rho_T \leq \rho $. In simple words,  $T_X$ and $T_Y$ are "less" correlated than their corresponding expression values are. 
-	\begin{figure}[!h]
-		\centering
-		\caption{$\cor(S^{-1}_X, S^{-1}_Y)$ against $\rho$}
-		\includegraphics[scale=0.25]{./Figures/invsd.png}
-		\label{invsd}
-	\end{figure}
-	
+%	In the Methods section, Lemma \ref{thm:invScorlimit} states that
 	
 	
 	\subsection{Simulation}
@@ -519,9 +491,9 @@
 	Basu's theorem that $\bm U$ and $\bm S$ are independent. 
 	
 	
-	Lemma \ref{lemmaIndep} implies that  $U_XU_Y$ is also independent of $\frac{1}{S_XS_Y}$, and
+	Lemma \ref{lemmaIndep} implies that  $U_XU_Y$ is also independent of $S_X^{-1}S_Y^{-1}$, and
 	therefore $E(\frac{U_X}{S_X} \cdot\frac{U_Y}{S_Y})$ can be expressed as
-	$E(U_XU_Y)E(\frac{1}{S_XS_Y})$. Additionally, if we know $\cor(\frac{1}{S_X}, \frac{1}{S_Y})$,
+	$E(U_XU_Y)E(S_X^{-1}S_Y^{-1})$. Additionally, if we know $\cor(S_X^{-1}, S_Y^{-1})$,
 	then the $t$-test statistics correlation can be accurately represented. 
 	
 	\textbf{Proof of theorem (\ref{thm:tstat})} \\
@@ -529,7 +501,7 @@
 	\begin{align*}
 		\cov(T_X, T_Y) &= E(T_XT_Y) - E(T_X)E(T_Y) \\
 		%& = E(c_0\frac{U_1}{S_1} \cdot c_0\frac{U_2}{S_2}) - E(c_0\frac{U_1}{S_1})E( c_0\frac{U_2}{S_2}) \\
-		& = \frac{1}{c_0^2} \left[E(U_XU_Y)E(\frac{1}{S_XS_Y}) - E(\frac{U_X}{S_X})E( \frac{U_Y}{S_Y})\right]   
+		& = \frac{1}{c_0^2} \left[E(U_XU_Y)E(S_X^{-1}S_Y^{-1}) - E(\frac{U_X}{S_X})E( \frac{U_Y}{S_Y})\right]   
 		~~~~~~~~~\text{ (by lemma \ref{lemmaIndep})}
 	\end{align*}
 	where $c_0 = \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ and $\var(T_X) = \var(\frac{U_X}{c_0S_X})=
@@ -538,11 +510,11 @@
 	\begin{equation}\label{eq:Tcorrelation}
 		\begin{aligned}
 			\cor(T_X, T_Y) & = \frac{\cov(T_X, T_Y) }{\sqrt{\var(T_X) \var(T_Y) }} \\
-			& = \frac{E(U_XU_Y)E(\frac{1}{S_XS_Y}) - E(\frac{U_X}{S_X})E(
+			& = \frac{E(U_XU_Y)E(S_X^{-1}S_Y^{-1}) - E(\frac{U_X}{S_X})E(
 				\frac{U_Y}{S_Y})}{\sqrt{\var(\frac{U_X}{S_X})\var(\frac{U_Y}{S_Y})}} 
 		\end{aligned}
 	\end{equation}
-	We need to calculate $E(U_XU_Y)$, $E(\frac{1}{S_XS_Y})$, $ E(\frac{U_i}{S_i})$ and
+	We need to calculate $E(U_XU_Y)$, $E(S_X^{-1}S_Y^{-1})$, $ E(\frac{U_i}{S_i})$ and
 	$\var(\frac{U_i}{S_i})$ for $i =X, Y$. 
 	\begin{enumerate}
 		\item Note that $U_i\sim N\left(\Delta_i, \sigma_i^2(\frac{1}{n_1} + \frac{1}{n_2})\right), i=X, Y$. 
@@ -561,15 +533,15 @@
 		Therefore 
 		\begin{equation}
 		\begin{aligned}
-		E\left(\frac{1}{S_X}\right) =
-	 \frac{\sqrt{B}}{\sigma_X},		~~~\var\left(\frac{1}{S_X}\right) = \frac{A-B}{\sigma_X^2}
+		E\left(S_X^{-1}\right) =
+	 \frac{\sqrt{B}}{\sigma_X},		~~~\var\left(S_X^{-1}\right) = \frac{A-B}{\sigma_X^2}
 		\end{aligned}
 		\end{equation}
-			Note that $\rho_s = \cor(\frac{1}{S_X}, \frac{1}{S_Y})$, we have 
+			Note that $\rho_s = \cor(S_X^{-1}, S_Y^{-1})$, we have 
 			\begin{equation}\label{eq2}
 			\begin{aligned}
-			E(\frac{1}{S_XS_Y})  &= E(\frac{1}{S_X})E(\frac{1}{S_Y}) + \rho_s
-			\sqrt{\var(\frac{1}{S_X})\var(\frac{1}{S_Y})} \\
+			E(S_X^{-1}S_Y^{-1})  &= E(S_X^{-1})E(S_Y^{-1}) + \rho_s
+			\sqrt{\var(S_X^{-1})\var(S_Y^{-1})} \\
 			& = \frac{B}{\sigma_X\sigma_Y} + \rho_s
 			\frac{A-B}{\sigma_X\sigma_Y}
 			\end{aligned}
@@ -642,7 +614,172 @@
 	\end{equation}
 	And the results immediately follow.
 	
- 
+	\begin{lemma}\label{thm:invScorlimit}
+		Let $\bm Z_j = (X_j, Y_j), j = 1, \ldots, n$ be i.i.d. random variables under the two sample $t$-test for equal variance setting, 
+%	  \begin{equation}\notag
+%	   Z_j \sim N\left[ \left(
+%	   \begin{array}{c}
+%	     \mu_X\\
+%	     \mu_Y \\
+%	   \end{array} \right), 
+%	   \left(
+%	   \begin{array}{cc}
+%	   \sigma_X^2	& \rho\sigma_{X}\sigma_Y\\
+%	   	  \rho\sigma_{X}\sigma_Y & \sigma_Y^2\\
+%	   	  \end{array}
+%	   \right)
+%	   \right] 
+%	  \end{equation}
+		with covariance structure given by equation (\ref{eq:meanstruct}). Then we have
+		$\lim\limits_{n\rightarrow\infty}\rho_s = \rho^2$.
+	\end{lemma}
+	\textbf{Proof}: Let's first look at samples $j=1, \ldots, n_1$. Note that 
+	 \begin{equation}
+	     S_{X,1}^2= \frac{1}{n_1}\sum_{j=1}^{n_1}(X_j -\bar{X}_1)^2
+	 \end{equation}
+	 is the \textit{maximum likelihood estimator} (MLE) for $\bm \sigma_X^2$. Because MLEs are consistent and asymptotically unbiased with respect to the true parameter, it can be shown that 
+		\begin{equation}\label{eq:sampVarasypm}
+	 	\begin{aligned}
+	 	E[S_{X, 1}^2] = \sigma_X^2,&~E[S_{Y, 1}^2] = \sigma_Y^2,  \\
+	 	\var[S_{X, 1}^2] \rightarrow \frac{2\sigma_X^4}{n_1},~\var[S_{Y, 1}^2] \rightarrow \frac{2\sigma_Y^4}{n_1},&
+	 	~\cov(S_{X, 1}^2, S_{Y, 1}^2) \rightarrow \frac{2\rho^2\sigma_X^2\sigma_Y^2}{n_1} \\
+	 	\end{aligned}
+	 	\end{equation} 
+%	 	\begin{equation}\label{eq:sampVarasypm}
+%	 	\begin{aligned}
+%	 	& \sqrt{n_1}\left[\left( \begin{array}{c}
+%	 	S_{X, 1}^2\\
+%	 	S_{Y, 1}^2\\
+%	 	\end{array}\right)
+%	 	-
+%	 	\left( \begin{array}{c}
+%	 	\sigma_X^2\\
+%	 	\sigma_Y^2\\
+%	 	\end{array}\right)
+%	 	\right]
+%	 	\stackrel{d.}{\longrightarrow} 
+%	 	N\left[
+%	 	\left(\begin{array}{c}
+%	 	0\\
+%	 	0\\
+%	 	\end{array} \right), 
+%	 	2\left(
+%	 	\begin{array}{cc}
+%	 	\sigma_X^4 &\rho^2\sigma_X^2\sigma_Y^2 \\
+%	 	\rho^2\sigma_X^2\sigma_Y^2  &\sigma_Y^4 \\
+%	 	\end{array}
+%	 	\right)
+%	 	\right] \\
+%	 		& \sqrt{n_2}\left[\left( \begin{array}{c}
+%	 		S_{X, 2}^2\\
+%	 		S_{Y, 2}^2\\
+%	 		\end{array}\right)
+%	 		-
+%	 		\left( \begin{array}{c}
+%	 		\sigma_X^2\\
+%	 		\sigma_Y^2\\
+%	 		\end{array}\right)
+%	 		\right]
+%	 		\stackrel{d.}{\longrightarrow} 
+%	 		N\left[
+%	 		\left(\begin{array}{c}
+%	 		0\\
+%	 		0\\
+%	 		\end{array} \right), 
+%	 		2\left(
+%	 		\begin{array}{cc}
+%	 		\sigma_X^4 &\rho^2\sigma_X^2\sigma_Y^2 \\
+%	 		\rho^2\sigma_X^2\sigma_Y^2  &\sigma_Y^4 \\
+%	 		\end{array}
+%	 		\right)
+%	 		\right] 
+%	 	\end{aligned}
+%	 	\end{equation}
+	Note that
+		\begin{equation}\label{eq:Slinearcomb}
+		\begin{aligned}
+		&\left( \begin{array}{c}
+		S_{X}^2\\
+		S_{Y}^2\\
+		\end{array}\right)
+		= 
+		a_1\left( \begin{array}{c}
+		S_{X, 1}^2\\
+		S_{Y,1}^2\\
+		\end{array}\right)
+		+
+		a_2\left( \begin{array}{c}
+		S_{X, 2}^2\\
+		S_{Y, 2}^2\\
+		\end{array}\right)
+		\end{aligned}
+		\end{equation}
+		where 
+		\[ 	n = n_1 + n_2, ~~a_1 = \frac{n_1 -1}{n-2}, ~~a_2 = \frac{n_2 -1}{n-2} \]
+	We have by Slutsky's theorem 
+%	\begin{equation}\label{eq:poolsampVarasypm}
+%	\begin{aligned}
+%	&E[S_X^2] = \sigma_X^2, \var[S_X^2] \rightarrow \frac{2\sigma_X^4}{n}\\
+%	&\cov(S_X^2, S_Y^2) \rightarrow \frac{2\rho^2\sigma_X^2\sigma_Y^2}{n} \\
+%	&E[S_Y^2] = \sigma_Y^2, \var[S_Y^2] \rightarrow \frac{2\sigma_Y^4}{n}\\
+%	\end{aligned}
+%	\end{equation}
+		\begin{equation}\label{eq:poolsampVarasypm}
+		\begin{aligned}
+		& \sqrt{n}\left[\left( \begin{array}{c}
+		S_{X, 1}^2\\
+		S_{Y, 1}^2\\
+		\end{array}\right)
+		-
+		\left( \begin{array}{c}
+		\sigma_X^2\\
+		\sigma_Y^2\\
+		\end{array}\right)
+		\right]
+		\stackrel{d.}{\longrightarrow} 
+		N\left[
+		\left(\begin{array}{c}
+		0\\
+		0\\
+		\end{array} \right), 
+		2\left(
+		\begin{array}{cc}
+		\sigma_X^4 &\rho^2\sigma_X^2\sigma_Y^2 \\
+		\rho^2\sigma_X^2\sigma_Y^2  &\sigma_Y^4 \\
+		\end{array}
+		\right)
+		\right] 
+		\end{aligned}
+		\end{equation}
+		If we let $g(x) = x^{-\frac{1}{2}}$, and apply $\delta$-method to equation (\ref{eq:poolsampVarasypm}), we obtain
+		\begin{equation}\label{eq:invSasymp}
+		\begin{aligned}
+		& \sqrt{n}\left[\left( \begin{array}{c}
+		S_X^{-1}\\
+		S_Y^{-1}\\
+		\end{array}\right)
+		-
+		\left( \begin{array}{c}
+		\sigma_X^{-1}\\
+		\sigma_Y^{-1}\\
+		\end{array}\right)
+		\right]
+		\stackrel{d.}{\longrightarrow} 
+		N\left[
+		\left(\begin{array}{c}
+		0\\
+		0\\
+		\end{array} \right), 
+		\frac{1}{2}\left(
+		\begin{array}{cc}
+		\sigma_X^{-2} &\rho^2\sigma_X^{-1}\sigma_Y^{-1} \\
+		\rho^2\sigma_X^{-1}\sigma_Y^{-1}  &\sigma_Y^{-2} \\
+		\end{array}
+		\right)
+		\right] 
+		\end{aligned}
+		\end{equation}
+	It follows from equation (\ref{eq:invSasymp}) that $\cor(S_X^{-1}, S_Y^{-1}) \rightarrow \rho^2$.
 	
 	
 	
@@ -703,240 +840,4 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	\section{MOVED FROM SETUP}
-	
-	
-	\begin{definition}
-		The \textbf{sample correlation} is 
-		\begin{equation}\label{rhosample}
-		r_{\text{sample}}  = \frac{r_1 + r_2}{2}
-		\end{equation}
-		where $r_1$  and $r_2$ are sample correlations for expression levels from treatment group and control group, respectively.
-		The pooled sample variance for test $H_{0i}$ ($i=1, 2$) is 
-		\begin{equation}\label{pooledvariance}
-		S_i^2 = \frac{(n-1)S_{X_i}^2 + (n-1)S_{Y_i}^2}{n-1 + n-1} = \frac{S_{X_i}^2 + S_{Y_i}^2}{2}
-		\end{equation}
-		where $S_{X_i}^2$ and $S_{Y_i}^2$ are sample variances for $X_i$ and $Y_i$ respectively.
-	\end{definition} 
-	
-	
-	
-	
-	Consider two random vectors $\bm X = (X_1, X_2)$ and $\bm Y =  (Y_1, Y_2)$ from normal distribution
-	\[ \bm X 
-	\sim N\left[
-	\left(\begin{array}{c}
-	\mu_1\\
-	\mu_2\\
-	\end{array} \right), 
-	\left(
-	\begin{array}{cc}
-	\sigma_1^2 &\rho \sigma_1\sigma_2 \\
-	\rho \sigma_1 \sigma_2 & 	\sigma_2^2 \\
-	\end{array}
-	\right)
-	\right]  \stackrel{\text{def}}{=} N(\bm \mu, \bm \Sigma)
-	\] 
-	and $\bm Y \sim N(\bm \mu + \bm \Delta, \bm \Sigma)$ where $\bm \Delta = (\Delta_1, \Delta_2)^T$.
-	Let $\bm X_1, \ldots, \bm X_n$ and $\bm Y_1, \ldots, \bm Y_n$ be $n$ realizations of each random
-	vector. 
-	\begin{enumerate}
-		\item[A1):] Within a sample, the random variables are correlated, $\cor(X_{i1}, X_{i2}) =
-		\cor(Y_{j1}, Y_{j2}) = \rho$.  This is the \textbf{population correlation}.
-		\item[A2):] Across samples, the random variables are independent, ($\cor\bm X_{j_1}, \bm Y_{j_2}$)=
-		0. 
-	\end{enumerate} 
-	
-	For notational convenience, let $G_1 = (X_{11}, \ldots, X_{1n}, Y_{11}, \ldots, Y_{1n})$ and $G_2 = 
-	(X_{21}, \ldots, X_{2n}, Y_{21}, \ldots, Y_{2n})$. We are interested in comparing the mean of $X_1$
-	verses $Y_1$, and of $X_2$ versus $Y_2$, statistically formulated as
-	\begin{equation}\label{hypotheses1}
-	H_{0i}:  \Delta_i = 0 \text{     Verses   }  H_{1i}: \Delta_i\neq 0 ,  ~~ i = 1, 2.
-	\end{equation}
-	
-	
-	or $i =X, Y$,  $\bar{X}_{i}\sim N(\mu_i, \sigma_i^2/n)$ and $\bar{Y}_{i}\sim N(\mu_i + \Delta_i,
-	\sigma_i^2/n)$. Define
-	\begin{equation}\label{expreU}
-	U_i = \bar{X}_i - \bar{Y}_i
-	\end{equation}
-	The two sample $z$-test statistic is
-	\begin{equation}\label{zTest}
-	Z_i = \frac{\bar{X}_{i}-\bar{Y}_{i} }{\sqrt{\frac{\sigma^2_i}{n} + \frac{\sigma^2_i}{n}}} =
-	\frac{U_i}{\sqrt{2\sigma_i^2/n}}\sim N(\Delta_i, 1) ,
-	\end{equation}
-	and the two sample $t$-test statistic for pooled variance is given by
-	\begin{align}\label{t-test}
-	T_i = \frac{\bar{X}_i - \bar{Y}_i}{S_i\sqrt{\frac{1}{n}+\frac{1}{n}}} =
-	\frac{U_i}{S_i\sqrt{\frac{2}{n}}} \sim t_{2n-2}(\Delta_i). 
-	\end{align}
-	where $S_i$ the pooled sample standard error defined in (\ref{pooledvariance}) and $\Delta_i$ is the
-	non-center parameter. 
-	
-	\begin{theorem}\label{theoremTstat} 
-		Under (A1-A2),  the two sample $t$-test statistics correlation can be expressed by 
-		\begin{align}\label{tTestCorrelation}
-		\cor(T_1, T_2)  = \frac{r_{\text{s}}\frac{\Delta_1\Delta_2}{\sigma_1\sigma_2}n(A-B) + 2\rho B
-			+ 2r_{\text{s}}\rho(A-B)}{\sqrt{\left[ \frac{\Delta_1^2}{\sigma_1^2}n(A-B) + 2
-				A\right]\left[\frac{\Delta_2^2}{\sigma_2^2}n(A-B) + 2 A\right]}}
-		\end{align} where 
-		\begin{align}\label{invScor1}
-		r_s = \cor(\frac{1}{S_1}, \frac{1}{S_2}), ~~~~~A = \frac{n-1}{n-2}, ~~~B =
-		\frac{(n-1)\Gamma^2(n-3/2)}{\Gamma^2(n-1)}.
-		\end{align}
-	\end{theorem}
-	
-	
-	
-	First note that
-	\begin{align*}
-	\cov(T_1, T_2) &= E(T_1T_2) - E(T_1)E(T_2) \\
-	%& = E(c_0\frac{U_1}{S_1} \cdot c_0\frac{U_2}{S_2}) - E(c_0\frac{U_1}{S_1})E( c_0\frac{U_2}{S_2}) \\
-	& = c_0^2 \left[E(U_1U_2)E(\frac{1}{S_1S_2}) - E(\frac{U_1}{S_1})E( \frac{U_2}{S_2})\right]   
-	~~~~~~~~~\text{ (by lemma \ref{lemmaIndep})}
-	\end{align*}
-	where $c_0 = \sqrt{\frac{n}{2}}$ and $\text{Var}(T_1) = \text{Var}(c_0\frac{U_1}{S_1})=
-	c_0^2\text{Var}(\frac{U_1}{S_1})$. 
-	Note that 
-	\begin{align}\label{tttTcorrelation}
-	\cor(T_1, T_2) & = \frac{\cor(T_1, T_2) }{\sqrt{\text{Var}(T_1) \text{Var}(T_2) }} =
-	\frac{E(U_1U_2)E(\frac{1}{S_1S_2}) - E(\frac{U_1}{S_1})E(
-		\frac{U_2}{S_2})}{\sqrt{\text{Var}(\frac{U_1}{S_1})\text{Var}(\frac{U_2}{S_2})}} 
-	\end{align}
-	We need to calculate $E(U_1U_2)$, $E(\frac{1}{S_1S_2})$, $ E(\frac{U_i}{S_i})$ and
-	$\text{Var}(\frac{U_i}{S_i})$ for $i =1, 2$. 
-	\begin{enumerate}
-		\item Note that $U_i\sim N(\Delta_i, \frac{2\sigma_i^2}{n}),  i=1, 2$. 
-		\begin{align}\label{eqq1}
-		E(U_1U_2)= \cor(U_1, U_2) + E(U_1)E(U_2) = \rho \frac{2\sigma_1\sigma_2}{n} +
-		\Delta_1\Delta_2
-		\end{align} 
-		\item Since $\frac{(n-1)S_{X_1}^2}{\sigma_1^2}$ and $\frac{(n-1)S_{Y_1}^2}{\sigma_1^2}$ are
-		independent  and follow $\chi^2(n-1)$, we have $W_{S_1}=\frac{2(n-1)S_1^2}{\sigma_1^2}\sim
-		\chi^2(2n-2)$. It can be shown that 
-		\[E(W_{S_1}^k)= \frac{2^k\Gamma(n-1+k)}{\Gamma(n-1)}\] 
-		Therefore 
-		\[E\left(\frac{1}{S_1}\right) =
-		\frac{\sqrt{n-1}\Gamma(n-\frac{3}{2})}{\sigma_1\Gamma(n-1)}=\frac{\sqrt{A}}{\sigma_1}, 
-		~~\text{Var}\left(\frac{1}{S_1}\right)=\frac{n-1}{\sigma_1^2}\left[\frac{1}{n-2} -
-		\frac{\Gamma^2(n-\frac{3}{2})}{\Gamma^2(n-1)}\right]=\frac{A-B}{\sigma_1^2}\]
-		Note that $r_s = \cor(\frac{1}{S_1}, \frac{1}{S_2})$, we have 
-		\begin{align}\label{eqq2}
-		E(\frac{1}{S_1S_2})  = E(\frac{1}{S_1})E(\frac{1}{S_2}) + r_s
-		\sqrt{\text{Var}(\frac{1}{S_1})\text{Var}(\frac{1}{S_2})} = \frac{A}{\sigma_1\sigma_2} + r_s
-		\frac{A-B}{\sigma_1\sigma_2}
-		\end{align}
-		\item $U_i\sim N(\Delta_i, \frac{2\sigma_i^2}{n})$ and $\frac{2(n-1)S_i^2}{\sigma_i^2} \sim
-		\chi^2(2n-2)$ and by Lemma \ref{lemmaIndep} they are independent, we have 
-		\[\frac{\frac{U_i-\Delta_i}{\sqrt{2\sigma_i^2/n}}}{\frac{2(n-1)S_i^2}{\sigma_i^2}/(2n-2)}  =
-		\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\sim t(2n-2)\]
-		It follows from $E\left(\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\right)=0 $ and
-		$\text{Var}\left(\frac{U_i-\Delta_i}{S_i}\sqrt{\frac{n}{2}}\right) = \frac{n-1}{n-2}$ that
-		\begin{align}\label{eqq3}
-		E\left(\frac{U_i}{S_i}\right) &= \frac{\Delta_i}{\sigma_i}\sqrt{A}
-		\end{align}
-		\begin{align}\label{eqq4}
-		\text{Var}\left(\frac{U_i}{S_i}\right)&=\frac{2}{n}A + \frac{\Delta_i^2}{\sigma_i^2}(A-B)
-		\end{align}
-	\end{enumerate}
-	Finally,  the test statistics correlation (\ref{tTestCorrelation}) is obtained by plugging
-	(\ref{eq1}--\ref{eq4}) into (\ref{Tcorrelation}).
-	
-	Up to now we have obtained an exact expression for $\cor(T_1, T_2)$, which depends not only on
-	the sample size $n$, but also on $\Delta/\sigma$, the magnitude of DE. The rest of this section
-	discusses asymptotic  property of $\cor(T_1, T_2)$ for large sample size.
-	\begin{lemma}\label{llemmaLimit}
-		Let $A = \frac{n-1}{n-2}$, $B= \frac{(n-1)\Gamma^2(n-3/2)}{\Gamma^2(n-1)}$, then the following
-		results hold:
-		\begin{enumerate}
-			\item $\lim\limits_{n\rightarrow \infty} A = 1$.
-			\item $\lim\limits_{n\rightarrow \infty} B = 1$.
-			\item $\lim\limits_{n\rightarrow \infty} C = \frac{1}{4 + 2c + 2c^{-1}}$. 
-		\end{enumerate}
-	\end{lemma}
-	\textbf{Proof}: We will use second order Stirling's formula
-	\begin{align}\label{sStirling1}
-	n! \approx \sqrt{2\pi n}\left(\frac{n}{e}\right)^n(1 + \frac{1}{12n})
-	\end{align}
-	By Stirling's formula (\ref{Stirling1}) and  $\Gamma(n + \frac{1}{2}) =
-	\frac{(2n)!}{4^nn!}\sqrt{\pi}$ 
-	\begin{align*}
-	\frac{\Gamma^2(n - \frac{3}{2}) }{\Gamma^2(n-1)} & =\left[\frac{\Gamma(n -2 +
-		\frac{1}{2})}{\Gamma(n-1)}\right]^2\\
-	&  = \left[\frac{(2n-4)!}{[(n-2)!]^2}\left(\frac{1}{4}\right)^{(n-2)}\right]^2\pi\\
-	& \approx \left[\frac{\sqrt{2\pi(2n-4)}\left(\frac{2n-4}{e}\right)^{2n-4}\left(1 +
-		\frac{1}{12(2n-4)}\right)}{\left[\sqrt{2\pi(n-2)}\left(\frac{n-2}{e}\right)^{2n-4}\left(1 +
-		\frac{1}{12(n-2)}\right)\right]^2}\left(\frac{1}{2}\right)^{2n-4}\right]^2\pi \\
-	& = \frac{(n-2)\left[(n-2) + \frac{1}{24}\right]^2}{(n-2 + \frac{1}{12})^4}
-	\end{align*}
-	therefore $\lim\limits _{n\rightarrow\infty}A = \lim\limits_{n\rightarrow\infty}B = 1$. Next, 
-	\begin{align*}
-	\lim\limits_{n\rightarrow \infty} n(A-B)& =\lim\limits_{n\rightarrow \infty} n\left[\frac{n-1}{n-2}
-	- \frac{(n-2)\left[(n-2) + \frac{1}{24}\right]^2}{(n-2 + \frac{1}{12})^4}\right]\\
-	& = \lim\limits_{n\rightarrow \infty}  \frac{\frac{1}{4} n(n-1)(n-2)^3 +
-		o\left((n-2)^4\right)}{(n-2)\left[(n-2)^4 +  o\left((n-2)^4\right)\right]}\\
-	&= \frac{1}{4}
-	\end{align*}
-	Application of Lemma \ref{lemmaLimit} to (\ref{tTestCorrelation}) gives the limit of test statistics
-	correlation, 
-	\begin{align}\label{llimitT}
-	\rho(T_1, T_2)=\lim\limits_{n \rightarrow \infty} \cor(T_1, T_2) = \frac{\rho +
-		\frac{\Delta_1\Delta_2}{8\sigma_1\sigma_2}r_{\text{s}}}{\sqrt{  \left[ 1 +
-			\frac{\Delta_1^2}{8\sigma_1^2}\right]\left[ 1 + \frac{\Delta_2^2}{8\sigma_2^2}\right]}}
-	\end{align}
-	where $r_{\text{s}}$ is defined in (\ref{invScor}). When $\bm \Delta = \bm 0$ then $\lim\limits_{n
-		\rightarrow \infty} \cor(T_1, T_2) = \rho$; but when $\bm \Delta \neq \bm 0$, $\lim\limits_{n
-		\rightarrow \infty} \cor(T_1, T_2) \neq \rho$ in general. In the next section, we will discuss
-	about it in further detail. 
-	
-	
-	
-	if $n_1 + n_2 = 2k$ then we have
-	\begin{align*}
-	B & = (k-1)\left[\frac{\Gamma(k -2 +
-		\frac{1}{2})}{\Gamma(k-1)}\right]^2\\
-	&  = (k-1)\left[\frac{(2k-4)!}{[(k-2)!]^2}\left(\frac{1}{4}\right)^{(k-2)}\right]^2\pi\\
-	& \approx (k-1)\left[\frac{\sqrt{2\pi(2k-4)}\left(\frac{2k-4}{e}\right)^{2k-4}\left(1 +
-		\frac{1}{12(2k-4)}\right)}{\left[\sqrt{2\pi(k-2)}\left(\frac{k-2}{e}\right)^{2k-4}\left(1 +
-		\frac{1}{12(k-2)}\right)\right]^2}\left(\frac{1}{2}\right)^{2k-4}\right]^2\pi \\
-	& = \frac{(k-1)(k-2)\left[(k-2) + \frac{1}{24}\right]^2}{(k-2 + \frac{1}{12})^4}
-	\end{align*}
-	
-	
-	Next, 
-	\begin{align*}
-	\lim\limits_{n\rightarrow \infty} n(A-B)& =\lim\limits_{n\rightarrow \infty} n\left[\frac{n-1}{n-2}
-	- \frac{(n-2)\left[(n-2) + \frac{1}{24}\right]^2}{(n-2 + \frac{1}{12})^4}\right]\\
-	& = \lim\limits_{n\rightarrow \infty}  \frac{\frac{1}{4} n(n-1)(n-2)^3 +
-		o\left((n-2)^4\right)}{(n-2)\left[(n-2)^4 +  o\left((n-2)^4\right)\right]}\\
-	&= \frac{1}{4}
-	\end{align*}
 
