@@ -145,70 +145,73 @@
 	Correlation coefficient of $+1$ ($-1$) indicates perfect positive (negative dependence), while correlation coefficient of 0 implies no linear 
 	relationship between two random variables. Larger correlation coefficient (in absolute value) corresponds to stronger linear correlation. 
 	There are many ways to look at the correlation coefficient , many of which are special cases of Pearson's correlation coefficient 
-	\citep{lee1988thirteen}. For example, the \textit{Kendall tau rank correlation coefficient} is computed as Pearson's correlation coefficient 
-	between the ranked variables.
-	
-	Let $(X, Y)$ be a random vector, and $(x_j, y_j)$ its $j$th observation. The most familiar measure of dependence between two quantities is 
+	\citep{lee1988thirteen}. For example, the \textit{Kendall tau rank correlation coefficient} is computed as Pearson's correlation coefficient between the ranked variables. Throughout this paper, we will discuss the correlation between $X$ and $Y$ under bivariate settings. 
+	 
+	The most familiar measure of dependence between two quantities is 
 	the \textit{Pearson's correlation coefficient}.  Following the notation of \citet{lee1988thirteen}, We will restrict our interest to two 
 	types of Pearson's correlation coefficient: 1) standardized covariance, which we refer to as \textit{\popucor}
 	\begin{equation}\label{eq:popucor}
-		\rho =\dfrac{\cov(X, Y)}{\sqrt{\var(X)\var(Y)}} = \dfrac{E[(X-\mu_X)(Y-\mu_Y)]}{\sigma_X\sigma_Y}, 
+	\rho =\dfrac{\cov(X, Y)}{\sqrt{\var(X)\var(Y)}} = \dfrac{E[(X-\mu_X)(Y_j-\mu_Y)]}{\sigma_X\sigma_Y}, 
 	\end{equation} 	where $\mu_X$ and $\mu_Y$ are the expected values and $\sigma_X<\infty$ and $\sigma_Y<\infty$ are the population standard errors, and 2) a function of raw scores and means, which we refer to as \textit{\samplecor}
 	\begin{equation}\label{eq:samplecor}
 	r  =  \dfrac{\sum_j (x_j -\bar{x})(y_j - \bar{y})}{\sqrt{\sum_{j}(x_j - \bar{x})^2\sum_i(y_j - \bar{y})^2}}, 
 	\end{equation}
 	where $(\bar{x}, \bar{y})$ is the vector of arithmetic mean of the observations.
-	Throughout this paper, we will discuss the correlation between $X$ and $Y$ under bivariate settings. 
-
-
-	 We assume that the population mean of $(X_j, Y_j)$ may differ across samples, but that the population covariance structure remains the 
-	 same, that is,  
-		\begin{equation}\label{eq:meanstruct}
-		\begin{aligned}
-		E  \left(\begin{array}{c}
-		X_j\\
-		Y_j\\	
-		\end{array} \right) 
-		 = &	\left(\begin{array}{c}
-		\mu_{X,j}\\
-		\mu_{Y,j}\\
-		\end{array} \right)\stackrel{\text{def}}{=} \bm \mu_j,\\
-		\cov\left(\begin{array}{c}
-		X_j\\
-		Y_j\\	
-		\end{array} \right)	
-		= &\left(
-		\begin{array}{cc}
-		\sigma_X^2 &\rho \sigma_X\sigma_Y \\
-		\rho \sigma_X \sigma_Y & 	\sigma_Y^2 \\
-		\end{array} 
-		\right)
-		\stackrel{\text{def}}{=} \bm \Sigma,  \text{~~ for $j = 1, \ldots, n$}
-			\end{aligned}
-		\end{equation}
-	where $\rho$ is the population correlation defined by equation (\ref{eq:popucor}).
 	
-	In addition, we assume independence across samples (Note that independence implies 0 correlation, but not vise versa), 
+	
+	Let $(X_j, Y_j),$ be a bivariate random variable representing two features of sample $j = 1, \ldots, m$ , and $(x_j, y_j)$ the corresponding realization.
+	We assume that the population mean of $(X_j, Y_j)$ may differ across samples, but that the population covariance structure remains the 
+	same, that is,  
+	\begin{equation}\label{eq:meanstruct}
+	E  \left(\begin{array}{c}
+	X_j\\
+	Y_j\\	
+	\end{array} \right) 
+	= 	\left(\begin{array}{c}
+	\mu_{X,j}\\
+	\mu_{Y,j}\\
+	\end{array} \right)\stackrel{\text{def}}{=} \bm \mu_j,  \text{~~ for $j = 1, \ldots, m$}
+	\end{equation}
+	and 
+	\begin{equation}\label{eq:covstruct}
+	\cov\left(\begin{array}{c}
+	X_j\\
+	Y_j\\	
+	\end{array} \right)	
+	= \left(
+	\begin{array}{cc}
+	\sigma_X^2 &\rho \sigma_X\sigma_Y \\
+	\rho \sigma_X \sigma_Y & 	\sigma_Y^2 \\
+	\end{array} 
+	\right)
+	\stackrel{\text{def}}{=} \bm \Sigma 
+	\end{equation}
+	where $\rho$ is the population correlation defined by equation (\ref{eq:popucor}). In addition, we assume independence across samples (note that independence implies 0 correlation, but not vise versa), 
 	\begin{equation}\label{eq:indepsamples}
 	\cov(X_{j_1}, X_{j_2}) = \cov(Y_{j_1}, Y_{j_2}) = 0 \text{~~~for $j_1\neq j_2$}
 	\end{equation}
+	
+	
+
+
+
 	 In the context of gene expression study, the goal is to detect differential expression (DE)---whether the expression level of a gene is 
 	 significantly correlated with treatment or experimental variables. Let $\bm a:=(a_1, \ldots, a_n)^T$ be a vector for a contrast of 
 	 interest, then DE detection for gene $X$ can be statistically formulated as 
 	 \begin{equation}\label{eq:hypotheses}
 	 H_{0}:  \bm a^T\bm \mu_X = d_X \textit{     Verses   }  H_{1}: \bm a^T\bm \mu_X \neq d_X,
 	 \end{equation}
-	 where $\bm X = (X_1, \ldots, X_n)^T$ and $\bm \mu_{X} = (\mu_{X, 1}, \ldots, \mu_{X, n})^T$. 
+	 where $\bm X = (X_1, \ldots, X_m)^T$ and $\bm \mu_{X} = (\mu_{X, 1}, \ldots, \mu_{X, m})^T$. DE detection for gene $Y$ can be obtained by applying the same contrast to $\bm Y = (Y_1, \ldots, Y_m)$ (simply replacing the subscript $X$ by $Y$ in equation (\ref{eq:hypotheses})).
 	This hypothesis testing procedure usually results in a ``$t$-test similar" test statistic, in which the numerator is a linear combination of 
 	$\bm X$ and the denominator is its standard error. Without a loss of generality, we express the test statistics as follows
 	\begin{equation}\label{eq:teststat}
-	T_X = \dfrac{\bm a^T\bm X}{S_X},  ~~~ T_Y = \dfrac{\bm a^T \bm Y}{S_Y}
+	T_X = \dfrac{\bm a^T\bm X}{S_X},  ~~~ T_Y = \dfrac{\bm a^T \bm Y}{S_Y},
 	\end{equation}  
-	$S_X$ and $S_Y$ are the standard error for $\bm a^T\bm X$ and $\bm a^T\bm Y$ respectively.
+	where $S_X$ and $S_Y$ are the standard error for $\bm a^T\bm X$ and $\bm a^T\bm Y$ respectively.
 	
 	Our main goal is to explore the relationship between population correlation (equation (\ref{eq:popucor})) for the test statistics 
 	\begin{equation}
-	\rho_T(n) = \cor({T_X, T_Y}),
+	\rho_T(m) = \cor({T_X, T_Y}),
 	\end{equation}  
 	and that for their corresponding expression level 
 	\begin{equation}
@@ -220,19 +223,21 @@
 	
 	\section{Results}\label{section:tcorresults}
 	
-	In this section we present the exact expression of statistics correlation coefficient for two
-	sample $t$-test. In the first part, we conclude theoretically that test statistics correlation and
-	sample correlation are perfect positive dependent for two sample $z$-test, but that is not always
-	true for two sample $t$-test. In the second part, we simulate four different cases where test
-	statistics correlation $r_{\text{statistics}}$ may be very different from true correlation $\rho$ or
-	sample correlation $r_{\text{sample}}$. 
+	In this section we present the exact formula of test statistics correlation $\rho_T(m)$ by making some assumptions about $T_X$ and $T_Y$, and show that the test statistics correlation $\rho_T$ does not always equal to the population correlation $\rho$. For the case of two-group comparison, we prove that 1) if $T_X$ ($T_Y$) is a linear transformation of $\bm X$ ($\bm Y$), then $\rho_T= \rho$, and that 2) if $T_X$ ($T_Y$) is the two sample $t$-test statistic for $\bm X$ ($\bm Y$), then $|\rho_T| \leq |\rho|$. For 2), we show that the relationship between $\rho_T$ and $\rho$ depends on whether the hypotheses tests (equation \ref{eq:hypotheses}) are true null or not. We perform simulations for the case of test statistics derived from two-sample $t$-test to illustrate our findings.
+	
+%	 for two
+%	sample $t$-test. In the first part, we conclude theoretically that test statistics correlation and
+%	sample correlation are perfect positive dependent for two sample $z$-test, but that is not always
+%	true for two sample $t$-test. In the second part, we simulate four different cases where test
+%	statistics correlation $r_{\text{statistics}}$ may be very different from true correlation $\rho$ or
+%	sample correlation $r_{\text{sample}}$. 
 	\subsection{Theory}
 %	\subsubsection{$S$ is a constant}
 	
 	\begin{theorem}\label{thm:teststatcor}
-		Let $(X_j, Y_j), j = 1, \ldots, n$ be independent random vectors with mean and covariance structures specified in equation (\ref{eq:meanstruct}). If $(\bm a^T\bm X, \bm a^T\bm Y)$ is independent of $(S_X, S_Y)$, then the correlation of $T_X$ and $T_Y$ in equation (\ref{eq:teststat}) can be expressed as 
+		Let $(X_j, Y_j), j = 1, \ldots, m$ be independent random vectors with mean and covariance structures specified in equation (\ref{eq:meanstruct}). If $(\bm a^T\bm X, \bm a^T\bm Y)$ is independent of $(S_X, S_Y)$, then the correlation of $T_X$ and $T_Y$ in equation (\ref{eq:teststat}) can be expressed as 
 		\begin{equation}\label{eq:teststatcor}
-			\rho_T(n) = \frac{ \rho E(S_X^{-1}S_Y^{-1}) + \frac{\bm a^T\bm \mu_X\cdot \bm a^T\bm \mu_Y}{\sigma_X\sigma_Y\bm a^T\bm a}\cov(S_X^{-1}, S_Y^{-1}) }{\sqrt{\left[E(S_X^{-2}) + \frac{(\bm a^T\bm \mu_X)^2}{\sigma_X^2\bm a^T\bm a}\var(S_X^{-1})\right]\left[E(S_Y^{-2}) + \frac{(\bm a^T\bm \mu_Y)^2}{\sigma_Y^2\bm a^T\bm a}\var(S_Y^{-1})\right]}}
+			\rho_T(m) = \frac{ \rho E(S_X^{-1}S_Y^{-1}) + \frac{\bm a^T\bm \mu_X\cdot \bm a^T\bm \mu_Y}{\sigma_X\sigma_Y\bm a^T\bm a}\cov(S_X^{-1}, S_Y^{-1}) }{\sqrt{\left[E(S_X^{-2}) + \frac{(\bm a^T\bm \mu_X)^2}{\sigma_X^2\bm a^T\bm a}\var(S_X^{-1})\right]\left[E(S_Y^{-2}) + \frac{(\bm a^T\bm \mu_Y)^2}{\sigma_Y^2\bm a^T\bm a}\var(S_Y^{-1})\right]}}
 		\end{equation}
 	%	where $d_X = E(\bm a^T\bm \mu_X)$ and $d_Y = E(\bm a^T\bm Y)$.
 	\end{theorem}
@@ -272,43 +277,53 @@
 	\end{corollary}
 	\textbf{Proof}: When $S_X$ and $S_Y$ are constants, $\cov(S_X^{-1}, S_Y^{-1})$, $\var(S_X^{-1}) $ and $\var(S_Y^{-1})$ are all 0, and equation (\ref{eq:teststatcor}) reduces to 
 	\begin{equation}
-		\rho_T(n) = \frac{\rho E(S_X^{-1}S_Y^{-1})}{\sqrt{E(S_X^{-2})E(S_Y^{-2})}} = \rho.
+		\rho_T(m) = \frac{\rho E(S_X^{-1}S_Y^{-1})}{\sqrt{E(S_X^{-2})E(S_Y^{-2})}} = \rho.
 	\end{equation}
-	\textbf{Note:} Corollary \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. In a two group comparison, Let $n = n_1 + n_2$ where $n_1, n_2$ are the sample sizes for the two groups, and 
-	\begin{equation}\label{eq:contrast}
-	\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})^T
-	\end{equation}
- be a contrast. If we set $S_X=1$, then $T_X$ corresponds to mean difference between the treatment and the control group; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ where $\sigma_X$ is known, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, $\rho_T=\rho$ if we use mean difference or $z$-value as test statistic.
-	
-	Next, if we assume that $(S_X, S_Y)$ is a function of $(\bm X, \bm Y)$, then the test statistics correlation in equation (\ref{eq:teststatcor}) can be expressed as  
+	Corollary \ref{thm:lineartransformation} states that test statistics correlation and expression level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. However, if we assume that $(S_X, S_Y)$ is a non-constant function of $(\bm X, \bm Y)$, then the test statistics correlation in equation (\ref{eq:teststatcor}) can be expressed as  
 	\begin{equation}
-		\rho_T(n) = \frac{ \frac{E(S_X^{-1}S_Y^{-1})}
+		\rho_T(m) = \frac{ \frac{E(S_X^{-1}S_Y^{-1})}
 			{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}\rho + \frac{(\bm a^T\bm \mu_X)(\bm a^T\bm \mu_Y)}{\sigma_X\sigma_Y\bm a^T\bm a} \rho_s	
 		}{\sqrt{\left[ \frac{E(S_X^{-2})}{\var(S_X^{-1})} + \frac{(\bm a^T\bm \mu_X)^2}{\sigma_X^2\bm a^T\bm a}\right]\left[ \frac{E(S_Y^{-2})}{\var(S_Y^{-1})} + \frac{(\bm a^T\bm \mu_Y)^2}{\sigma_Y^2\bm a^T\bm a}\right]}} 
 	\end{equation}
 	where 
 	\begin{equation}
-	 \rho_s = \frac{\cov(S_X^{-1},S_Y^{-1})}{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}
+	 \rho_s = \frac{\cov(S_X^{-1},S_Y^{-1})}{\sqrt{\var(S_X^{-1})\var(S_Y^{-1})}}.
 	\end{equation}
-	SAY SOMETHING HERE....
+	The correlation between test statistics $\rho_T(m)$ depends on the form of test statistics, and in general,  may not converge to the population correlation $\rho$. 
 	
-	In gene expression analysis, a commonly used statistic is the two sample $t$-statistic (REF).
-	For a two-factor experiment, we let $n_1$ and $n_2$ be the sample size for each treatment. The mean expression level is $\bm \mu_j = (\mu_X, \mu_Y)$  for the first treatment (i.e., $j = 1, \ldots, n_1$), and  $\bm \mu_j = (\mu_X,  \mu_Y)^T  + ( \Delta_X,\Delta_Y)^T$ for the second treatment (i.e., $j = n_1 + 1, \ldots, n_1 + n_2$). 
+	\subsection{Application of Theorem \ref{thm:teststatcor} to two group comparisons}
 	
-	In the case of two sample $t$-test with equal variance, the contrast $\bm a$ is defined in equation (\ref{eq:contrast}), giving the test statistic 
+	Many gene expression experiments are done to compare expression levels under two-treatment conditions. For the rest of this section, we discuss the relationship between $\rho_T$ and $\rho$ under such setting.
+	Let $n = n_1 + n_2$ be the total number of samples, where $n_1$ of them are from group 1 and $n_2$ from group 2, and let
+	\begin{equation}\label{eq:contrast}
+	\bm a  = (\underbrace{\frac{1}{n_1}, \ldots, \frac{1}{n_1}}_{n_1}, \underbrace{-\frac{1}{n_2}, \ldots, -\frac{1}{n_2}}_{n_2})^T
+	\end{equation}
+	be the contrast of interest. 
+	 The mean expression levels are specified as 
+	 \begin{equation}\label{eq:meanTwogroup}
+	 \begin{aligned}
+	 \bm \mu_j &= (\mu_X, \mu_Y),~~ j = 1, \ldots, n_1, \\
+	 \bm \mu_j &= (\mu_X,  \mu_Y)^T  + ( \Delta_X,\Delta_Y)^T, ~~j = n_1 + 1, \ldots, n_1 + n_2.
+	 \end{aligned}
+	 \end{equation}
+	 
+	 
+	If we set $S_X=1$, then $T_X$ corresponds to mean difference between groups 1 and 2; instead, if $S_X = \sigma_X\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ where $\sigma_X$ is known, then $T_X$ corresponds to the statistic for two sample $z$-test. Therefore, according to Corollary \ref{thm:lineartransformation},  $\rho_T=\rho$ if we use mean difference or $z$-value as test statistics.
+	
+	The two sample $t$-statistic is also a commonly used statistic in differential expression analysis.	In the case of two sample $t$-test with equal variance, with the contrast $\bm a$ defined in equation (\ref{eq:contrast}), the test statistic for $X$ is 
 	\begin{equation}\label{eq:tx}
-		T_X= \frac{\bar{X}_1- \bar{X}_2}{S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}
+		T_X= \frac{\bar{X}_1- \bar{X}_2}{S_{p, X}\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}},
 	\end{equation}
-	where $S_p$ is the pooled variance
+	where $S_{p, X}$ is the pooled variance
 	 \begin{equation}\label{eq:tstatform}
 	 \begin{aligned}
-	 &S_{X}^2 = \frac{(n_1-1)S_{X, 1}^2 + (n_2 -1)S_{X,2}^2}{n_1 + n_2 -2}. \\
+	 &S_{p, X}^2 = \frac{(n_1-1)S_{X, 1}^2 + (n_2 -1)S_{X,2}^2}{n_1 + n_2 -2}. \\
 	% 	&S_{X, 1}^2 =  \frac{\sum_{j=1}^{n_1}(X_j - \bar{X}_1)^2}{n_1 -1}, ~~S_{X, 2}^2 =  \frac{\sum_{j=n_1 +1}^{n_1 + n_2}(X_j - \bar{X}_2)^2}{n_2 -1},\\
 	 \end{aligned}
 	 \end{equation}
  Similarly, we obtain $T_Y$ by replacing the subscript ``$X$" in equations (\ref{eq:tx}) and (\ref{eq:tstatform}). Under normal distribution assumption, we have the following theorem for two sample $t$-test with equal variance:
 	\begin{theorem}\label{thm:tstat}
-		Let $(X_i, Y_i), i = 1, \ldots, n_1 + n_2$ follow a bivariate normal distribution with mean and covariance specified by equation (\ref{eq:meanstruct}). If $T_X$ and $T_Y$ are statistics for equal-variance two-sample $t$-test, then 
+		Let $(X_i, Y_i), i = 1, \ldots, n$ follow a bivariate normal distribution with mean specified by equations (\ref{eq:meanTwogroup}) and covariance $\bm \Sigma$ (see equation (\ref{eq:meanstruct})). If $T_X$ and $T_Y$ are statistics for equal-variance two-sample $t$-test, then 
 		\begin{equation}\label{eq:ttestcor}
 	\begin{aligned}
 	 \cor(T_X, T_Y) =   
@@ -326,7 +341,7 @@
 			 	 \end{aligned}
 			 \end{equation}	 
 	\end{theorem}
-	The proof of Theorem \ref{thm:tstat} is presented in Section \ref{section:testcormethod}. Next we give the limit of $\cor(T_X, T_Y)$.
+	The proof of Theorem \ref{thm:tstat} is presented in Section \ref{section:testcormethod}. Next we present the limit of $\cor(T_X, T_Y)$.
 	\begin{theorem}\label{thm:rholimit}
 	  	If there exists positive constant $M_1$ and $M_2$, such that $M_1 \leq n_1n_2^{-1}\leq M_2$, then
 	   \begin{equation}\label{eq:limitT}
@@ -336,20 +351,20 @@
 	   where %$\rho_{s}$ is defined in equation (\ref{eq:AandB}) and 
 	   $\beta = \lim\limits_{n_1 + n_2 \rightarrow \infty}C = (4 + 2n_1^{-1}n_2 + 2n_1n_2^{-1})^{-1}$.
 	\end{theorem}
-	Theorem \ref{thm:rholimit} says that as long as $n_1$ and $n_2$ grow proportionally, the limit of $\cor(T_X, T_Y)$ is a function of population covariance $\bm \Sigma$, the true mean difference $\bm \Delta$ and the ratio $n_1/n_2$. We have the following observations:
+	Theorem \ref{thm:rholimit} says that as long as $n_1$ and $n_2$ grow proportionally to infinity, the quantity $\rho_T$ is a function of population correlation $\rho$, the signal-to-noise ratio $(\Delta_X/\sigma_X, \Delta_Y/\sigma_Y)$  and the sample ratio $n_1/n_2$. We have the following observations:
 	\begin{enumerate}
 		\item If both test are true null (i.e., $\bm \Delta = \bm 0$), then $\rho_T = \rho$.
 		\item If one test is true null, then $\rho_T$ is proportional to and smaller in absolute value than $\rho$ (i.e., $|\rho_T|< |\rho|$).
 		\item If both tests are true alternative (i.e., $\bm \Delta \neq \bm 0$), then $\rho_T\neq \rho$ in general. Specifically,
 			\begin{enumerate}
-				\item  when $\Delta_X\Delta_Y >0$ (i.e., both genes are DE towards the same direction), we have $\rho_T>\rho$ for $\rho <0$ and $0 \leq \rho_T \leq\rho$ for $\rho \geq 0$.
-				\item when $\Delta_X\Delta_Y <0$ (i.e., genes are DE towards different directions), we have
+				\item[i)]  when $\Delta_X\Delta_Y >0$ (i.e., both genes are DE towards the same direction), we have $\rho_T>\rho$ for $\rho <0$ and $0 \leq \rho_T \leq\rho$ for $\rho \geq 0$.
+				\item[ii)] when $\Delta_X\Delta_Y <0$ (i.e., genes are DE towards different directions), we have
 				$\rho <\rho_T<0$ for $\rho <0$ and $\rho_T<\rho$ for $\rho>0$.
 			\end{enumerate}
 		Therefore in either case, we have $|\rho_T| \leq |\rho|$. 
 		\end{enumerate}
 		
-	For a two sample $t$ test with equal variance, we note that $|\rho_T| \leq |\rho|$. In other words, $T_X$ and $T_Y$ are never ``more correlated" than $X$ and $Y$ are. It's also interesting to note that when both genes are DE, $\rho_T=0$ at $\rho =-\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} $ and $\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} \in (-1, 1)$.
+	We note that $|\rho_T| \leq |\rho|$ when test statistics are derived from two sample $t$ test with equal variance. In other words, $T_X$ and $T_Y$ are always ``no more correlated" than $X$ and $Y$ are. It's also interesting to note that when both genes are DE, $\rho_T=0$ at $\rho =-\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} $ and $\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} \in (-1, 1)$.
 			
 	 In addition, we note that if $n_1/n_2 \rightarrow 0$ or $\infty$, then $\beta = 0$ and we have $\rho_T = \rho$. That is, when sample size of one group is not proportional to that of the other, $\cor(T_X, T_Y)$ will converge to $\rho$ regardless of whether the tests are under the null or not. 	
 %	 When $\bm \Delta = \bm 0$ then $\rho_T = \rho$; but when $\bm \Delta \neq \bm 0$, then $\rho_T \neq \rho$ in general. % In the next section, we will discuss about it in further detail. 
@@ -413,7 +428,7 @@
 	\end{equation}
 	where $j_1 = 1,\ldots, n_1$ and $j_2 = n_1 + 1, \ldots, n_1 + n_2$. In this simulation setting, we set both $n_1$ and $n_2$ to be 100.  For each given $\rho$, we consider these $n=200$ pairs of $(X, Y)$
 	as observations from one \textit{simulated} experiment. Out of this experiment, we calculate $q = (T_X, T_Y, r_{XY})$ where $T_X$ and $T_Y$ are the test statistics for gene $X$ and gene $Y$ respectively using 
-	two-sample $t$-test for equal variance procedure, and $r_{XY}$ is the sample correlation after the treatment effect is removed. We replicate the simulated
+	two-sample $t$-test for equal variance procedure, and $r_{XY}$ is the sample correlation after the treatment effects  are removed. We replicate the simulated
 	experiment for $B=1000$ times, resulting in a matrix $\bm Q_{1000\times 3}$. We take the correlation between the first and the second columns of $\bm Q$ as an estimate for test statistics correlation	$r_\text{statistics}$, and 
 	the mean of the third column as an estimate of sample correlation $r_{\text{sample}}$. 
 	\citet{fisher1915frequency} proved that sample correlation is a consistent estimator for underlying true 
@@ -432,7 +447,7 @@
 	In case a) where no gene is DE, $r_\text{statistics}$ and $r_{\text{sample}}$ are almost equal, and both converge the true correlation $\rho$. However, as long as DE effect exists, there is a discrepancy between $r_\text{statistics}$ and $\rho$. In case b) where only one gene is DE, 
 	 the magnitude of $r_\text{statistics}$ is proportional to, and smaller in absolute value than $\rho$.
 	% and according to equation (\ref{eq:ttestcor}), the magnitude of $r_\text{statistics}$ has to do with the signal-to-noise ratio $\Delta/\sigma$
-	It is more interesting to note that $r_\text{statistics}$ is not monotone with respect to $\rho$ when both genes are DE. If genes are DE towards the same direction as in the case of c),  $r_\text{statistics}$ first decreases from a positive value to 0, and continues to decrease until it reaches the minimum (a negative value), and then gradually increases to 1, as $\rho$ grows from $-1$ to $1$. When genes are DE towards opposite directions like in case d), however, the trend is reversed from that in the case of c).	This set of simulation results is reflected in the test statistics correlation formula of equation (\ref{eq:limitT}). 
+	It is more interesting to note that $r_\text{statistics}$ is not monotone with respect to $\rho$ when both genes are DE. If genes are DE towards the same direction as in the case of c),  $r_\text{statistics}$ first decreases from a positive value to 0, and continues to decrease until it reaches the minimum (a negative value), and then gradually increases to 1, as $\rho$ grows from $-1$ to $1$. When genes are DE towards opposite directions like in case d), however, the trend is reversed from that of c): $r_\text{statistics}$ increases from $-1$ to a positive value and reaches its maximum (a positive value), and decreases to a negative value. This set of simulation results is reflected in the test statistics correlation formula of equation (\ref{eq:limitT}). 
 	
 	\begin{figure}[!ht]
 		\centering
@@ -452,35 +467,33 @@
 	\section{Method}\label{section:testcormethod}
 	
 	\begin{lemma}
-		Sample correlation coefficient is a consistent estimator for $\rho$, 
-		\[\sqrt{n}(r_{\text{sample}} - \rho ) \stackrel{D}{\rightarrow}N\left(0, (1-\rho^2)^2\right).\]
+		The sample correlation coefficient $r$ defined in equation (\ref{eq:samplecor}) is a consistent estimator for the population correlation $\rho$, 
+		\[\sqrt{n}(r - \rho ) \stackrel{D}{\rightarrow}N\left(0, (1-\rho^2)^2\right).\]
 	\end{lemma}
-	The proof of lemma 1 can be found in \citet{fisher1915frequency}. \\
+	The proof of Lemma 1 can be found in \citet{fisher1915frequency}. \\
 	%$\rho({G_1, G_2})$ and $\frac{{\rho}_X + {\rho}_Y}{2}$ are asymptotically equivalent. \\
 	
-	To prove Theorem \ref{thm:tstat}, it is useful to note that $\bm U$ is independent of $\bm S$,
+	To prove Theorem \ref{thm:tstat}, it is useful to note that $\bm U = (\bm a^T\bm X, \bm a^T\bm Y)$ is independent of $\bm S = (S_X, S_Y)$,
 	following from Lemmas \ref{lemmabiChisq} and \ref{lemmaIndep}.
 	\begin{lemma}\label{lemmabiChisq}
-		Let $(X_{j}, Y_{j}), j=1 \ldots,  n$ be independent random variables satisfying equation (\ref{eq:indepsamples}),
-		then $\bm W = (W_{X},W_{Y}) =(\frac{(n -1)S_{X}^2}{\sigma_X^2}, \frac{(n-1)S_{Y}^2}{\sigma_Y^2})$ 
+		Let $(X_{j}, Y_{j}), j=1 \ldots,  m$ be independent random variables satisfying equation (\ref{eq:indepsamples}),
+		then $\bm W = (W_{X},W_{Y}) =(\frac{(m -1)S_{X}^2}{\sigma_X^2}, \frac{(n-1)S_{Y}^2}{\sigma_Y^2})$ 
 		follows a \textbf{bivariate chi square distribution} with density 
 		\begin{equation}\label{biChisq}
 			\begin{aligned}
-				f(w_x, w_y) & = \frac{2^{-n}(w_xw_y)^{(n-3)/2}e^{-\frac{w_x +
-							w_y}{2(1-\rho^2)}}}{\sqrt{\pi}\Gamma(\frac{n}{2})(1-\rho^2)^{(n-1)/2}} \times \\
+				f(w_x, w_y) & = \frac{2^{-m}(w_xw_y)^{(n-3)/2}e^{-\frac{w_x +
+							w_y}{2(1-\rho^2)}}}{\sqrt{\pi}\Gamma(\frac{m}{2})(1-\rho^2)^{(m-1)/2}} \times \\
 				& \sum_{k=0}^{\infty}[1 +
-				(-1)^k]\left(\frac{\rho\sqrt{w_xw_y}}{1-\rho^2}\right)^k\frac{\Gamma(\frac{k+1}{2})}{k!\Gamma(\frac{k
-						+ n}{2})}
+				(-1)^k]\left(\frac{\rho\sqrt{w_xw_y}}{1-\rho^2}\right)^k\frac{\Gamma(\frac{k+1}{2})}{k!\Gamma(\frac{k+ m}{2})}
 			\end{aligned}
 		\end{equation}
 		for $n>3$ and $-1<\rho < 1$.
 	\end{lemma}
 	For proof of Lemma \ref{lemmabiChisq}, interested readers are referred to \citet{joarder2009moments}.
-	It immediately follows from Lemma \ref{lemmabiChisq} that $\bm W_1 = (\frac{(n_1 -1)S_{X, 1}^2}{\sigma_X^2}, \frac{(n_1-1)S_{Y, 1}^2}{\sigma_Y^2})$ follows bivariate chi-square distribution with degree of freedom $n_1-1$, where $S_{X_,1}$ and $S_{X, 2}$ are defined in equation (\ref{eq:samplevariance}). Similarly, $\bm W_2 =(\frac{(n_2 -1)S_{X, 2}^2}{\sigma_X^2}, \frac{(n_2-1)S_{Y, 2}^2}{\sigma_Y^2})$ follows a bivariate chi-square distribution with degree of freedom $n_2-1$.  Note that $\bm W_1$ and $\bm W_2$ are independent since the samples are independent. 
+	It immediately follows from Lemma \ref{lemmabiChisq} that $\bm W_1 = (\frac{(n_1 -1)S_{X, 1}^2}{\sigma_X^2}, \frac{(n_1-1)S_{Y, 1}^2}{\sigma_Y^2})$ follows bivariate chi-square distribution with degree of freedom $n_1-1$. Similarly, $\bm W_2 =(\frac{(n_2 -1)S_{X, 2}^2}{\sigma_X^2}, \frac{(n_2-1)S_{Y, 2}^2}{\sigma_Y^2})$ follows a bivariate chi-square distribution with degree of freedom $n_2-1$.  Note that $\bm W_1$ and $\bm W_2$ are independent since the samples are independent. 
 	
 	\begin{lemma}\label{lemmaIndep}
-		$\bm U =(U_X, U_Y)$ is independent of $\bm S = (S_X ,S_Y)$, where $\bm U$ and $\bm S$ are defined in
-		equation (\ref{eq:tstatform}).
+		$\bm U =(U_X, U_Y)$ is independent of $\bm S = (S_X ,S_Y)$.
 	\end{lemma}
 	\textbf{Proof}: By Lemma \ref{lemmabiChisq}, the density function of $
 	\bm W_1 + \bm W_2$ only involves $\sigma^2_X, \sigma^2_Y, \rho$ and sample size $n_1, n_2$, therefore
@@ -493,16 +506,14 @@
 	
 	Lemma \ref{lemmaIndep} implies that  $U_XU_Y$ is also independent of $S_X^{-1}S_Y^{-1}$, and
 	therefore $E(\frac{U_X}{S_X} \cdot\frac{U_Y}{S_Y})$ can be expressed as
-	$E(U_XU_Y)E(S_X^{-1}S_Y^{-1})$. Additionally, if we know $\cor(S_X^{-1}, S_Y^{-1})$,
-	then the $t$-test statistics correlation can be accurately represented. 
+	$E(U_XU_Y)E(S_X^{-1}S_Y^{-1})$. We can apply Theorem \ref{thm:teststatcor} to calculate the correlation between $T_X$ and $T_Y$ under two sample $t$-test for equal variance. 
 	
-	\textbf{Proof of theorem (\ref{thm:tstat})} \\
-	First note that
+	\textbf{Proof of theorem \ref{thm:tstat}} \\
+	First note that by Lemma  \ref{lemmaIndep} we have
 	\begin{align*}
 		\cov(T_X, T_Y) &= E(T_XT_Y) - E(T_X)E(T_Y) \\
 		%& = E(c_0\frac{U_1}{S_1} \cdot c_0\frac{U_2}{S_2}) - E(c_0\frac{U_1}{S_1})E( c_0\frac{U_2}{S_2}) \\
 		& = \frac{1}{c_0^2} \left[E(U_XU_Y)E(S_X^{-1}S_Y^{-1}) - E(\frac{U_X}{S_X})E( \frac{U_Y}{S_Y})\right]   
-		~~~~~~~~~\text{ (by lemma \ref{lemmaIndep})}
 	\end{align*}
 	where $c_0 = \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ and $\var(T_X) = \var(\frac{U_X}{c_0S_X})=
 	\frac{1}{c_0^2}\var(\frac{U_X}{S_X})$. 
@@ -568,9 +579,6 @@
 	Finally,  the test statistics correlation (\ref{eq:ttestcor}) is obtained by plugging
 	equations (\ref{eq1}--\ref{eq3}) into equation (\ref{eq:Tcorrelation}).
 	
-	Up to now we have obtained an exact expression for $\cor(T_X, T_Y)$, which depends not only on
-	the sample size $n_1$ and $n_2$, but also on $\Delta/\sigma$, the relative magnitude of DE. The rest of this section
-	discusses asymptotic  property of $\cor(T_X, T_Y)$ for large sample size.
 	\begin{lemma}\label{lemmaLimit}
 	If there exists a positive number $M$, such that  $n_1n_2^{-1}\leq M$ and $n_1n_2^{-1}\leq M$, then the following results hold:
 		\begin{enumerate}
@@ -615,7 +623,7 @@
 	And the results immediately follow.
 	
 	\begin{lemma}\label{thm:invScorlimit}
-		Let $\bm Z_j = (X_j, Y_j), j = 1, \ldots, n$ be i.i.d. random variables under the two sample $t$-test for equal variance setting, 
+		Let $(X_j, Y_j), j = 1, \ldots, n$ be i.i.d. random variables under the two sample $t$-test for equal variance setting, 
 %	  \begin{equation}\notag
 %	   Z_j \sim N\left[ \left(
 %	   \begin{array}{c}
@@ -630,21 +638,14 @@
 %	   \right)
 %	   \right] 
 %	  \end{equation}
-		with covariance structure given by equation (\ref{eq:meanstruct}). Then we have
+		with mean specified in equation (\ref{eq:meanTwogroup}) covariance structure in equation (\ref{eq:meanstruct}). Then we have
 		$\lim\limits_{n\rightarrow\infty}\rho_s = \rho^2$.
 	\end{lemma}
 	\textbf{Proof}: Let's first look at samples $j=1, \ldots, n_1$. Note that 
 	 \begin{equation}
 	     S_{X,1}^2= \frac{1}{n_1}\sum_{j=1}^{n_1}(X_j -\bar{X}_1)^2
 	 \end{equation}
-	 is the \textit{maximum likelihood estimator} (MLE) for $\bm \sigma_X^2$. Because MLEs are consistent and asymptotically unbiased with respect to the true parameter, it can be shown that 
-		\begin{equation}\label{eq:sampVarasypm}
-	 	\begin{aligned}
-	 	E[S_{X, 1}^2] = \sigma_X^2,&~E[S_{Y, 1}^2] = \sigma_Y^2,  \\
-	 	\var[S_{X, 1}^2] \rightarrow \frac{2\sigma_X^4}{n_1},~\var[S_{Y, 1}^2] \rightarrow \frac{2\sigma_Y^4}{n_1},&
-	 	~\cov(S_{X, 1}^2, S_{Y, 1}^2) \rightarrow \frac{2\rho^2\sigma_X^2\sigma_Y^2}{n_1} \\
-	 	\end{aligned}
-	 	\end{equation} 
+	 is the \textit{maximum likelihood estimator} (MLE) for $\sigma_X^2$. By invariance property of MLE,
 %	 	\begin{equation}\label{eq:sampVarasypm}
 %	 	\begin{aligned}
 %	 	& \sqrt{n_1}\left[\left( \begin{array}{c}
@@ -695,7 +696,7 @@
 %	 		\right] 
 %	 	\end{aligned}
 %	 	\end{equation}
-	Note that
+	 the pooled variance estimator 
 		\begin{equation}\label{eq:Slinearcomb}
 		\begin{aligned}
 		&\left( \begin{array}{c}
@@ -716,7 +717,16 @@
 		\end{equation}
 		where 
 		\[ 	n = n_1 + n_2, ~~a_1 = \frac{n_1 -1}{n-2}, ~~a_2 = \frac{n_2 -1}{n-2} \]
-	We have by Slutsky's theorem 
+	is also MLE for $(\sigma_X^2, \sigma_Y^2)^T$ respectively.
+	It can be shown that 
+		 \begin{equation}\label{eq:sampVarasypm}
+		 \begin{aligned}
+		 E[S_{X}^2] = \sigma_X^2,&~E[S_{Y}^2] = \sigma_Y^2,  \\
+		 \var[S_{X}^2] \rightarrow \frac{2\sigma_X^4}{n},~\var[S_{Y}^2] \rightarrow \frac{2\sigma_Y^4}{n},&
+		 ~\cov(S_{X}^2, S_{Y}^2) \rightarrow \frac{2\rho^2\sigma_X^2\sigma_Y^2}{n} \\
+		 \end{aligned}
+		 \end{equation} 
+	We have 
 %	\begin{equation}\label{eq:poolsampVarasypm}
 %	\begin{aligned}
 %	&E[S_X^2] = \sigma_X^2, \var[S_X^2] \rightarrow \frac{2\sigma_X^4}{n}\\
@@ -786,44 +796,30 @@
 	\section{Conclusion}
 	
 	\textbf{State the major findings} \\
-	This article discusses the relationship between sample correlation coefficients $r_{\text{sample}}$ 
-	(after treatment effects removed) and test statistics correlation $r_\text{statistics}$ in a two
-	group comparison setting. We proved that under normal distribution assumption, $r_\text{statistics}$
-	and $r_\text{sample}$ have a perfect positive correlation for two sample $z$ test. However, for two
-	sample $t$-test this correspondence does not hold in general, unless the null in (\ref{hypotheses})
-	is true for all the tests considered. The results for two sample $t$-test can be applied to the case
-	of two group mean comparison under Poisson regression, as shown by simulation. Consequently, that
-	estimating  $r_\text{statistics}$ by $r_{\text{sample}}$ after nullifying treatment effects can not
-	be taken for granted.
+	This article discusses the relationship between population correlation $\rho$ and the corresponding test statistics correlation $\rho_T$. We investigate $\rho_T$ for test statistics of the form $(\frac{\bm a^T\bm X}{S_X}, \frac{\bm a^T\bm Y}{S_Y})$ (see equation (\ref{eq:teststat})), where the denominator is the standard error of the numerator. Assuming independence between $(\bm a^T\bm X, \bm a^T\bm Y)$ and $(S_X, S_Y)$, we derive the formula for test statistics correlation $\rho_T$, and show that $\rho_T$ may not equal population correlation $\rho$.  
+	
+	In two group comparison setting, we conclude that $\rho_T = \rho$ when $S_X$ (or $S_Y$) is constant with respect to $\bm X$ (or $\bm Y$). That is, $\rho_T = \rho$ under linear transformation of $\bm X$ and $\bm Y$, which is the case for two sample $z$-test. However, when $S_X$ (or $S_Y$) is a function of $\bm X$ (or $\bm Y$), as is the case of two
+	sample $t$-test, this equality may not hold. For two sample $t$-test, we prove that $\rho_T=\rho$ only if the null in equation (\ref{eq:hypotheses}) is true for all the tests considered, and that $|\rho_T|\leq |\rho|$ otherwise. In the case where one test is true null and the other true alternative, $\rho_T$ is directly proportional to $\rho$, while when both tests are true alternatives, $\rho_T$ is quadratic function of $\rho$.
 	
 	\textbf{State the practical meaningness of the findings}\\
-	In gene expression analysis, cares need to be taken when estimating test statistics correlation from
-	sample correlation. For microarray data, two sample $t$ test (\cite{efron2007correlation},
-	\cite{barry2008statistical}) or its moderated version \citep{wu2012camera} are used in detecting DE,
-	with $r_\text{statistics}$  estimated from sample correlation to adjust for inter-gene correlation.
-	Our study shows, however, that for DE genes, $r_\text{statistics}$ may be either overestimated if
-	two genes are positively correlated, or underestimated if two genes are negatively correlated. If we
-	believe that most genes are positively correlated (if any) and that there are true DE genes, then
-	the VIF factor may be overestimated in \cite{wu2012camera}, which may result in conservative test
-	for enrichment analysis; the variance of  $r_\text{statistics}$ may also be overestimated in
-	\cite{efron2007correlation}, which leads to larger variation in estimating conditional FDP. The
-	situation may be more complicated for RNA-Seq data, which are counts in nature and therefore need to
-	be modeled by more sophisticated regression tools (e.g. logistic regression, negative binomial
-	regression, etc.). 
+	We note that cares need to be taken when estimating correlations between test statistics.
+	In gene expression analysis, the two sample $t$-test \citep{barry2008statistical, efron2007correlation,qiu2005correlation} or moderated 
+	$t$-test \citep{wu2012camera} are used to calculate test statistics for DE detection, and the sample correlation (after treatment effects 
+	nullified) are used to adjust for correlation between those test statistics.
+	Our study shows that, however, for DE genes, $\rho_T$ may be overestimated when
+	two genes are positively correlated, and underestimated when they are negatively correlated. If there are true DE genes whose expression 
+	levels are correlated in either way, the VIF may not be accurately estimated in \cite{wu2012camera}, resulting in biased test
+	for their enrichment analysis (REF our paper?). Our results also indicates that the variance of $\rho_T$ may also be overestimated in
+	\cite{efron2007correlation}, which leads to larger variation in estimating their conditional FDP.
 	
 	\textbf{	Acknowledge the study’s limitations \\}
-	\textit{One assumption yet to be justified}\\
-	In the context of two sample $t$-test, the simulation results agree with our theoretical
-	conclusion, assuming that  $0\leq r_s \leq |\rho|$ in (\ref{rhoineq}) is true. Our simulation does
-	suggest 
-	\begin{equation}\label{rhosrho}
-		r_s = \rho^2, 
-	\end{equation}
-	as shown in figure (\ref{invsd}). If (\ref{rhosrho}) can be justified theoretically, it is possible
-	to approximate the true value of $\rho(T_1, T_2)$, which will correct the bias of estimating
-	$r_\text{statistics}$ by $r_\text{sample}$. Another remaining challenge is to assess the
-	relationship of $r_\text{statistics}$  and $\rho$ for non-normal distributions, or for other
-	hypothesis testing under different regression models (e.g., negative binomial regression).  
+	Theorem \ref{thm:teststatcor} and the subsequent results hold when the following two assumptions are met: 1) the test statistic has the of 
+	the form $\bm a^T\bm X/S_X$, and 2) $\bm a^T\bm X$ and $S_X$ are independent. In practice, both assumptions are vulnerable.
+	The test statistic may take different forms, depending on many factors such as the nature of the data (RNA-Seq or microarray), the 
+	experimental design structure, and the statistical hypothesis to be tested. The independence assumption between $\bm a^T\bm X$ and $S_X$ are 
+	unlikely to hold unless the statistic is derived from two sample $t$-test for normally distributed random variables. Therefore, the 
+	application of Theorem \ref{thm:teststatcor} is very limited. Yet one goal of this study is to raise awareness that the equality of $\rho_T$ 
+	and $\rho$ should not be taken for granted. In the future, we will explore the relationship between $\rho_T$ and $\rho$ for more general cases and for other types of statistics. 
 	
 	% \textbf{Make suggestions for further research\\ }
 	
