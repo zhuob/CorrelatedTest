@@ -46,13 +46,15 @@
 	Inter-gene correlations are commonly observed in sequencing data generated from gene expression 
 	experiments \citep{efron2012large, qiu2005effects,storey2003positive, huang2013gene, 
 	gatti2010heading}.
-	The key task of expression analysis is to detect differentially expressed (DE) genes, in which 
-	a summary statistic that quantifies the magnitude of DE is calculated for each gene. The test 
+	The key task of expression analysis is to detect differentially expressed (DE) genes whose 
+	expression levels are associated with experimental or treatment variables under study. 
+	In such a task, 
+	a summary statistic is calculated for each gene to quantify the magnitude of DE. The test 
 	statistics are often of familiar form. For example, 
 	they may come from two-sample comparison or experimental design based regression models. 
 	However, since the expression levels are correlated, the test statistics calculated from the 
 	expression levels are also correlated \citep{barry2008statistical, efron2007correlation, 
-	wu2012camera}. This paper concerns the relation between test 
+	wu2012camera}. This paper concerns the relationship between test 
 	statistics correlations and the corresponding expression level correlations.
 
 	\textbf{Why would people care about correlation between genes?}\\
@@ -106,10 +108,15 @@
 	yaari2013quantitative}. 
 	%The sample correlation is a consistent estimator of underlying population correlation 
 	%\cite{fisher1915frequency}. 
-	\citet{efron2007correlation} estimates the distribution of $z$-value (transformed from corresponding two sample $t$-test statistics) 
+	\citet{efron2007correlation} estimates the distribution of $z$-value (transformed from 
+	corresponding two sample $t$-test statistic) 
 	correlation by sample correlation. \citet{barry2008statistical} show by Monte Carlo simulation of gene expression data that a nearly linear 
 	relationship holds between test statistic correlation and sample correlation for several types 
-	of test statistics they examine. In all of the works, it is shown by simulation only the 
+	of test statistics they examine.  This Monte Carlo simulation results are cited by 
+	\citet{wu2012camera} as a justification for estimating their VIF---a summary of correlation 
+	between test statistics---from sample correlation.
+	 In all of the 
+	works, it is shown by simulation only the 
 	equivalence (in terms of either distribution or numerical summarization) of sample correlation  
 	and test statistics	correlation. 
 	%The validity of such representation is then demonstrated by small simulations.
@@ -135,12 +142,12 @@
 		\textbf{What did we find}\\
 	We investigate the effect of testing procedures on inter-gene correlation. First, we present a 
 	formula for calculating correlation between test statistics when they take specific form and 
-	meet some assumption of independence. Then we apply this formula to a special case where two 
-	group comparison experiment is considered. We show that 1) the test statistics correlation 
+	meet some assumption of independence. Then we apply this formula to a special case where 
+	two-group comparison experiment is considered. We show that 1) the test statistics correlation 
 	$\rho_T$ is equal to the population correlation $\rho$ when the test statistics are a linear 
-	combination of the expression levels, and that 2) $\rho_T$ is no more than $\rho$ in absolute 
-	value when the test statistics are derived from two sample $t$ test. We conduct simulations to 
-	illustrate our findings.
+	combination of the expression levels, and that 2) $\rho_T$ is no more larger than $\rho$ in 
+	absolute value when the test statistics are derived from two sample $t$ test. We conduct 
+	simulations to illustrate our findings.
 		
 	
 	\textbf{Relevant but different work}\\
@@ -174,26 +181,32 @@
 	 
 	%The most familiar measure of dependence between two quantities is 
 	%the \textit{Pearson's correlation coefficient}.  
-	Following the notation of 
-	\citet{lee1988thirteen}, We will restrict our interest to two 
-	types of Pearson's correlation coefficient: 1) standardized covariance, which we refer to as 
-	\textit{\popucor}
+	We will restrict our interest, following the notation of 
+	\citet{lee1988thirteen},  to two 
+	types of Pearson's correlation coefficient. The first type of correlation, which we refer to as 
+	\textit{\popucor}, is the standardized 
+	covariance
 	\begin{equation}\label{eq:popucor}
 	\rho =\dfrac{\cov(X, Y)}{\sqrt{\var(X)\var(Y)}} = 
-	\dfrac{E[(X-\mu_X)(Y_j-\mu_Y)]}{\sigma_X\sigma_Y}, 
-	\end{equation} 	where $\mu_X$ and $\mu_Y$ are the expected values of random variables $X$ and 
+	\dfrac{E[(X-\mu_X)(Y_j-\mu_Y)]}{\sigma_X\sigma_Y}.
+	\end{equation} 
+	In equation (\ref{eq:popucor}), $\mu_X$ and $\mu_Y$ are the expected values of 
+	random variables 
+	$X$ and 
 	$Y$,  and $\sigma_X<\infty$ and 
-	$\sigma_Y<\infty$ are the population standard errors, and 2) a function of raw scores and 
-	means, which we refer to as \textit{\samplecor}
+	$\sigma_Y<\infty$ are the population standard errors. The second type of correlation, which we 
+	refer to as \textit{\samplecor}, is a function of raw scores and means
 	\begin{equation}\label{eq:samplecor}
 	r  =  \dfrac{\sum_j (x_j -\bar{x})(y_j - \bar{y})}{\sqrt{\sum_{j}(x_j - \bar{x})^2\sum_i(y_j - 
 	\bar{y})^2}}, 
 	\end{equation}
-	where $(\bar{x}, \bar{y})$ is the vector of arithmetic mean of the observations.
+	where $(\bar{x}, \bar{y})$ is the vector of arithmetic mean of the observations. 
+	Note that \citet{fisher1915frequency} proved that sample correlation $r$ is a consistent 
+	estimator for 
+	population correlation $\rho$.
 	
-	
-	Let $(X_j, Y_j),$ be a bivariate random variable representing two features of sample $j = 1, 
-	\ldots, m$ , and $(x_j, y_j)$ the corresponding realization.
+	Let $(X_j, Y_j),$ be a bivariate random variable representing two features (genes) of sample $j 
+	= 1, \ldots, m$ , and $(x_j, y_j)$ the corresponding realization.
 	We assume that the population mean of $(X_j, Y_j)$ may differ across samples, but that the 
 	population covariance structure remains the 
 	same, that is,  
@@ -238,7 +251,7 @@
 	 a_m)^T$ be a vector for a contrast of 
 	 interest, then DE detection for gene $X$ can be statistically formulated as 
 	 \begin{equation}\label{eq:hypotheses}
-	 H_{0}:  \bm a^T\bm \mu_X = d_X \textit{     Verses   }  H_{1}: \bm a^T\bm \mu_X \neq d_X,
+	 H_{0}:  \bm a^T\bm \mu_X = 0 \textit{     Verses   }  H_{1}: \bm a^T\bm \mu_X \neq 0,
 	 \end{equation}
 	 where $\bm X = (X_1, \ldots, X_m)^T$ and $\bm \mu_{X} = (\mu_{X, 1}, \ldots, \mu_{X, m})^T$. 
 	 DE detection for gene $Y$ can be obtained by applying the same contrast to $\bm Y = (Y_1, 
@@ -269,10 +282,12 @@
 	
 	In this section we present the exact formula of test statistics correlation $\rho_T(m)$ by 
 	making some assumptions about $T_X$ and $T_Y$, and show that the test statistics correlation 
-	$\rho_T$ does not always equal to the population correlation $\rho$. For the case of two-group 
-	comparison, we prove that 1) if $T_X$ ($T_Y$) is a linear transformation of $\bm X$ ($\bm Y$), 
-	then $\rho_T= \rho$, and that 2) if $T_X$ ($T_Y$) is the two sample $t$-test statistic for $\bm 
-	X$ ($\bm Y$), then $|\rho_T| \leq |\rho|$. For 2), we show that the relationship between 
+	$\rho_T$ does not always equal the population correlation $\rho$. For the case of two-group 
+	comparison, we prove that 1) if $T_X$ (or $T_Y$) is a linear transformation of $\bm X$ ($\bm 
+	Y$), 
+	then $\rho_T= \rho$, and that 2) if $T_X$ (or $T_Y$) is the two sample $t$-test statistic for 
+	$\bm 
+	X$ (or $\bm Y$), then $|\rho_T| \leq |\rho|$. For 2), we show that the relationship between 
 	$\rho_T$ and $\rho$ depends on whether the hypotheses tests (equation \ref{eq:hypotheses}) are 
 	true null or not. We perform simulations for the case of test statistics derived from 
 	two-sample $t$-test to illustrate our findings.
@@ -366,7 +381,7 @@
 	 The mean expression levels are specified as 
 	 \begin{equation}\label{eq:meanTwogroup}
 	 \begin{aligned}
-	 \bm \mu_j &= (\mu_X, \mu_Y),~~ j = 1, \ldots, n_1, \\
+	 \bm \mu_j &= (\mu_X, \mu_Y)^T,~~ j = 1, \ldots, n_1, \\
 	 \bm \mu_j &= (\mu_X,  \mu_Y)^T  + ( \Delta_X,\Delta_Y)^T, ~~j = n_1 + 1, \ldots, n_1 + n_2.
 	 \end{aligned}
 	 \end{equation}
@@ -417,7 +432,8 @@
 	The proof of Theorem \ref{thm:tstat} is presented in Section \ref{section:testcormethod}. Next 
 	we present the limit of $\cor(T_X, T_Y)$.
 	\begin{theorem}\label{thm:rholimit}
-	  	If there exists positive constant $M_1$ and $M_2$, such that $M_1 \leq n_1n_2^{-1}\leq M_2$, then
+	  	If there exists positive constants $M_1$ and $M_2$, such that $M_1 \leq n_1n_2^{-1}\leq 
+	  	M_2$, then
 	   \begin{equation}\label{eq:limitT}
 	   \rho_T=\lim\limits_{n_1 + n_2 \rightarrow \infty} \cor(T_X, T_Y) = \frac{\rho(1  +
 	   	\beta\frac{\Delta_X\Delta_Y}{\sigma_X\sigma_Y}\rho)}{\sqrt{  \left[ 1 +\beta\frac{\Delta_X^2}{\sigma_X^2}\right]\left[ 1 + \beta\frac{\Delta_Y^2}{\sigma_Y^2}\right]}}
@@ -507,14 +523,14 @@
 			\right] 
 		\end{aligned}
 	\end{equation}
-	where $j_1 = 1,\ldots, n_1$ and $j_2 = n_1 + 1, \ldots, n_1 + n_2$. In this simulation setting, we set both $n_1$ and $n_2$ to be 100.  For each given $\rho$, we consider these $n=200$ pairs of $(X, Y)$
+	where $j_1 = 1,\ldots, n_1$ and $j_2 = n_1 + 1, \ldots, n_1 + n_2$. For each given $\rho$, we 
+	consider these $n=n_1 + n_2$ pairs of $(X, Y)$
 	as observations from one \textit{simulated} experiment. Out of this experiment, we calculate $q = (T_X, T_Y, r_{XY})$ where $T_X$ and $T_Y$ are the test statistics for gene $X$ and gene $Y$ respectively using 
 	two-sample $t$-test for equal variance procedure, and $r_{XY}$ is the sample correlation after 
 	the treatment effects  are removed. We replicate the simulated
 	experiment for $B=1000$ times, resulting in a matrix $\bm Q_{1000\times 3}$. We take the correlation between the first and the second columns of $\bm Q$ as an estimate for test statistics correlation	$r_\text{statistics}$, and 
 	the mean of the third column as an estimate of sample correlation $r_{\text{sample}}$. 
-	\citet{fisher1915frequency} proved that sample correlation is a consistent estimator for underlying true 
-	correlation, therefore
+	Sample correlation is a consistent estimator for underlying true correlation, therefore
 		$r_\text{statistics}$ and $r_{\text{sample}}$ should reflect the true correlation between $T_X$ and $T_Y$ and 
 		that between $X$ and $Y$ respectively. 
 		We increase $\rho$ from $-0.99$ to $0.99$ by fixed step size $0.01$, and examine the relationship between $r_\text{statistics}$ and $r_{\text{sample}}$ under four different cases:
@@ -525,9 +541,19 @@
 		\item[d)] DE towards opposite directions (i.e., $\Delta_X\Delta_Y <0$); in the simulation we set $\Delta_X = 2$ and $\Delta_Y=-5$.
 		\end{enumerate}
 		
-	In Figure \ref{fig:tstat}, we plot $r_\text{statistics}$ and $r_{\text{sample}}$ against the underlying true population correlation $\rho$. Note that in all cases, while $r_{\text{sample}}$ is a consistent estimator of $\rho$, $r_\text{statistics}$ might be very different from $\rho$ and thus from $r_\text{sample}$.  
-	In case a) where no gene is DE, $r_\text{statistics}$ and $r_{\text{sample}}$ are almost equal, and both converge the true correlation $\rho$. However, as long as DE effect exists, there is a discrepancy between $r_\text{statistics}$ and $\rho$. In case b) where only one gene is DE, 
-	 the magnitude of $r_\text{statistics}$ is proportional to, and smaller in absolute value than $\rho$.
+	We conduct simulations for two different sample sizes: we set $n_1 = n_2 = 1000$ to assess 
+	asymptotic performance of $\rho_T(n)$ in equation (\ref{eq:teststatcor}), and set $n_1 = n_2 
+	= 5$ to mimic small sample size scenarios which are typical in gene expression study. 
+			
+	In Figure \ref{fig:tstat}, we plot $r_\text{statistics}$ and $r_{\text{sample}}$ against the 
+	underlying true population correlation $\rho$. Note that in all cases, while 
+	$r_{\text{sample}}$ is a consistent estimator of $\rho$, $r_\text{statistics}$ might be very 
+	different from $\rho$ and thus from $r_\text{sample}$.  
+	In case a) where no gene is DE, $r_\text{statistics}$ and $r_{\text{sample}}$ are almost equal, 
+	and both converge the true correlation $\rho$. However, as long as DE effect exists, there is a 
+	discrepancy between $r_\text{statistics}$ and $\rho$. In case b) where only one gene is DE, 
+	 the magnitude of $r_\text{statistics}$ is proportional to, and smaller in absolute value than 
+	 $\rho$.
 	% and according to equation (\ref{eq:ttestcor}), the magnitude of $r_\text{statistics}$ has to do with the signal-to-noise ratio $\Delta/\sigma$
 	It is more interesting to note that $r_\text{statistics}$ is not monotone with respect to 
 	$\rho$ when both genes are DE. If genes are DE towards the same direction as in the case of 
@@ -539,13 +565,24 @@
 	This set of simulation results is reflected in the test statistics correlation formula of 
 	equation (\ref{eq:limitT}). 
 	
+	We also illustrate in Figure \ref{fig:tstat} the variation in $r_\text{statistics}$ with 
+	respect to change in sample size $n$. For each fixed $\rho$ under cases b)---d), the absolute 
+	value of $r_\text{statistics}$  increases when we change the sample size $n$ from $10$ to 
+	$2000$. Yet the change in $r_\text{statistics}$ induced by sample size is not substantial, 
+	especially when the population correlation is small (e.g., $\rho < 0.1$). We note that in all 
+	of the four cases, the inequality $r_\text{statistics}\leq r_\text{sample}$ holds.
+	
 	\begin{figure}[!ht]
 		\centering
 		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case1.eps}
 		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case2.eps}
 		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case3.eps}
 		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case4.eps}
-	\caption{Plots for estimates of sample/test statistics correlation against true population correlations. For each of the simulation settings a)--d), the test statistics are calculated using two sample $t$-test with equal variance, and the correlations are calculated by equation (\ref{eq:samplecor}). }
+	\caption{Plots for estimates of sample/test statistics correlation against true population 
+	correlations. For each of the simulation settings a)--d), the test statistics are calculated 
+	using two sample $t$-test with equal variance, and the correlations are calculated by equation 
+	(\ref{eq:samplecor}). The legend ``larger" corresponds to results from simulation of sample 
+	size $n_1=n_2 =1000$, and ``smaller" to those from simulation of sample size $n_1 = n_2 =5$.}
 		\label{fig:tstat}
 	\end{figure}
 
@@ -938,8 +975,8 @@
 	assumption between $\bm a^T\bm X$ and $S_X$ are 
 	unlikely to hold unless the statistic is derived from two sample $t$-test for normally 
 	distributed random variables. Therefore, the 
-	application of Theorem \ref{thm:teststatcor} is very limited. Yet one goal of this study is to 
-	raise awareness that the equality of $\rho_T$ 
+	application of Theorem \ref{thm:teststatcor} is somewhat limited. Yet one goal of this study is 
+	to raise awareness that the equality of $\rho_T$ 
 	and $\rho$ should not be taken for granted. In the future, we will explore the relationship 
 	between $\rho_T$ and $\rho$ for more general cases and for other types of statistics. 
 	

@@ -213,6 +213,56 @@ plot_rho <- function(obj, case, textsize = rep(20, 4),include_invS = F){
 
 
 
+##  compare the performance of small samples and large samples
+comb1 <- function(obj1, obj2){
+  
+  rho_mat1 <- obj1$rho_mat;
+  rho_mat2 <- obj2$rho_mat
+  rho_mat1$s2 <- rho_mat2$test_cor
+  
+  obj_new <- obj1;
+  obj_new$rho_mat <- rho_mat1
+  names(obj_new$rho_mat)[2:4] <- c("smaller", "invS", "larger")
+  
+  return(obj_new)
+}
+
+
+plot_rho2 <- function(obj, case, textsize = rep(20, 4),include_invS = F){
+  
+  rho_t <- obj$rho_mat
+  rho_s <- obj$rho_sample
+  DE <- obj$DE
+  
+  rho_t$rho_sample_ave <- apply(rho_s, 1, mean) 
+ names(rho_t)[5] <- "sample"
+  
+  if (include_invS){
+    prep_data <- rho_t
+  } else {
+    prep_data <- rho_t[, c(1, 2, 4, 5)]
+  }
+  
+  prep_data2 <- melt(prep_data, id = "true_popu_rho", 
+                     variable.name = "category", value.name = "estimate")
+  
+  tl <- substitute(case1~"):"~"("~Delta[x]~","~Delta[y]~")"~"="~"("~var1~","~var2~")", 
+                   list(case1 = case, var1 = DE[1], var2=DE[2]))
+  #tl <- substitute(Delta[x]~ "="~ var1 ~","~Delta[y]~"="~var2, list (var1 = DE[1], var2=DE[2]))
+  p1 <- ggplot(data = prep_data2, aes(true_popu_rho, estimate, color = category)) + 
+    geom_line(aes(linetype = category)) + 
+    labs( x= "population correlation", y = "estimated correlation", 
+          title = tl ) + 
+    theme(legend.position = c(0.8, 0.1), 
+          legend.text = element_text(size = textsize[1]),
+          plot.title = element_text(size = textsize[2]),
+          axis.text = element_text(size = textsize[3]), 
+          axis.title = element_text(size = textsize[4], face= "bold"))
+  p1  + guides(
+    linetype  = guide_legend(keywidth = 3, keyheight = 1), 
+    color = guide_legend(keywidth = 3, keyheight = 1) )
+  
+}
 
 
 
