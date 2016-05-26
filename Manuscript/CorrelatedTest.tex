@@ -369,7 +369,7 @@
 	The correlation between test statistics $\rho_T(m)$ depends on the form of test statistics, and 
 	in general,  may not converge to the population correlation $\rho$. 
 	
-	\subsection{Application of Theorem \ref{thm:teststatcor} to two group comparisons}
+	\subsection{Application of Theorem \ref{thm:teststatcor} under normal distribution}
 	
 	Many gene expression experiments are done to compare expression levels under two-treatment conditions. For the rest of this section, we discuss the relationship between $\rho_T$ and $\rho$ under such setting.
 	Let $n = n_1 + n_2$ be the total number of samples, where $n_1$ of them are from group 1 and 
@@ -457,6 +457,20 @@
 		Therefore in either case, we have $|\rho_T| \leq |\rho|$. 
 		\end{enumerate}
 		
+		
+			
+			\begin{figure}[!ht]
+				\centering
+				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th1.eps}
+				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th2.eps}
+				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th3.eps}
+				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th4.eps}
+				\caption{Theoretical correlation between test statistics under different settings. 
+				For each of the fixed correlation $\rho$, we adjust delta1 ($\Delta_x/\sigma_x$) 
+				and delta2 ($\Delta_y/\sigma_y$) to evaluate $\rho_T$ according to equation 
+				(\ref{eq:limitT}).}
+				\label{fig:th}
+			\end{figure}
 	We note that $|\rho_T| \leq |\rho|$ when test statistics are derived from two sample $t$ test 
 	with equal variance. In other words, $T_X$ and $T_Y$ are always ``no more correlated" than $X$ 
 	and $Y$ are. It's also interesting to note that when both genes are DE, $\rho_T=0$ at $\rho 
@@ -742,7 +756,7 @@
 			\frac{(k-\frac{1}{2})(k - 1 + \frac{1}{12})^4}{(k-1+ \frac{1}{24})^2(k-1)^3},& \text{if } n_1 + n_2 = 2k+1, k\geq 2 \\
 		\end{cases}
 	\end{equation}
-	It can also be shown using equation (\ref{eq:Bapprox}) that
+	It can also be shown following equation (\ref{eq:Bapprox}) that
 	\begin{equation}\label{eq:AminusB}
 		A- B \approx  
 		\begin{cases}
@@ -945,7 +959,7 @@
 	$\rho_T=\rho$ only if the null in equation (\ref{eq:hypotheses}) is true for all the tests 
 	considered, and that $|\rho_T|\leq |\rho|$ otherwise. In the case where one test is true null 
 	and the other true alternative, $\rho_T$ is directly proportional to $\rho$, while when both 
-	tests are true alternatives, $\rho_T$ is quadratic function of $\rho$.
+	tests are true alternatives, $\rho_T$ is a quadratic function of $\rho$.
 	
 	\textbf{State the practical meaningness of the findings}\\
 	We note that cares need to be taken when estimating correlations between test statistics.
@@ -959,7 +973,7 @@
 	there are true DE genes whose expression 
 	levels are correlated in either way, the VIF may not be accurately estimated in 
 	\cite{wu2012camera}, resulting in biased test
-	for their enrichment analysis (REF our paper?). Our results also indicates that the variance of 
+	for their enrichment analysis (REF our paper?). Our results also indicate that the variance of 
 	$\rho_T$ may also be overestimated in
 	\cite{efron2007correlation}, which leads to larger variation in estimating their conditional 
 	FDP.

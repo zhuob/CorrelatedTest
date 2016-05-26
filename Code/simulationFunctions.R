@@ -214,11 +214,14 @@ plot_rho <- function(obj, case, textsize = rep(20, 4),include_invS = F){
 
 
 ##  compare the performance of small samples and large samples
-comb1 <- function(obj1, obj2){
+##  arguments are objects returned from compare_rho function
+
+comb1 <- function(obj1, obj2, obj3){
   
   rho_mat1 <- obj1$rho_mat;
   rho_mat2 <- obj2$rho_mat
   rho_mat1$s2 <- rho_mat2$test_cor
+  rho_mat1$theoretical <- obj3
   
   obj_new <- obj1;
   obj_new$rho_mat <- rho_mat1
@@ -266,115 +269,99 @@ plot_rho2 <- function(obj, case, textsize = rep(20, 4),include_invS = F){
 
 
 
-
-############ now the correlation between test statistic is related to both 
-###########  rho0 = cor(z1, z2) and rho1 = cor(1/s1, 1/s2)
-
-# the correlation of sample and the correlation of inverse_standard_errors
-sample.inv_sd.correlation <- function(mu1, sigma1, mu2, sigma2, rho, n, nreps){
-
-  stat <- matrix(NA, nrow=nreps, ncol=2)                     # matrix to store the t.stat
-  rho.sample <- c()
+plot_rho1 <- function(obj, case, textsize = rep(20, 4),
+                      smaller =5, larger=1000, include_invS = F){
   
-  for ( k in 1: nreps)                                       # create a vector of score stat for each gene
-  {
-    y.t1 <- correlated.norm(mu1, rho, sigma1, n/2)           # treatment 
-    y.t2 <- correlated.norm(mu2, rho, sigma2, n/2)           # control
-    
-    y <- cbind(y.t1, y.t2)                                   # expression data of two genes
-    rho1 <- cor(t(y.t1))[1, 2]; rho2 <- cor(t(y.t2))[1, 2]   # sample correlation for each group
-    rho.sample[k] <- mean(c(rho1, rho2))                     # mean of sample correlation
-    
-    #    stat[k, ] <- ztest.stat(y, sigma1, sigma2)              # calculate the z stat
-    stat[k, ] <- inv_sd(y)
+  rho_t <- obj$rho_mat
+  rho_s <- obj$rho_sample
+  DE <- obj$DE
+  
+#  rho_t$rho_sample_ave <- apply(rho_s, 1, mean) 
+#  names(rho_t)[5] <- "sample"
+  v1 <- paste("n =", smaller)
+  v2 <- paste("n =", larger)
+  names(rho_t)[c(2, 4)] <- c(v1, v2)
+  
+  if (include_invS){
+    prep_data <- rho_t
+  } else {
+    prep_data <- rho_t[, c(1, 2, 4, 5)]
   }
   
-  rho.ave <- mean(rho.sample)                                # calculate the mean of the sampel rhos
-  rho.s <- cor(stat)[1, 2]                                   # calculate the correlation of statistics
-  rho.list <- list(sample.cor= rho.ave, inv_sd.cor = rho.s)
+  prep_data2 <- melt(prep_data, id = "true_popu_rho", 
+                     variable.name = "category", value.name = "estimate")
   
-  return(rho.list)  
+  tl <- substitute(case1~"):"~"("~Delta[x]~","~Delta[y]~")"~"="~"("~var1~","~var2~")",
+                   list(case1 = case, var1 = DE[1], var2=DE[2]))
+  #tl <- substitute(Delta[x]~ "="~ var1 ~","~Delta[y]~"="~var2, list (var1 = DE[1], var2=DE[2]))
+  p1 <- ggplot(data = prep_data2, aes(true_popu_rho, estimate, color = category)) + 
+    geom_line(aes(linetype = category)) + 
+    labs( x= "population correlation", y = "estimated correlation", 
+          title = tl ) + 
+    theme(legend.position = c(0.8, 0.1), 
+          legend.text = element_text(size = textsize[1]),
+          plot.title = element_text(size = textsize[2]),
+          axis.text = element_text(size = textsize[3]), 
+          axis.title = element_text(size = textsize[4], face= "bold"))
+  p1  + guides(
+    linetype  = guide_legend(keywidth = 3, keyheight = 1), 
+    color = guide_legend(keywidth = 3, keyheight = 1) ) +
+    geom_abline(intercept = 0, slope=1) + ylim(-1, 1)
+    
+  
 }
 
 
+## theoretical correlation 
+## delta1 = Delta_x/sigma_x;  delta2 = Delta_y/sigma_y
 
-
-
-sample.stat.correlation <- function(mu1, sigma1, mu2, sigma2, rho, n, nreps, test.type = "t"){
-#   simulate correlated normal data as specified by the parameters and 
-#  return the sample correlation as  well as the test stat correlation
-
-#  input:
-#   mu1: true mean for group 1
-#   mu2: true mean for group 2
-# sigma: true variance 
-#   rho: true correlation
-#     n: total number of samples to be simulated
-# nreps: how many data sets to be simulated
-#
-# output:
-#  rho.list: the estimated sample correlation and estimated test statistics correlation
+theore_rho <- function(delta1, delta2, rho, sigma, n1, n2){
   
-  stat <- matrix(NA, nrow=nreps, ncol=2)                     # matrix to store the t.stat
-  rho.sample <- c()
+  beta <- 1/(4 + 2*n1/n2 + 2*n2/n1)
+  delta <- c(delta1, delta2)
+  signal2noise <- delta/sigma 
   
-  for ( k in 1: nreps)                                       # create a vector of score stat for each gene
+  numerator <- rho + beta*prod(signal2noise)*rho^2
+  denominator <- sqrt((1 + beta*signal2noise[1]^2)*(1 + beta*signal2noise[2]^2))
+  
+  rho_stat <- numerator/denominator
+  return(rho_stat)
+}
+
+
+theoretical_plot <- function(delta1_vector, delta2= seq(0,4), rho, sigma, n1, n2, textsize = rep(20, 4)){
+  
+  m <- length(delta2)
+  obj_dat <- data.frame(matrix(NA, length(delta1_vector), m))
+  for ( k in 1:m)
   {
-    y.t1 <- correlated.norm(mu1, rho, sigma1, n/2)           # treatment 
-    y.t2 <- correlated.norm(mu2, rho, sigma2, n/2)           # control
-    
-    y <- cbind(y.t1, y.t2)                                   # expression data of two genes
-    rho1 <- cor(t(y.t1))[1, 2]; rho2 <- cor(t(y.t2))[1, 2]   # sample correlation for each group
-    rho.sample[k] <- mean(c(rho1, rho2))                     # mean of sample correlation
-    
-    if (test.type == "t") { 
-      stat[k, ] <- ttest.stat(y)                               #  calculate the t stat
-      }
-    else if ( test.type == "z"){
-      stat[k, ] <- ztest.stat(y, sigma1, sigma2)              # calculate the z stat
-    }
-    
+   obj_dat[, k] <- sapply(delta1_vector, theore_rho, rho = rho, delta2=delta2[k], sigma= sigma, n1=n1, n2=n2)
   }
+  names(obj_dat) <- delta2
+  obj_dat$delta1 <- delta1_vector
   
-  rho.ave <- mean(rho.sample)                                # calculate the mean of the sampel rhos
-  rho.t <- cor(stat)[1, 2]                                   # calculate the correlation of statistics
-  rho.list <- list(true.cor = rho, sample.cor= rho.ave, stat.cor = rho.t)
   
-  return(rho.list)  
+  tr_data <- melt(obj_dat, id = "delta1", value.name = "theoretical",
+                  variable.name = "delta2" )
+  rho1 <- rho
+  tl <- substitute(rho~"="~rho1, list( rho1 = rho1))
+  
+  ggplot(tr_data, aes(delta1, theoretical, color = delta2, linetype = delta2)) + 
+    geom_line(size = 1) + 
+    labs(y = "theoretical correlation", title = tl) + 
+    theme(legend.position = c(0.9, 0.2), 
+          legend.text = element_text(size = textsize[1]),
+          plot.title = element_text(size = textsize[2]), 
+          axis.text = element_text(size = textsize[3]), 
+          axis.title = element_text(size = textsize[4], face = "bold")) + 
+    guides(fill = guide_legend(keywidth = 1, keyheight = 1), 
+        #   linetype = guide_legend(keywidth = 3, keywidth= 1), 
+           colour = guide_legend(keywidth = 3, keyheight = 1))
+    
+
 }
 
-
-simulate.rho <- function(mu1, sigma1, mu2, sigma2, rhoVec, n, nreps, test.type= "t"){
-# simulate sample and test statistics correlation according to the rho Vector 
   
-  rho <- rhoVec
-  store.corr <- data.frame(matrix(NA, length(rho), 3))
   
-  for ( i in 1:length(rho))
-  {
-    a <- sample.stat.correlation(mu1, sigma1, mu2, sigma2, rho[i], n, nreps, test.type = test.type)
-    store.corr[i, ] <- unlist(a)  
-  }
-  colnames(store.corr) <- c("true", "sample", "test.stat")
-  
-  return(store.corr)
-}
-
-
-plot.rho <- function(data, textsize=rep(20, 4)){
-# plot the sample and test statistics correlation against the true correlation  
-
-  store.corr1 <- melt(data, id="true", value.name = "correlation", variable.name = "type")
-
-    ggplot(data = store.corr1, aes(x=true, y=correlation) ) +
-      geom_point(aes(colour=type, shape=type), size=2) + 
-      #labs(x="true", y="correlation") + 
-      theme(legend.position="top", 
-            legend.text = element_text(size = textsize[1]),
-            plot.title = element_text(size = textsize[2]), 
-            axis.text=element_text(size=textsize[3]), 
-            axis.title=element_text(size=textsize[4],face="bold"))
-  
-}
 
 
