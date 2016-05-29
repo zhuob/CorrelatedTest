@@ -201,7 +201,7 @@
 	\bar{y})^2}}, 
 	\end{equation}
 	where $(\bar{x}, \bar{y})$ is the vector of arithmetic mean of the observations. 
-	Note that \citet{fisher1915frequency} proved that sample correlation $r$ is a consistent 
+	\citet{fisher1915frequency} proved that sample correlation $r$ is a consistent 
 	estimator for 
 	population correlation $\rho$.
 	
@@ -251,7 +251,7 @@
 	 a_m)^T$ be a vector for a contrast of 
 	 interest, then DE detection for gene $X$ can be statistically formulated as 
 	 \begin{equation}\label{eq:hypotheses}
-	 H_{0}:  \bm a^T\bm \mu_X = 0 \textit{     Verses   }  H_{1}: \bm a^T\bm \mu_X \neq 0,
+	 H_{0}:  \bm a^T\bm \mu_X = 0 \textit{     Versus   }  H_{1}: \bm a^T\bm \mu_X \neq 0,
 	 \end{equation}
 	 where $\bm X = (X_1, \ldots, X_m)^T$ and $\bm \mu_{X} = (\mu_{X, 1}, \ldots, \mu_{X, m})^T$. 
 	 DE detection for gene $Y$ can be obtained by applying the same contrast to $\bm Y = (Y_1, 
@@ -347,14 +347,17 @@
 	The result follows by plugging equations (\ref{eq:testprepare})-(\ref{eq:testnumerator}) into equation (\ref{eq:popucor}).
 	
 	\begin{corollary}\label{thm:lineartransformation} 
-		For any non zero $\bm a$, $\rho_T=\rho$ if $S_X$ and $S_Y$ are constant with respect to $\bm X, \bm Y$. 
+		For any non zero $\bm a$, $\rho_T(m)=\rho$ if $S_X$ and $S_Y$ are constant with respect to 
+		$\bm X, \bm Y$. 
 	\end{corollary}
 	\textbf{Proof}: When $S_X$ and $S_Y$ are constants, $\cov(S_X^{-1}, S_Y^{-1})$, $\var(S_X^{-1}) $ and $\var(S_Y^{-1})$ are all 0, and equation (\ref{eq:teststatcor}) reduces to 
 	\begin{equation}
 		\rho_T(m) = \frac{\rho E(S_X^{-1}S_Y^{-1})}{\sqrt{E(S_X^{-2})E(S_Y^{-2})}} = \rho.
 	\end{equation}
 	Corollary \ref{thm:lineartransformation} states that test statistics correlation and expression 
-	level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. However, if we 
+	level correlation are equal under linear transformation of $\bm X$ and $\bm Y$. 
+	
+	However, if we 
 	assume that $(S_X, S_Y)$ is a non-constant function of $(\bm X, \bm Y)$, then the test 
 	statistics correlation in equation (\ref{eq:teststatcor}) can be expressed as  
 	\begin{equation}
@@ -443,11 +446,13 @@
 	\end{theorem}
 	Theorem \ref{thm:rholimit} says that as long as $n_1$ and $n_2$ grow proportionally to 
 	infinity, the quantity $\rho_T$ is a function of population correlation $\rho$, the 
-	signal-to-noise ratio $(\Delta_X/\sigma_X, \Delta_Y/\sigma_Y)$  and the sample ratio $n_1/n_2$. 
+	signal-to-noise ratios $(\delta_X, \delta_Y) = (\Delta_X/\sigma_X, \Delta_Y/\sigma_Y)$  and the 
+	sample ratio $n_1/n_2$. 
 	We have the following observations:
 	\begin{enumerate}
-		\item If both test are true null (i.e., $\bm \Delta = \bm 0$), then $\rho_T = \rho$.
-		\item If one test is true null, then $\rho_T$ is proportional to and smaller in absolute value than $\rho$ (i.e., $|\rho_T|< |\rho|$).
+		\item If both tests are true null (i.e., $\bm \Delta = \bm 0$), then $\rho_T = \rho$.
+		\item If only one test is true null, then $\rho_T$ is proportional to and smaller in 
+		absolute value than $\rho$ (i.e., $\rho_T = \gamma_0\rho,~ 0 <\gamma_0 <1$).
 		\item If both tests are true alternative (i.e., $\bm \Delta \neq \bm 0$), then $\rho_T\neq \rho$ in general. Specifically,
 			\begin{enumerate}
 				\item[i)]  when $\Delta_X\Delta_Y >0$ (i.e., both genes are DE towards the same direction), we have $\rho_T>\rho$ for $\rho <0$ and $0 \leq \rho_T \leq\rho$ for $\rho \geq 0$.
@@ -459,25 +464,48 @@
 		
 		
 			
-			\begin{figure}[!ht]
-				\centering
-				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th1.eps}
-				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th2.eps}
-				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th3.eps}
-				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th4.eps}
-				\caption{Theoretical correlation between test statistics under different settings. 
-				For each of the fixed correlation $\rho$, we adjust delta1 ($\Delta_x/\sigma_x$) 
-				and delta2 ($\Delta_y/\sigma_y$) to evaluate $\rho_T$ according to equation 
-				(\ref{eq:limitT}).}
-				\label{fig:th}
-			\end{figure}
+%			\begin{figure}[!ht]
+%				\centering
+%				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th1.eps}
+%				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th2.eps}
+%				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th3.eps}
+%				\includegraphics[width=6.5cm, height= 6.5cm]{Figures/th4.eps}
+%				\caption{Theoretical correlation between test statistics under different settings. 
+%				For each of the fixed correlation $\rho$, we adjust delta1 ($\Delta_x/\sigma_x$) 
+%				and delta2 ($\Delta_y/\sigma_y$) to evaluate $\rho_T$ according to equation 
+%				(\ref{eq:limitT}).}
+%				\label{fig:th}
+%			\end{figure}
+%			
+					
 	We note that $|\rho_T| \leq |\rho|$ when test statistics are derived from two sample $t$ test 
 	with equal variance. In other words, $T_X$ and $T_Y$ are always ``no more correlated" than $X$ 
 	and $Y$ are. It's also interesting to note that when both genes are DE, $\rho_T=0$ at $\rho 
 	=-\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} $ and 
-	$\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} \in (-1, 1)$.
+	$\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} \in (-1, 1)$. Figure \ref{fig:ct} shows the 
+	contour plots of $\rho_T$ versus the signal-to-noise ratios $\delta_X$ ($=\Delta_X/\sigma_X$) 
+	and $\delta_Y$ ($=\Delta_Y/\sigma_Y$) for different $\rho$'s. The largest value of $\rho_T$ (in 
+	absolute value) 
+	is always at the center, where both $\delta_X$ and $\delta_Y$ are 0 (i.e., $\Delta_X =\Delta_Y 
+	= 0$).
+	
+		\begin{figure}[!ht]
+			\centering
+			\includegraphics[width=6.5cm, height= 6.5cm]{Figures/ct1.eps}
+			\includegraphics[width=6.5cm, height= 6.5cm]{Figures/ct2.eps}
+			\includegraphics[width=6.5cm, height= 6.5cm]{Figures/ct3.eps}
+			\includegraphics[width=6.5cm, height= 6.5cm]{Figures/ct4.eps}
+			\caption{Contour plot of theoretical correlation between test statistics. For 
+				each fixed $\rho$ and each pair of $\delta_X$ (	$=\Delta_X/\sigma_X$) 
+				and $\delta_Y$ ($=\Delta_Y/\sigma_Y$), the theoretical correlation $\rho_T$ is 
+				calculated according to equation (\ref{eq:limitT}).}
+			\label{fig:ct}
+		\end{figure}
 			
-	 In addition, we note that if $n_1/n_2 \rightarrow 0$ or $\infty$, then $\beta = 0$ and we have $\rho_T = \rho$. That is, when sample size of one group is not proportional to that of the other, $\cor(T_X, T_Y)$ will converge to $\rho$ regardless of whether the tests are under the null or not. 	
+	 In addition, if $n_1/n_2 \rightarrow 0$ or $\infty$, then $\beta = 0$ and we have $\rho_T = 
+	 \rho$. That is, when sample size of one group is not proportional to that of the other, 
+	 $\cor(T_X, T_Y)$ will converge to $\rho$ regardless of whether the tests are under the null or 
+	 not. 	
 %	 When $\bm \Delta = \bm 0$ then $\rho_T = \rho$; but when $\bm \Delta \neq \bm 0$, then $\rho_T \neq \rho$ in general. % In the next section, we will discuss about it in further detail. 
 %	\begin{corollary} 
 %	If $\bm \Delta  = (\Delta_X, \Delta_Y)= \bm 0$, and there exists a positive number $M$, such that  $n_1n_2^{-1}\leq M$ and $n_1n_2^{-1}\leq M$,  then $\cor({T_X, T_Y})\rightarrow \rho$ as $n_1 + n_2 \rightarrow \infty$. 
@@ -504,8 +532,8 @@
 	\begin{equation}
 		\begin{aligned}
 			&\left( \begin{array}{c}
-				X_{j_1}\\
-				Y_{j_1}\\
+				X_{j}\\
+				Y_{j}\\
 			\end{array}\right)
 			\sim N\left[
 			\left(\begin{array}{c}
@@ -514,14 +542,14 @@
 			\end{array} \right), 
 			\left(
 			\begin{array}{cc}
-				1 &\rho \sqrt{1\cdot 3} \\
-				\rho \sqrt{1\cdot 3} & 	3 \\
+				1 &\rho  \\
+				\rho & 	1 \\
 			\end{array}
 			\right)
-			\right] \\
+			\right], j = 1, \ldots, n_1 \\
 			& \left( \begin{array}{c}
-				X_{j_2}\\
-				Y_{j_2}\\
+				X_{j}\\
+				Y_{j}\\
 			\end{array}\right)
 			\sim N\left[
 			\left(\begin{array}{c}
@@ -530,73 +558,86 @@
 			\end{array} \right), 
 			\left(
 			\begin{array}{cc}
-				1 &\rho \sqrt{1\cdot 3} \\
-				\rho \sqrt{1\cdot 3} & 	3 \\
+				1 &\rho \\
+				\rho  & 	1 \\
 			\end{array}
 			\right)
-			\right] 
+			\right], j = n_1 +1, \ldots, n_1 + n_2 
 		\end{aligned}
 	\end{equation}
-	where $j_1 = 1,\ldots, n_1$ and $j_2 = n_1 + 1, \ldots, n_1 + n_2$. For each given $\rho$, we 
+	%where $j_1 = 1,\ldots, n_1$ and $j_2 = n_1 + 1, \ldots, n_1 + n_2$.
+	 For each given $\rho$, we 
 	consider these $n=n_1 + n_2$ pairs of $(X, Y)$
-	as observations from one \textit{simulated} experiment. Out of this experiment, we calculate $q = (T_X, T_Y, r_{XY})$ where $T_X$ and $T_Y$ are the test statistics for gene $X$ and gene $Y$ respectively using 
-	two-sample $t$-test for equal variance procedure, and $r_{XY}$ is the sample correlation after 
-	the treatment effects  are removed. We replicate the simulated
-	experiment for $B=1000$ times, resulting in a matrix $\bm Q_{1000\times 3}$. We take the correlation between the first and the second columns of $\bm Q$ as an estimate for test statistics correlation	$r_\text{statistics}$, and 
-	the mean of the third column as an estimate of sample correlation $r_{\text{sample}}$. 
-	Sample correlation is a consistent estimator for underlying true correlation, therefore
-		$r_\text{statistics}$ and $r_{\text{sample}}$ should reflect the true correlation between $T_X$ and $T_Y$ and 
-		that between $X$ and $Y$ respectively. 
-		We increase $\rho$ from $-0.99$ to $0.99$ by fixed step size $0.01$, and examine the relationship between $r_\text{statistics}$ and $r_{\text{sample}}$ under four different cases:
+	as observations from one \textit{simulated} experiment. Out of this experiment, we calculate $q 
+	= (T_X, T_Y)$ where $T_X$ and $T_Y$ are the test statistics for gene $X$ and gene $Y$ 
+	respectively using 
+	two-sample $t$-test for equal variance procedure. We replicate the simulated
+	experiment for $B=1000$ times, resulting in a matrix $\bm Q_{1000\times 2}$. We take the 
+	correlation between the first and the second columns of $\bm Q$ as an estimate for test 
+	statistics correlation	$r_\text{statistics}$. 
+%	Sample correlation is a consistent estimator for underlying true correlation, therefore
+%		$r_\text{statistics}$ and $r_{\text{sample}}$ should reflect the true correlation between $	
+%%% 		T_X$ and $T_Y$ and 
+%		that between $X$ and $Y$ respectively. 
+		We increase $\rho$ from $-0.99$ to $0.99$ by fixed step size $0.01$, and examine the 
+		relationship between $r_\text{statistics}$ and $\rho$ under the following different cases:
 	\begin{enumerate}
-		\item[a)] No DE genes (i.e., $\Delta_X = \Delta_Y  =0$);
-		\item[b)] One gene is DE and the other is not (i.e, only one of $\Delta_X$ and $\Delta_Y$ is 0); in the simulation we set $\Delta_X = 0$ and $\Delta_Y=5$;
-		\item[c)] DE towards the same direction (i.e., $\Delta_X\Delta_Y>0$); in the simulation we set $\Delta_X = 2$ and $\Delta_Y=5$;
-		\item[d)] DE towards opposite directions (i.e., $\Delta_X\Delta_Y <0$); in the simulation we set $\Delta_X = 2$ and $\Delta_Y=-5$.
+		\item[a)]  $\delta_X = \delta_Y  =0$;
+		\item[b)]  $\delta_X = 0, \delta_Y=2$;
+		\item[c)]  $\delta_X = 0.5, \delta_Y=2$;
+		\item[d)]  $\delta_X = 1, \delta_Y=2$;
+		\item[e)]  $\delta_X = 3, \delta_Y=2$;
+		\item[f)]  $\delta_X = -3, \delta_Y=2$.
 		\end{enumerate}
 		
 	We conduct simulations for two different sample sizes: we set $n_1 = n_2 = 1000$ to assess 
 	asymptotic performance of $\rho_T(n)$ in equation (\ref{eq:teststatcor}), and set $n_1 = n_2 
-	= 5$ to mimic small sample size scenarios which are typical in gene expression study. 
+	= 3$ to mimic small sample size scenarios which are typical in gene expression study. 
 			
-	In Figure \ref{fig:tstat}, we plot $r_\text{statistics}$ and $r_{\text{sample}}$ against the 
-	underlying true population correlation $\rho$. Note that in all cases, while 
-	$r_{\text{sample}}$ is a consistent estimator of $\rho$, $r_\text{statistics}$ might be very 
-	different from $\rho$ and thus from $r_\text{sample}$.  
-	In case a) where no gene is DE, $r_\text{statistics}$ and $r_{\text{sample}}$ are almost equal, 
-	and both converge the true correlation $\rho$. However, as long as DE effect exists, there is a 
-	discrepancy between $r_\text{statistics}$ and $\rho$. In case b) where only one gene is DE, 
+	In Figure \ref{fig:tstat}, we plot $r_\text{statistics}$ against the 
+	underlying true population correlation $\rho$ under both large and small sample size scenarios. 
+	In case a) where both tests are true null, $r_\text{statistics}$ is close to the true 
+	correlation $\rho$ when sample size is large ($n_1 = n_2 = 1000$), but smaller (in absolute 
+	value) than $\rho$ when sample size is small ($n_1 = n_2 = 3$).
+		In cases b)---f) where there is at least one true alternative, the estimate
+		$r_\text{statistics}$ can be very 
+	different from $\rho$. In case b) where only one gene is DE, 
 	 the magnitude of $r_\text{statistics}$ is proportional to, and smaller in absolute value than 
 	 $\rho$.
 	% and according to equation (\ref{eq:ttestcor}), the magnitude of $r_\text{statistics}$ has to do with the signal-to-noise ratio $\Delta/\sigma$
 	It is more interesting to note that $r_\text{statistics}$ is not monotone with respect to 
 	$\rho$ when both genes are DE. If genes are DE towards the same direction as in the case of 
-	c),  $r_\text{statistics}$ first decreases from a positive value to 0, and continues to 
-	decrease until it reaches the minimum (a negative value), and then gradually increases to 1, as 
-	$\rho$ grows from $-1$ to $1$. When genes are DE towards opposite directions like in case d), 
-	however, the trend is reversed from that of c): $r_\text{statistics}$ increases from $-1$ to a 
-	positive value and reaches its maximum (a positive value), and decreases to a negative value. 
+	e),  $r_\text{statistics}$ first decreases until it reaches the minimum (a negative value), and 
+	then gradually increases to 1, as 
+	$\rho$ grows from $-1$ to $1$. When genes are DE towards opposite directions like the case f), 
+	however, the trend is reversed from that of e): $r_\text{statistics}$ increases from $-1$ to 
+	its maximum (a positive value), and then decreases. 
 	This set of simulation results is reflected in the test statistics correlation formula of 
-	equation (\ref{eq:limitT}). 
+	equation (\ref{eq:limitT}). We also demonstrate the process of how $\rho_T$ changes from
+	being a linear function of $\rho$ to a quadratic function, by fixing $\delta_Y=2$ while 
+	increasing $\delta_X$ from $0$ (case b) to $3$ (case e).
+		
+	We illustrate in Figure \ref{fig:tstat} the variation in $r_\text{statistics}$ with 
+	respect to change in sample size $n$. For each fixed $\rho$ under cases a)---f), the absolute 
+	value of $r_\text{statistics}$  increases when we change the sample size $n$ from $6$ to 
+	$2000$. The change in $r_\text{statistics}$ induced by sample size could be substantial, 
+	especially when the population correlation is large (e.g., $\rho > 0.2$). This simulation shows 
+	that test statistics correlation $\rho_T$ can be over-estimated by sample correlation, 
+	especially when sample size is small.
+%	We note that in all of the four cases, the inequality $r_\text{statistics}\leq \rho$ holds.
 	
-	We also illustrate in Figure \ref{fig:tstat} the variation in $r_\text{statistics}$ with 
-	respect to change in sample size $n$. For each fixed $\rho$ under cases b)---d), the absolute 
-	value of $r_\text{statistics}$  increases when we change the sample size $n$ from $10$ to 
-	$2000$. Yet the change in $r_\text{statistics}$ induced by sample size is not substantial, 
-	especially when the population correlation is small (e.g., $\rho < 0.1$). We note that in all 
-	of the four cases, the inequality $r_\text{statistics}\leq r_\text{sample}$ holds.
-	
-	\begin{figure}[!ht]
+	\begin{figure}[!th]
 		\centering
-		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case1.eps}
-		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case2.eps}
-		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case3.eps}
-		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/case4.eps}
-	\caption{Plots for estimates of sample/test statistics correlation against true population 
-	correlations. For each of the simulation settings a)--d), the test statistics are calculated 
-	using two sample $t$-test with equal variance, and the correlations are calculated by equation 
-	(\ref{eq:samplecor}). The legend ``larger" corresponds to results from simulation of sample 
-	size $n_1=n_2 =1000$, and ``smaller" to those from simulation of sample size $n_1 = n_2 =5$.}
+		\includegraphics[width=4.4cm, height= 6.2cm]{Figures/case1.eps}
+		\includegraphics[width=4.4cm, height= 6.2cm]{Figures/case2.eps}
+		\includegraphics[width=4.4cm, height= 6.2cm]{Figures/case3.eps}
+		\includegraphics[width=4.4cm, height= 6.2cm]{Figures/case4.eps}
+		\includegraphics[width=4.4cm, height= 6.2cm]{Figures/case5.eps}
+		\includegraphics[width=4.4cm, height= 6.2cm]{Figures/case6.eps}
+	\caption{Plots of test statistics correlation against true population 
+	correlation. The test statistics are calculated 
+	using two sample $t$-test with equal variance, and the theoretical correlation is calculated by 
+	equation (\ref{eq:limitT}).}
 		\label{fig:tstat}
 	\end{figure}
 

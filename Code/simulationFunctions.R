@@ -291,14 +291,14 @@ plot_rho1 <- function(obj, case, textsize = rep(20, 4),
   prep_data2 <- melt(prep_data, id = "true_popu_rho", 
                      variable.name = "category", value.name = "estimate")
   
-  tl <- substitute(case1~"):"~"("~Delta[x]~","~Delta[y]~")"~"="~"("~var1~","~var2~")",
+  tl <- substitute(case1~"):"~"("~delta[x]~","~delta[y]~")"~"="~"("~var1~","~var2~")",
                    list(case1 = case, var1 = DE[1], var2=DE[2]))
   #tl <- substitute(Delta[x]~ "="~ var1 ~","~Delta[y]~"="~var2, list (var1 = DE[1], var2=DE[2]))
   p1 <- ggplot(data = prep_data2, aes(true_popu_rho, estimate, color = category)) + 
     geom_line(aes(linetype = category)) + 
-    labs( x= "population correlation", y = "estimated correlation", 
+    labs( x= "population correlation", y = "test statistics correlation", 
           title = tl ) + 
-    theme(legend.position = c(0.8, 0.1), 
+    theme(legend.position = c(0.7, 0.2), 
           legend.text = element_text(size = textsize[1]),
           plot.title = element_text(size = textsize[2]),
           axis.text = element_text(size = textsize[3]), 
@@ -361,7 +361,36 @@ theoretical_plot <- function(delta1_vector, delta2= seq(0,4), rho, sigma, n1, n2
 
 }
 
+
+contour_plot <- function(delta1=seq(-4, 4, 0.1), delta2= seq(-4, 4, 0.1), rho, 
+                         sigma, n1, n2, textsize=rep(20, 4)){
   
+  m1 <- length(delta1)
+  m2 <- length(delta2)
+  obj_data <- data.frame(matrix(NA, nrow = m1*m2, ncol = 3))
+  for ( k in 1: m2){
+    start_index <- (k-1)*m1 + 1
+    end_index <- k*m1
+    obj_data[start_index:end_index, 3] <- sapply(delta1, theore_rho, rho = rho, delta2=delta2[k], sigma= sigma, n1=n1, n2=n2)
+    obj_data[start_index:end_index, 1] <- delta1
+    obj_data[start_index:end_index, 2] <- delta2[k]
+  }
+  rho1 <- rho
+  tl <- substitute(rho~"="~rho1, list( rho1 = rho1))
   
+  names(obj_data) <- c("delta.x", "delta.y","TestCorr")
+  v <- ggplot(obj_data, aes(delta.x, delta.y, z =TestCorr )) +
+    geom_raster(aes(fill =  TestCorr))  + 
+      geom_contour(bins = 20, colour= "white") + 
+    labs(title = tl) + 
+    theme(legend.position = "right",
+          legend.text = element_text(size = textsize[1]),
+          plot.title = element_text(size = textsize[2]), 
+          axis.text = element_text(size = textsize[3]),
+          axis.title = element_text(size = textsize[4], face = "bold")
+          )
+     
+  v
+}
 
 
