@@ -3,6 +3,7 @@
 library(MASS)
 library(reshape2)
 library(ggplot2)
+library(directlabels)  # add labels to the contour plot
 
 
 #' generate bivariate normally distributed data.
@@ -363,7 +364,7 @@ theoretical_plot <- function(delta1_vector, delta2= seq(0,4), rho, sigma, n1, n2
 
 
 contour_plot <- function(delta1=seq(-4, 4, 0.1), delta2= seq(-4, 4, 0.1), rho, 
-                         sigma, n1, n2, textsize=rep(20, 4)){
+                         sigma, n1, n2, brks, textsize=rep(20, 4)){
   
   m1 <- length(delta1)
   m2 <- length(delta2)
@@ -376,21 +377,20 @@ contour_plot <- function(delta1=seq(-4, 4, 0.1), delta2= seq(-4, 4, 0.1), rho,
     obj_data[start_index:end_index, 2] <- delta2[k]
   }
   rho1 <- rho
-  tl <- substitute(rho~"="~rho1, list( rho1 = rho1))
-  
+  tl <- substitute(rho~"="~rho1, list( rho1 = rho1)) # the title
+
   names(obj_data) <- c("delta.x", "delta.y","TestCorr")
   v <- ggplot(obj_data, aes(delta.x, delta.y, z =TestCorr )) +
-    geom_raster(aes(fill =  TestCorr))  + 
-      geom_contour(bins = 20, colour= "white") + 
-    labs(title = tl) + 
-    theme(legend.position = "right",
+    geom_contour(aes(colour=..level..), breaks = brks) + 
+    labs(title = tl, x = expression(delta[x]), y = expression(delta[y])) + 
+    theme(legend.position = "none",
           legend.text = element_text(size = textsize[1]),
           plot.title = element_text(size = textsize[2]), 
           axis.text = element_text(size = textsize[3]),
           axis.title = element_text(size = textsize[4], face = "bold")
           )
-     
-  v
+    direct.label(v,method="bottom.pieces")
+
 }
 
 
