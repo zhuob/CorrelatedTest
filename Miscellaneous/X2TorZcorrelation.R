@@ -1,4 +1,4 @@
-source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/simulationFunctions.R")
+source("/Users/Bin/Dropbox/Zhuo/Research/CorrelatedTest/Code/simulationFunctions.R")
 
 mu1 <- c(10, -10); mu2 <- c(10 +delta[1], -10 + delta[2])
 sigma1 <- c(1, 3); sigma2 <- sigma1
