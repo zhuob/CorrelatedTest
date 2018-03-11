@@ -1,4 +1,7 @@
 source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/simulationFunctions.R")
+source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/product.moments.R")
+source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/plot.rhoT.vs.rho.R")
+
 mu1 <- c(0, 0);  sigma <- c(1, 1)
 nreps <- 1000 # number of simulated data for each case
 textsize = c(20, 20, 20, 20)
@@ -8,7 +11,7 @@ wd <- 5
 ht <- 7
 FigurePath <- "/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Manuscript/Figures/"
 n1 <- n2 <- 3 # small sample size
-n3 <- n4 <- 30 # larger sample size
+n3 <- n4 <- 10 # larger sample size
 
 
 mu2 <- c(0, 0);

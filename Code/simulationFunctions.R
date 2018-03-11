@@ -2,6 +2,7 @@
 
 library(MASS)
 library(reshape2)
+library(dplyr)
 library(ggplot2)
 library(directlabels)  # add labels to the contour plot
 
@@ -318,7 +319,7 @@ plot_rho1 <- function(obj, case, textsize = rep(20, 4),
 
 theore_rho <- function(delta1, delta2, rho, sigma, n1, n2){
   
-  beta <- 1/(4 + 2*n1/n2 + 2*n2/n1)
+  beta <- 1/(4 + 2*n1/n2 + 2*n2/n2)
   delta <- c(delta1, delta2)
   signal2noise <- delta/sigma 
   
@@ -393,4 +394,63 @@ contour_plot <- function(delta1=seq(-4, 4, 0.1), delta2= seq(-4, 4, 0.1), rho,
 
 }
 
+
+
+
+#' plot the simulated rhos
+#'
+#' @title calculate correlations for rhoT
+#' @param mu1 the mean vector in group 1
+#' @param mu2 the mean vector in group 2
+#' @param  rhovec  the true correlation vector we want to simulate 
+#' @param sigma  a vector of 2, specifying the population variance 
+#' @param n1  the number of samples to be generated in group 1
+#' @param n2 the number of samples in group 2
+#' @param nrep   number of experiment to be generated
+#' @return rho_mat   a data frame
+#' @export
+
+
+compute_cor <- function(mu1, mu2, rhovec, sigma, n1, n2, nrep){
+  rho_mat <- data.frame(matrix(NA, nrow = length(rhovec), 3))
+  names(rho_mat) <- c("rhoTrue", paste("rhoSimu", n1, sep = ""), 
+                                 paste("rhoT", n1, sep = ""))
+  
+  rho_mat[, 1] <- rhovec
+  
+  for ( k in 1:length(rhovec))  # simulated correlation
+  {
+    
+    single_rho <- test_cor(mu1, mu2, rhovec[k], sigma, n1, n2, nreps)
+    a1 <- cor(single_rho[, 1:2])[1, 2]  
+    rho_mat[k, 2] <- a1
+  }
+  
+  # true correlation for finite sample size
+  v <- n1 + n2 -2 
+  deltaX <- mu2[1] - mu1[1];
+  deltaY <- mu2[2] - mu1[2]
+  rho_mat[, 3] <- compute.rhoT(v, rhovec, deltaX, deltaY)
+  
+  return(rho_mat)
+}
+
+
+
+### organize the results 
+final_dat <- function(mu1, mu2, rhovec, sigma, n1, n2, n3, n4, nrep){
+  x1 <- compute_cor(mu1 = mu1, mu2 = mu2, rhovec, sigma, n1, n2, nrep)  # n = 3
+  x2 <- compute_cor(mu1 = mu1, mu2 = mu2, rhovec, sigma, n3, n4, nrep) # n = 10
+  
+  delta1 <- mu2[1] - mu1[1]; delta2 <- mu2[2]-mu1[2]
+  rhoTinf <- compute.rhoTInf(rhovec, delta1, delta2) # 
+  set1 <- paste( "(", mu2[1]-mu1[1], ", ", mu2[2]-mu1[2], ")", sep = "")  # setting
+  
+  x3 <- left_join(x1, x2, by = "rhoTrue")
+  x3$rhoTinf <- rhoTinf
+  x3$setting = set1
+  
+  results <- gather(x3, -rhoTrue, -setting, key = "category", value = "rho")
+  return(results)
+}
 

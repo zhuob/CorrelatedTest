@@ -1,5 +1,4 @@
 ## Mon Mar  5 11:56:31 PST 2018
-source("product.moments.R");
 
 
 Cvrho.vec = function(v, rho.vec) {
