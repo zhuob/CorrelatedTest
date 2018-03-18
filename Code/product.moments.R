@@ -60,6 +60,16 @@ Cvrho = function(v, rho) {
   euab(-1/2, -1/2, v, rho);
 }
 
+A = function(v) {
+  v/(v-2);
+}
+
+## E(S_X^-1)=B(v)\sigma_X^-1
+B = function(v) {
+  sqrt(v/2)*gamma(v/2-1/2)/gamma(v/2);
+}
+
+
 main = function() {
   rm(list=ls());
   source('product.moments.R');

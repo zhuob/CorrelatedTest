@@ -3,6 +3,7 @@
 library(MASS)
 library(reshape2)
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(directlabels)  # add labels to the contour plot
 
@@ -430,7 +431,7 @@ compute_cor <- function(mu1, mu2, rhovec, sigma, n1, n2, nrep){
   v <- n1 + n2 -2 
   deltaX <- mu2[1] - mu1[1];
   deltaY <- mu2[2] - mu1[2]
-  rho_mat[, 3] <- compute.rhoT(v, rhovec, deltaX, deltaY)
+  rho_mat[, 3] <- compute.rhoT(v, rhovec, deltaX, deltaY, n1, n2)
   
   return(rho_mat)
 }

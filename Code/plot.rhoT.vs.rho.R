@@ -1,4 +1,9 @@
+## Sun Mar 11 20:47:20 PDT 2018
+## Add simualted rhoT
+
 ## Mon Mar  5 11:56:31 PST 2018
+#source("product.moments.R");
+#source("simulate.t.test.R");
 
 
 Cvrho.vec = function(v, rho.vec) {
@@ -10,20 +15,11 @@ test.Cvrho.vec = function() {
   v = 4;
   rho = seq(-1, 1, 0.05);
   Cvrho.vec(v, rho);
-
 }
 
 
-A = function(v) {
-  v/(v-2);
-}
-
-## E(S_X^-1)=B(v)\sigma_X^-1
-B = function(v) {
-  sqrt(v/2)*gamma(v/2-1/2)/gamma(v/2);
-}
-
-compute.rhoT = function(v, rho, deltaX, deltaY, beta=1/4) {
+compute.rhoT = function(v, rho, deltaX, deltaY, n1, n2) {
+  beta = 1/(v * (1/n1 + 1/n2));
   Cv = Cvrho.vec(v, rho);
   Bv = B(v);
   Av = A(v);
@@ -45,30 +41,5 @@ compute.rhoTInf = function(rho, deltaX, deltaY, beta=1/4) {
 }
 
  
-plot.rhoT.vs.rho = function(deltaX, deltaY, v) {
-  nv = length(v);
-  
-  rho = seq(-1, 1, length=81);
-  nrho = length(rho);
 
-  rhoT = matrix(0, nv+1, nrho);
-  rownames(rhoT) = c(v,Inf);
-  colnames(rhoT) = rho;
-  
-  rhoTInf = compute.rhoTInf(rho, deltaX, deltaY);
-
-  rhoT[nv+1, ] = rhoTInf;
-
-  plot(rho, rhoTInf, type="l", lwd=2, col="magenta",
-       main=sprintf("(%d, %d)", deltaX, deltaY),
-       ylab="rho_T", ylim=c(-1,1));
-
-  for (i in 1:nv) {
-    rhoT[i,] = compute.rhoT(v[i], rho, deltaX, deltaY);
-    lines(rho, rhoT[i,]);
-  }
-
-  list(rho, rhoT);
-  abline(0,1);
-}
 
