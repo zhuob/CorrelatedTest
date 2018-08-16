@@ -32,9 +32,9 @@ final_data  <- readRDS(paste("/Users/Bin/Google Drive/Study/Thesis/Correlation/C
 
 final_data <- final_data %>% 
                 mutate(type = ifelse(grepl("Simu", category)>0, "simulated", " theoretical"), 
-                       samplesize =  case_when(category %in% c("rhoSimu3", "rhoT3")~"n=3", 
+                       samplesize =  case_when(category %in% c("rhoSimu3", "rhoT3")~"n= 3", 
                                                category %in% c("rhoSimu10", "rhoT10")~"n=10", 
-                                               category == "rhoTinf"~"asymptotic"),
+                                               category == "rhoTinf"~" asymptotic"),
                        setting = case_when(setting == "(0, 0)"~"  (0, 0)",
                                            setting == "(0, 2)"~"  (0, 2)",
                                            setting == "(1, 2)"~"  (1, 2)",
@@ -66,10 +66,16 @@ rho_figure <- ggplot(data = final_data, aes(x = rhoTrue, y = rho)) +
           facet_wrap(~setting, ncol= 2, labeller = label_parsed) + 
           theme(legend.position = "bottom") + 
           labs(x = expression(rho), y = expression(rho[T])) + 
-          guides(colour = guide_legend(nrow = 2, byrow = T, title.position ="left", title ="Size" )) + 
+          guides(colour = guide_legend(nrow = 1, byrow = T, title.position ="left", title ="" )) + 
           geom_abline(intercept = 0, slope=1, colour = "darkgrey") + 
-          ylim(-1, 1) + scale_color_manual(breaks = c("asymptotic", "n=10", "n=3"),
-                                           values=c("black", "magenta", "darkgreen")) 
+          scale_linetype(guide = FALSE) +
+          ylim(-1, 1) + 
+          scale_color_manual(breaks = c("asymptotic", "n= 3", "n=10"),
+                                      values=c("black", "magenta", "darkgreen"),
+                             labels = expression(paste(n[1], "=", n[2], "=10"), 
+                                                 paste(n[1], "=", n[2], "=3"),
+                                                 paste("theoretical"))) 
+     
 
 rho_figure
 ggsave(paste(FigurePath,"sim.eps", sep =""), rho_figure,
