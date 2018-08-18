@@ -1,0 +1,43 @@
+---
+title: "README"
+author: "BZ"
+date: "8/18/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data sets and R codes for the paper "test-statistic correlation and data-row correlation".
+
+This collection of R codes and datasets investigate moments involving
+the sample variances $(S_X^2, S_Y^2)$ from a sample bivariate normal data $(X_j, Y_j), j=1,...,n.$.
+
+Let $(Q_X, Q_Y)=(vS_x^2/\sigma_X^2, vS_Y^2/\sigma_Y^2)$, where $v$ is the degree of freedom.
+Joader (2009) <http://dx.doi.org/10.1007/s00362-007-0105-0> 
+derived the joint pdf of $(Q_X, Q_Y)$ and gave a formula for computing all product menments of the form $E(Q_X^a Q_Y^a)$ as an infinite sum.
+We can also compute $E(Q_X^a, Q_Y^b)$ using numerical integration using the joint pdf of $(Q_X, Q_Y)$ and another quatity $R$ (also derived in Joader 2009).
+
+Let $C_v(\rho) = v E(Q_X^{-1/2}Q_Y^{-1/2})$, then  $E(S_X^-1 S_Y^{-1}) = C_v(\rho) \sigma_X^{-1} \sigma_Y^{-1}$.
+
+In our paper, we want to study the relationship between test-statistic correlation $rho_T$ and data-row correlation $rho$. The function relationship between $\rho_T$ and $\rho$ depends on $E(S_X^{-1})$, $E(S_X^{-2})$, $Var(S_X^{-1})$, and $E(S_X^{-1}S_Y^{-1})$, $Cov(S_X^{-1}, S_Y^{-1})$.
+
+
+    
+Data file:
+
+* product.moments.R
+    + Implement the formula for computing $E(Q_X^a, Q_Y^b)$ as an infinite sum.
+    + Compute $C_v(\rho)$ using the prodcut-moment formula for $v=4, 8, 18, 28, ..., 98$ and $\rho=0, 0.05, 0.10, ..., 1$ and save the results to "cvrho.csv".
+    
+* plot.rhoT.vs.rho.R    
+    + Plot rho_T vs rho for different values $(\delta_X, \delta_Y)$ and for $v=4, 8, 18, 28$ (v can be specified to other values too).
+    + $C_v(\rho)$ values used here were from the infinite-sum formula.
+
+* SimulationFunctions.R
+    + functions for calcuation, simulation, and producing Figure 1 and Figure 2 in the manuscript
+
+* simulation.R
+    + perform the simulation and save the results (figures)
+    
