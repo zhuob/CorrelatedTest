@@ -1,5 +1,6 @@
 
 ## the final result summary
+rm(list=ls())
 source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/simulationFunctions.R")
 source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/product.moments.R")
 source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/plot.rhoT.vs.rho.R")
@@ -24,6 +25,7 @@ case7 <- final_dat(mu1, mu2 = c(-5, 5), rhovec, sigma, n1, n2, n3, n4, nrep) ## 
 case8 <- final_dat(mu1, mu2 = c(5, 5), rhovec, sigma, n1, n2, n3, n4, nrep) ## DeltaX = 5, DeltaY = 5
 
 final_data <- bind_rows(case1, case2, case3, case4, case5, case6, case7, case8) 
+# this takes a long time, so the results are saved
 #saveRDS(object = final_data, file = paste("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/simuResults", nreps, ".rds", sep = ""))
 
 
@@ -60,21 +62,21 @@ final_data$setting <- factor(final_data$setting,
 final_data$type <- factor(final_data$type, labels = c("theoretical", "simulated"))
 
 
-
+## produce figure 2
 rho_figure <- ggplot(data = final_data, aes(x = rhoTrue, y = rho)) + 
+  geom_abline(intercept = 0, slope=1, colour = "darkgrey") + 
           geom_line(aes(color = samplesize, linetype = type)) + 
           facet_wrap(~setting, ncol= 2, labeller = label_parsed) + 
           theme(legend.position = "bottom") + 
           labs(x = expression(rho), y = expression(rho[T])) + 
           guides(colour = guide_legend(nrow = 1, byrow = T, title.position ="left", title ="" )) + 
-          geom_abline(intercept = 0, slope=1, colour = "darkgrey") + 
           scale_linetype(guide = FALSE) +
           ylim(-1, 1) + 
-          scale_color_manual(breaks = c("asymptotic", "n= 3", "n=10"),
+          scale_color_manual(breaks = c( "n= 3", "n=10", " asymptotic"),
                                       values=c("black", "magenta", "darkgreen"),
-                             labels = expression(paste(n[1], "=", n[2], "=10"), 
-                                                 paste(n[1], "=", n[2], "=3"),
-                                                 paste("theoretical"))) 
+                             labels = expression(paste(n[1], "=", n[2], "=3,"), 
+                                                 paste(n[1], "=", n[2], "=10,"),
+                                                 paste("asymptotic"))) 
      
 
 rho_figure
@@ -82,7 +84,7 @@ ggsave(paste(FigurePath,"sim.eps", sep =""), rho_figure,
        width = 5, height = 9)
 
 
-
+## produce figure 1
 #FigurePath <- "/Users/Bin/Google Drive/Study/Thesis/ThesisRelated/Dissertation/Figures/"
 wd <- 5
 ht <- 5

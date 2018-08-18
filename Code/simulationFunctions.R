@@ -219,108 +219,115 @@ plot_rho <- function(obj, case, textsize = rep(20, 4),include_invS = F){
 ##  compare the performance of small samples and large samples
 ##  arguments are objects returned from compare_rho function
 
-comb1 <- function(obj1, obj2, obj3){
-  
-  rho_mat1 <- obj1$rho_mat;
-  rho_mat2 <- obj2$rho_mat
-  rho_mat1$s2 <- rho_mat2$test_cor
-  rho_mat1$theoretical <- obj3
-  
-  obj_new <- obj1;
-  obj_new$rho_mat <- rho_mat1
-  names(obj_new$rho_mat)[2:4] <- c("smaller", "invS", "larger")
-  
-  return(obj_new)
-}
+# comb1 <- function(obj1, obj2, obj3){
+#   
+#   rho_mat1 <- obj1$rho_mat;
+#   rho_mat2 <- obj2$rho_mat
+#   rho_mat1$s2 <- rho_mat2$test_cor
+#   rho_mat1$theoretical <- obj3
+#   
+#   obj_new <- obj1;
+#   obj_new$rho_mat <- rho_mat1
+#   names(obj_new$rho_mat)[2:4] <- c("smaller", "invS", "larger")
+#   
+#   return(obj_new)
+# }
 
-
-plot_rho2 <- function(obj, case, textsize = rep(20, 4),include_invS = F){
-  
-  rho_t <- obj$rho_mat
-  rho_s <- obj$rho_sample
-  DE <- obj$DE
-  
-  rho_t$rho_sample_ave <- apply(rho_s, 1, mean) 
- names(rho_t)[5] <- "sample"
-  
-  if (include_invS){
-    prep_data <- rho_t
-  } else {
-    prep_data <- rho_t[, c(1, 2, 4, 5)]
-  }
-  
-  prep_data2 <- melt(prep_data, id = "true_popu_rho", 
-                     variable.name = "category", value.name = "estimate")
-  
-  tl <- substitute(case1~"):"~"("~Delta[x]~","~Delta[y]~")"~"="~"("~var1~","~var2~")", 
-                   list(case1 = case, var1 = DE[1], var2=DE[2]))
-  #tl <- substitute(Delta[x]~ "="~ var1 ~","~Delta[y]~"="~var2, list (var1 = DE[1], var2=DE[2]))
-  p1 <- ggplot(data = prep_data2, aes(true_popu_rho, estimate, color = category)) + 
-    geom_line(aes(linetype = category)) + 
-    labs( x= "population correlation", y = "estimated correlation", 
-          title = tl ) + 
-    theme(legend.position = c(0.8, 0.1), 
-          legend.text = element_text(size = textsize[1]),
-          plot.title = element_text(size = textsize[2]),
-          axis.text = element_text(size = textsize[3]), 
-          axis.title = element_text(size = textsize[4], face= "bold"))
-  p1  + guides(
-    linetype  = guide_legend(keywidth = 3, keyheight = 1), 
-    color = guide_legend(keywidth = 3, keyheight = 1) )
-  
-}
-
-
-
-plot_rho1 <- function(obj, case, textsize = rep(20, 4),
-                      smaller =5, larger=1000, include_invS = F){
-  
-  rho_t <- obj$rho_mat
-  rho_s <- obj$rho_sample
-  DE <- obj$DE
-  
-#  rho_t$rho_sample_ave <- apply(rho_s, 1, mean) 
+# 
+# plot_rho2 <- function(obj, case, textsize = rep(20, 4),include_invS = F){
+#   
+#   rho_t <- obj$rho_mat
+#   rho_s <- obj$rho_sample
+#   DE <- obj$DE
+#   
+#   rho_t$rho_sample_ave <- apply(rho_s, 1, mean) 
 #  names(rho_t)[5] <- "sample"
-  v1 <- paste("n =", smaller)
-  v2 <- paste("n =", larger)
-  names(rho_t)[c(2, 4)] <- c(v1, v2)
-  
-  if (include_invS){
-    prep_data <- rho_t
-  } else {
-    prep_data <- rho_t[, c(1, 2, 4, 5)]
-  }
-  
-  prep_data2 <- melt(prep_data, id = "true_popu_rho", 
-                     variable.name = "category", value.name = "estimate")
-#  colorcode <- rep(c("#3399FF", "#FF00FF", "#000000"), each = nrow(prep_data2)/3)
-
-  
-  tl <- substitute(case1~"):"~"("~delta[x]~","~delta[y]~")"~"="~"("~var1~","~var2~")",
-                   list(case1 = case, var1 = DE[1], var2=DE[2]))
-  #tl <- substitute(Delta[x]~ "="~ var1 ~","~Delta[y]~"="~var2, list (var1 = DE[1], var2=DE[2]))
-  p1 <- ggplot(data = prep_data2, aes(true_popu_rho, estimate)) + 
-    geom_line(aes(linetype = category, color = category)) + 
-    labs( x= "population correlation", y = "test statistics correlation", title = tl ) + 
-    theme(legend.position = c(0.7, 0.2), 
-          legend.text = element_text(size = textsize[1]),
-          plot.title = element_text(size = textsize[2]),
-          axis.text = element_text(size = textsize[3]), 
-          axis.title = element_text(size = textsize[4], face= "bold"))
-  p1  + guides( linetype  = guide_legend(keywidth = 3, keyheight = 1), 
-                color = guide_legend(keywidth = 3, keyheight = 1) ) +
-    geom_abline(intercept = 0, slope=1, colour = "#FFCC00") + ylim(-1, 1)
-    
-  
-}
+#   
+#   if (include_invS){
+#     prep_data <- rho_t
+#   } else {
+#     prep_data <- rho_t[, c(1, 2, 4, 5)]
+#   }
+#   
+#   prep_data2 <- melt(prep_data, id = "true_popu_rho", 
+#                      variable.name = "category", value.name = "estimate")
+#   
+#   tl <- substitute(case1~"):"~"("~Delta[x]~","~Delta[y]~")"~"="~"("~var1~","~var2~")", 
+#                    list(case1 = case, var1 = DE[1], var2=DE[2]))
+#   #tl <- substitute(Delta[x]~ "="~ var1 ~","~Delta[y]~"="~var2, list (var1 = DE[1], var2=DE[2]))
+#   p1 <- ggplot(data = prep_data2, aes(true_popu_rho, estimate, color = category)) + 
+#     geom_line(aes(linetype = category)) + 
+#     labs( x= "population correlation", y = "estimated correlation", 
+#           title = tl ) + 
+#     theme(legend.position = c(0.8, 0.1), 
+#           legend.text = element_text(size = textsize[1]),
+#           plot.title = element_text(size = textsize[2]),
+#           axis.text = element_text(size = textsize[3]), 
+#           axis.title = element_text(size = textsize[4], face= "bold"))
+#   p1  + guides(
+#     linetype  = guide_legend(keywidth = 3, keyheight = 1), 
+#     color = guide_legend(keywidth = 3, keyheight = 1) )
+#   
+# }
+# 
+# 
+# 
+# plot_rho1 <- function(obj, case, textsize = rep(20, 4),
+#                       smaller =5, larger=1000, include_invS = F){
+#   
+#   rho_t <- obj$rho_mat
+#   rho_s <- obj$rho_sample
+#   DE <- obj$DE
+#   
+# #  rho_t$rho_sample_ave <- apply(rho_s, 1, mean) 
+# #  names(rho_t)[5] <- "sample"
+#   v1 <- paste("n =", smaller)
+#   v2 <- paste("n =", larger)
+#   names(rho_t)[c(2, 4)] <- c(v1, v2)
+#   
+#   if (include_invS){
+#     prep_data <- rho_t
+#   } else {
+#     prep_data <- rho_t[, c(1, 2, 4, 5)]
+#   }
+#   
+#   prep_data2 <- melt(prep_data, id = "true_popu_rho", 
+#                      variable.name = "category", value.name = "estimate")
+# #  colorcode <- rep(c("#3399FF", "#FF00FF", "#000000"), each = nrow(prep_data2)/3)
+# 
+#   
+#   tl <- substitute(case1~"):"~"("~delta[x]~","~delta[y]~")"~"="~"("~var1~","~var2~")",
+#                    list(case1 = case, var1 = DE[1], var2=DE[2]))
+#   #tl <- substitute(Delta[x]~ "="~ var1 ~","~Delta[y]~"="~var2, list (var1 = DE[1], var2=DE[2]))
+#   p1 <- ggplot(data = prep_data2, aes(true_popu_rho, estimate)) + 
+#     geom_line(aes(linetype = category, color = category)) + 
+#     labs( x= "population correlation", y = "test statistics correlation", title = tl ) + 
+#     theme(legend.position = c(0.7, 0.2), 
+#           legend.text = element_text(size = textsize[1]),
+#           plot.title = element_text(size = textsize[2]),
+#           axis.text = element_text(size = textsize[3]), 
+#           axis.title = element_text(size = textsize[4], face= "bold"))
+#   p1  + guides( linetype  = guide_legend(keywidth = 3, keyheight = 1), 
+#                 color = guide_legend(keywidth = 3, keyheight = 1) ) +
+#     geom_abline(intercept = 0, slope=1, colour = "#FFCC00") + ylim(-1, 1)
+#     
+#   
+# }
 
 
 ## theoretical correlation 
 ## delta1 = Delta_x/sigma_x;  delta2 = Delta_y/sigma_y
+#' @title calculate the theoretical rho based on Theorem 2
+#' @param delta1 deltaX in the theorem
+#' @param delta2 deltaY in the theorem
+#' @param rho the true data-row correlation
+#' @param sigma the diagnal of the covariance matrix
+#' @param n1,n2 the sample size for Group 1 and Group 2
+#' @return the theoretical correlation from Theorem 2
 
 theore_rho <- function(delta1, delta2, rho, sigma, n1, n2){
   
-  beta <- 1/(4 + 2*n1/n2 + 2*n2/n2)
+  beta <- 1/(4 + 2*n1/n2 + 2*n2/n1)
   delta <- c(delta1, delta2)
   signal2noise <- delta/sigma 
   
@@ -330,40 +337,50 @@ theore_rho <- function(delta1, delta2, rho, sigma, n1, n2){
   rho_stat <- numerator/denominator
   return(rho_stat)
 }
+# 
+# 
+# theoretical_plot <- function(delta1_vector, delta2= seq(0,4), rho, sigma, n1, n2, textsize = rep(20, 4)){
+#   
+#   m <- length(delta2)
+#   obj_dat <- data.frame(matrix(NA, length(delta1_vector), m))
+#   for ( k in 1:m)
+#   {
+#    obj_dat[, k] <- sapply(delta1_vector, theore_rho, rho = rho, delta2=delta2[k], sigma= sigma, n1=n1, n2=n2)
+#   }
+#   names(obj_dat) <- delta2
+#   obj_dat$delta1 <- delta1_vector
+#   
+#   
+#   tr_data <- melt(obj_dat, id = "delta1", value.name = "theoretical",
+#                   variable.name = "delta2" )
+#   rho1 <- rho
+#   tl <- substitute(rho~"="~rho1, list( rho1 = rho1))
+#   
+#   ggplot(tr_data, aes(delta1, theoretical, color = delta2, linetype = delta2)) + 
+#     geom_line(size = 1) + 
+#     labs(y = "theoretical correlation", title = tl) + 
+#     theme(legend.position = c(0.9, 0.2), 
+#           legend.text = element_text(size = textsize[1]),
+#           plot.title = element_text(size = textsize[2]), 
+#           axis.text = element_text(size = textsize[3]), 
+#           axis.title = element_text(size = textsize[4], face = "bold")) + 
+#     guides(fill = guide_legend(keywidth = 1, keyheight = 1), 
+#         #   linetype = guide_legend(keywidth = 3, keywidth= 1), 
+#            colour = guide_legend(keywidth = 3, keyheight = 1))
+#     
+# 
+# }
 
-
-theoretical_plot <- function(delta1_vector, delta2= seq(0,4), rho, sigma, n1, n2, textsize = rep(20, 4)){
-  
-  m <- length(delta2)
-  obj_dat <- data.frame(matrix(NA, length(delta1_vector), m))
-  for ( k in 1:m)
-  {
-   obj_dat[, k] <- sapply(delta1_vector, theore_rho, rho = rho, delta2=delta2[k], sigma= sigma, n1=n1, n2=n2)
-  }
-  names(obj_dat) <- delta2
-  obj_dat$delta1 <- delta1_vector
-  
-  
-  tr_data <- melt(obj_dat, id = "delta1", value.name = "theoretical",
-                  variable.name = "delta2" )
-  rho1 <- rho
-  tl <- substitute(rho~"="~rho1, list( rho1 = rho1))
-  
-  ggplot(tr_data, aes(delta1, theoretical, color = delta2, linetype = delta2)) + 
-    geom_line(size = 1) + 
-    labs(y = "theoretical correlation", title = tl) + 
-    theme(legend.position = c(0.9, 0.2), 
-          legend.text = element_text(size = textsize[1]),
-          plot.title = element_text(size = textsize[2]), 
-          axis.text = element_text(size = textsize[3]), 
-          axis.title = element_text(size = textsize[4], face = "bold")) + 
-    guides(fill = guide_legend(keywidth = 1, keyheight = 1), 
-        #   linetype = guide_legend(keywidth = 3, keywidth= 1), 
-           colour = guide_legend(keywidth = 3, keyheight = 1))
-    
-
-}
-
+#'
+#' @title produce the contour plot (Figure 1 in the manuscript)
+#' @param delta1 a vector specifying the values to be included in the x-axis
+#' @param delta2 a vector specifying the values to be included in the y-axis
+#' @param rho the true correlation to be evaluated
+#' @param sigma the variance in the diagonal of covariance
+#' @param n1,n2 the sample size for the theoretical value. Note that theoretical rho - based on Theorem 2 - won't change if r = 1/2 (i.e., n1 = n2)
+#' @param brks a paramter in \code{geom_contour()}
+#' @param textsize  controling the text size of the figure
+#' @return a ggplot object
 
 contour_plot <- function(delta1=seq(-4, 4, 0.1), delta2= seq(-4, 4, 0.1), rho, 
                          sigma, n1, n2, brks, textsize=rep(20, 4)){
@@ -439,6 +456,18 @@ compute_cor <- function(mu1, mu2, rhovec, sigma, n1, n2, nrep){
 
 
 ### organize the results 
+#' Given a specified parameters, return a simulation results for estimated data-row correlation, test-statistic correlation and its theoretical value.
+#' 
+#' @param mu1 the mean vector in group 1
+#' @param mu2 the mean vector in group 2
+#' @param rhovec  the true correlation vector we want to simulate 
+#' @param sigma  a vector of 2, specifying the population variance 
+#' @param n1,n2 sample size for small-sample simulation Group 1 and Group 2
+#' @param n3,n4 sample size for larger-sample simulation for Group 1 and Group 2
+#' @param nrep  number of simulation to be performed
+#' @return  a data frame containing the true rho, simulation setting, category, and estimated rho.
+#' 
+
 final_dat <- function(mu1, mu2, rhovec, sigma, n1, n2, n3, n4, nrep){
   x1 <- compute_cor(mu1 = mu1, mu2 = mu2, rhovec, sigma, n1, n2, nrep)  # n = 3
   x2 <- compute_cor(mu1 = mu1, mu2 = mu2, rhovec, sigma, n3, n4, nrep) # n = 10
