@@ -41,3 +41,9 @@ Data file:
 * simulation.R
     + perform the simulation and save the results (figures)
     
+* limma-functions.R
+    + simulation functions to demonstrate the impact of data-row correlation to the moderated-t test statistics in limma package
+ 
+* explore_limma.R
+    + perform simulations to show the results of moderated-t test statistics
+    
