@@ -1,10 +1,4 @@
 # rm(list = ls())
-library(dplyr)
-library(limma)
-library(ggplot2)
-source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/product.moments.R")
-source("/Users/Bin/Google Drive/Study/Thesis/Correlation/CorrelatedTest/Code/plot.rhoT.vs.rho.R")
-
 
 get_chol <- function(n_gene, rho){
   
@@ -89,6 +83,11 @@ simulate_t <- function(nsim, seed = 123, rho, n1, n2,
 
 
 
+get_upper_tri <- function(mat){
+  temp <- upper.tri(mat, diag = FALSE)
+  return(mat[temp])
+}
+
 plot_t_cor <- function(sim1, rho){
   
   temp <- cor(t(sim1))
@@ -97,36 +96,40 @@ plot_t_cor <- function(sim1, rho){
   n_de_high <- n_gene*0.05
   n_de <- n_de_low + n_de_high
   
-  b1 <- temp[1:n_de_low, 1:n_de_low]  %>% as.vector  # low DE
-  b2 <- temp[(n_de_low+1):n_de, (n_de_low+1):n_de] %>% as.vector # high DE
-  b3 <- temp[(n_de+1):n_gene, (n_de+1):n_gene] %>% as.vector  # no DE
+  b1 <- temp[1:n_de_low, 1:n_de_low] %>% get_upper_tri()
+  b2 <- temp[(n_de_low+1):n_de, (n_de_low+1):n_de] %>% get_upper_tri() # high DE
+  b3 <- temp[(n_de+1):n_gene, (n_de+1):n_gene] %>% get_upper_tri()  # no DE
   # correlation between de genes
   b12 <- temp[1:n_de_low, (n_de_low+1):n_de] %>% as.vector
   b23 <- temp[(n_de_low+1):n_de, (n_de+1):n_gene] %>% as.vector
   b13 <- temp[1:n_de_low, ((n_de +1):n_gene)] %>% as.vector
   
   # remove diagonal elements
-  b1 <- b1[b1<1] %>% as.vector %>% as_tibble %>% mutate(cluster = "low DE")
-  b2 <- b2[b2<1] %>% as.vector %>% as_tibble %>% mutate(cluster = "high DE")
-  b3 <- b3[b3<1] %>% as.vector %>% as_tibble %>% mutate(cluster = "Non-DE")
-  b12 <- b12 %>% as.vector %>% as_tibble %>% mutate(cluster = "low vs high DE")
-  b23 <- b23 %>% as.vector %>% as_tibble %>% mutate(cluster = "high vs Non DE")
-  b13 <- b13 %>% as.vector %>% as_tibble %>% mutate(cluster = "low vs Non DE")
+  b1 <- b1 %>% as_tibble %>% mutate(cluster = "(-3, -3)")
+  b2 <- b2 %>% as_tibble %>% mutate(cluster = "(2, 2)")
+  b3 <- b3 %>% as_tibble %>% mutate(cluster = "(0, 0)")
+  b12 <- b12 %>% as.vector %>% as_tibble %>% mutate(cluster = "(-3, 2)")
+  b23 <- b23 %>% as.vector %>% as_tibble %>% mutate(cluster = "(2, 0)")
+  b13 <- b13 %>% as.vector %>% as_tibble %>% mutate(cluster = "(-3, 0)")
   
   
   dat <- bind_rows(b1, b2, b3, b12, b23, b13) %>% 
-    mutate(cluster = factor(cluster, levels = c("low DE", 'high DE', "Non-DE", 
-                                                "low vs high DE", "high vs Non DE", "low vs Non DE")))
+    mutate(cluster = factor(cluster, levels = c("(-3, -3)", '(2, 2)', "(0, 0)", 
+                                                "(-3, 2)", "(2, 0)", "(-3, 0)")))
   
   f1 <- ggplot(data = dat, aes(value, color = cluster)) + 
     geom_density(alpha = 1, aes(fill = cluster), position = "dodge") +
     theme(legend.position = "bottom", 
           axis.title = element_text(face = "bold")) + 
-    labs(x = "statitics correlation",
+    labs(x = "sample test-statitic correlation",
          subtitle = paste0("True data-row correlation is ", rho, ".")) + 
     scale_color_manual(values = c("red", "#00FF00", "#3300FF", 
                                   "#000000", "#33FFFF", "#FF33FF"))
   
   
   return(f1)
+  
 }
+
+
+
