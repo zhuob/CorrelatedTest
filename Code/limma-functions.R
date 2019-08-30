@@ -118,13 +118,20 @@ plot_t_cor <- function(sim1, rho){
                                                 "(-3, 2)", "(2, 0)", "(-3, 0)")))
   
   f1 <- ggplot(data = dat, aes(value, color = cluster)) + 
-    geom_density(alpha = 1, aes(fill = cluster), position = "dodge") +
+    geom_density(alpha = 1,  aes(fill = cluster),
+                 position = "dodge") +
     theme(legend.position = "bottom", 
-          axis.title = element_text(face = "bold")) + 
-    labs(x = "sample test-statitic correlation",
-         subtitle = paste0("True data-row correlation is ", rho, ".")) + 
+          axis.title = element_text(face = "bold", size = 20),
+          axis.text = element_text(size = 18),
+          legend.text = element_text(size = 15),
+          legend.title = element_text(size = 15)) + 
+    labs(x = "sample test-statitic correlation") +
+    #     subtitle = paste0("True data-row correlation is ", rho, ".")) + 
     scale_color_manual(values = c("red", "#00FF00", "#3300FF", 
-                                  "#000000", "#33FFFF", "#FF33FF"))
+                                  "#000000", "#33FFFF", "#FF33FF"), guide = "none") + 
+    guides(fill = guide_legend(
+      title = expression(paste("(", delta[X], ", ", delta[Y], "):") ) ), size = 20
+      )
   
   
   return(f1)
